@@ -1,0 +1,13 @@
+@keyframes float {
+  0% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-100px) translateX(20px); }
+  100% { transform: translateY(0) translateX(0); }
+}
+
+.star {
+  will-change: transform, opacity;
+}
+
+.bubble {
+  will-change: transform, opacity, scale;
+}
