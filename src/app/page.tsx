@@ -5,6 +5,7 @@ import { Sun, Moon } from 'lucide-react';
 import { FiBarChart2, FiAward, FiCode, FiDownload, FiMail,FiX, FiMessageSquare, FiLinkedin, FiInstagram, FiExternalLink, FiGithub } from 'react-icons/fi';
 import { FaWhatsapp, FaTelegram, FaLine } from 'react-icons/fa';
 import React from 'react';
+import Image from 'next/image';
 
 // Typing animation hook
 function PaperPlaneIcon({ className }: { className?: string }) {
@@ -301,21 +302,7 @@ const blogPosts = [
   }
 ];
 
-const contactForm = (
-  <form className="space-y-4 max-w-lg mx-auto">
-    <input type="text" placeholder="Nama Anda" className="w-full px-4 py-2 rounded bg-white/10 text-white backdrop-blur-sm" />
-    <input type="email" placeholder="Email Anda" className="w-full px-4 py-2 rounded bg-white/10 text-white backdrop-blur-sm" />
-    <textarea placeholder="Pesan Anda" className="w-full px-4 py-2 rounded bg-white/10 text-white backdrop-blur-sm" rows={4}></textarea>
-    <button type="submit" className="bg-indigo-500 px-6 py-2 rounded-full hover:bg-indigo-600 transition">Kirim</button>
-  </form>
-);
 
-
-const CVButton = (
-  <div className="text-center mt-6">
-    <a href="/CV-Anda.pdf" target="_blank" rel="noopener noreferrer" className="inline-block px-6 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-full">Download CV</a>
-  </div>
-);
 
 // Variants untuk animasi masuk dan keluar
 const sectionVariants = {
@@ -328,6 +315,9 @@ const TypingTitle = React.memo(() => {
   const typedName = useTyping('Web Developer | Laravel Senior & React Junior Specialist |', 120, 3000);
   return <>{typedName}</>;
 });
+
+// Tambahkan display name
+TypingTitle.displayName = "TypingTitle";
 
 
 // TypingAnimation component for animated code typing effect
@@ -537,7 +527,7 @@ export default function Portfolio() {
           >
             {/* Name Tag */}
             <div className="mb-6 px-4 py-2 bg-indigo-900/50 rounded-full border border-indigo-400/30 shadow-lg">
-              <span className="text-sm font-medium text-indigo-200">Hello, I'm</span>
+              <span className="text-sm font-medium text-indigo-200">Hello, I&apos;m</span>
             </div>
 
             {/* Name */}
@@ -883,7 +873,6 @@ export default function Portfolio() {
         >
           {/* Falling Stars Animation */}
           {windowSize.width > 0 && [...Array(8)].map((_, i) => {
-            const xPos = Math.random() * windowSize.width;
             return (
               <motion.div
                 key={`star-${i}`}
@@ -989,9 +978,11 @@ export default function Portfolio() {
                   >
                     <div className="h-full bg-white/5 backdrop-blur-md rounded-2xl shadow-2xl overflow-hidden border border-indigo-400/30 transition-all duration-300 flex flex-col">
                       <div className="relative overflow-hidden h-40">
-                        <img
+                        <Image    
                           src={proj.img}
                           alt={proj.title}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 50vw"
                           className="w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
@@ -1374,10 +1365,16 @@ export default function Portfolio() {
             viewport={{ once: true }}
           >
             <div className="flex justify-between mb-2">
-              <span className="font-medium text-indigo-100 flex items-center gap-2">
-                <img src={skill.icon} alt={skill.name} className="w-5 h-5 object-contain" />
+                <span className="font-medium text-indigo-100 flex items-center gap-2">
+                <Image
+                  src={skill.icon}
+                  alt={skill.name}
+                  width={20}
+                  height={20}
+                  className="w-5 h-5 object-contain"
+                />
                 {skill.name}
-              </span>
+                </span>
               <span className="text-indigo-300 font-mono">{skill.value}%</span>
             </div>
             <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden shadow-inner">
@@ -1478,9 +1475,11 @@ export default function Portfolio() {
                 <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl blur-md -z-10"></div>
                 <div className="flex flex-col items-center justify-center bg-white/5 rounded-xl shadow-lg border border-indigo-400/20 p-4 hover:bg-white/10 hover:border-indigo-300/50 hover:shadow-indigo-500/20 transition-all duration-300 h-full">
                   <div className="w-12 h-12 mb-3 flex items-center justify-center">
-                    <img 
-                      src={skill.icon} 
-                      alt={skill.name} 
+                    <Image 
+                      src={skill.icon}
+                      alt={skill.name}
+                      width={48}
+                      height={48}
                       className="w-full h-full object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-300" 
                     />
                   </div>
@@ -1683,8 +1682,8 @@ export default function Portfolio() {
                       <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl opacity-0 group-hover:opacity-20 blur transition-all duration-300 -z-10"></div>
                       <div className="h-full bg-white/5 backdrop-blur-md rounded-xl p-6 shadow-xl border border-indigo-400/30 hover:border-purple-300/50 transition-all duration-300">
                         <div className="flex items-start mb-4">
-                          <div className="text-4xl font-serif text-purple-400/50 mr-4">"</div>
-                          <p className="text-lg italic text-indigo-100 flex-1">"{testi.message}"</p>
+                          <div className="text-4xl font-serif text-purple-400/50 mr-4">&quot;</div>
+                          <p className="text-lg italic text-indigo-100 flex-1">&quot;{testi.message}&quot;</p>
                         </div>
                         <div className="flex items-center mt-6">
                           <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold mr-4">
