@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sun, Moon } from 'lucide-react';
 import { FiBarChart2, FiAward, FiCode, FiDownload, FiMail,FiX, FiMessageSquare, FiLinkedin, FiInstagram, FiExternalLink, FiGithub } from 'react-icons/fi';
 import { FaWhatsapp, FaTelegram, FaLine } from 'react-icons/fa';
 import React from 'react';
@@ -117,6 +116,22 @@ const projects = [
     desc: "Aplikasi portal berita yang menyediakan informasi terkini dan penting dari PT.PLN (Persero) untuk wilayah Sumatera Selatan, Jambi, dan Bengkulu.",
     img: "/project/newspln.jpg",
     tags: ["Laravel", "Bootstrap", "Node.js"," MySQL"],
+    demoUrl: "#",
+    codeUrl: "#"
+  },
+        {
+    title: "Aplikasi Penjualan Pempek Palembang Secara Online",
+    desc: "Aplikasi ini adalah platform penjualan pempek Palembang secara online, memungkinkan pengguna untuk memesan dan membeli pempek dengan mudah walaupun berbeda pulau.",
+    img: "/project/pempek.png",
+    tags: ["Laravel", "Bootstrap","Tailwind", "Node.js"," MySQL"],
+    demoUrl: "#",
+    codeUrl: "#"
+  },
+   {
+    title: "Aplikasi Untuk System Auditi Pada Universitas Sriwijaya",
+    desc: "Aplikasi ini adalah sistem auditi yang dirancang untuk membantu Universitas Sriwijaya dalam mengelola dan memantau proses audit internal secara efisien.Tetapi Aplikasi ini masih dalam tahap pengembangan dan sudah memasuki tahap testing. mungkin akan ada beberapa bug yang harus diperbaiki jadi kedepannya akan di update oleh tim pengembang yang ada disana.",
+    img: "/project/auditi.png",
+    tags: ["Laravel", "Bootstrap","Tailwind", "Node.js"," MySQL"],
     demoUrl: "#",
     codeUrl: "#"
   },
@@ -253,7 +268,7 @@ const testimonials = [
     message: 'Kamu harus bangga dengan dirimu sendiri, Fathiir. Kamu telah bekerja keras dan mencapai banyak hal. Teruslah belajar dan berkembang, saya selalu mendukungmu.'
   },
   {
-    name: 'Eko,Meiliano,Daffa,Azzam,Alif,Fahkri',
+    name: 'Teman Seperjuangan',
     title: 'Teman Seperjuangan',
     message: 'Fathiir adalah teman yang sangat inspiratif. Dia selalu siap membantu dan berbagi ilmu dengan kami. Kerja kerasnya dalam mengembangkan aplikasi pengelolaan dokumen akreditasi sangat menginspirasi kami semua.'
   },
@@ -384,7 +399,7 @@ const TypingAnimation = ({ lines, speed, className }: { lines: string[]; speed: 
 
 export default function Portfolio() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(true);
+  // const [darkMode, setDarkMode] = useState(true);
   const [showContact, setShowContact] = useState(false);
 
   // Gunakan ref untuk menyimpan ukuran window hanya di client
@@ -471,16 +486,16 @@ export default function Portfolio() {
   };
 
   return (
-    <div className={`${darkMode ? 'bg-gradient-to-br from-indigo-900 to-purple-900 text-white' : 'bg-white text-black'} relative min-h-screen w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth font-sans`}>
+    <div className="bg-gradient-to-br from-indigo-900 to-purple-900 text-white relative min-h-screen w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth font-sans">
 
       {/* Toggle Theme */}
-      <button
+      {/* <button
         onClick={() => setDarkMode(!darkMode)}
         aria-label="Toggle dark mode"
         className="fixed top-4 right-4 z-50 p-2 rounded-xl backdrop-blur-md bg-white/10 hover:bg-white/20 outline-none"
       >
         {darkMode ? <Sun className="text-yellow-300" /> : <Moon className="text-gray-800" />}
-      </button>
+      </button> */}
 
       {/* Navigation */}
       <nav className="fixed top-4 left-4 z-50">
@@ -662,7 +677,7 @@ export default function Portfolio() {
                 }}
               >
                 <motion.img
-                  src="/fatir.jpg"
+                  src="/fatirr.jpg"
                   alt="Foto Atin"
                   className="w-full h-full object-cover rounded-full border-[6px] border-white"
                   whileHover={{ scale: 1.05, rotate: 2 }}
