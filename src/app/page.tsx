@@ -107,7 +107,7 @@ const projects = [
     title: "Aplikasi Absensi Siswa Menggunakan Face Recognition",
     desc: "Aplikasi ini adalah sistem absensi siswa yang menggunakan teknologi pengenalan wajah untuk mencatat kehadiran siswa secara otomatis, meningkatkan efisiensi dan akurasi dalam proses absensi walau masih tahab pengembangan tetapi ini sudah bisa digunakan dan semoga dapat bermanfaat kedepannya.",
     img: "/project/ApkAbsen.png",
-    tags: ["Laravel", "Bootstrap", "Node.js"," MySQL","Python", "Face Recognition","Filament"],
+    tags: ["Laravel", "Bootstrap", "Node.js"," MySQL","Python", "Face Recognition","Filament", "API"],
     demoUrl: "#",
     codeUrl: "#"
   },
@@ -131,7 +131,15 @@ const projects = [
     title: "Aplikasi Untuk System Auditi Pada Universitas Sriwijaya",
     desc: "Aplikasi ini adalah sistem auditi yang dirancang untuk membantu Universitas Sriwijaya dalam mengelola dan memantau proses audit internal secara efisien.Tetapi Aplikasi ini masih dalam tahap pengembangan dan sudah memasuki tahap testing. mungkin akan ada beberapa bug yang harus diperbaiki jadi kedepannya akan di update oleh tim pengembang yang ada disana.",
     img: "/project/auditi.png",
-    tags: ["Laravel", "Bootstrap","Tailwind", "Node.js"," MySQL"],
+    tags: ["Laravel", "Bootstrap","Tailwind", "Node.js"," MySQL","API"],
+    demoUrl: "#",
+    codeUrl: "#"
+  },
+  {
+    title: "Aplikasi Profile Perusahaan Berbasis Web dengan Penerapan AI di PT. Lematang Coal Lestari",
+    desc: "Aplikasi ini adalah website profile perusahaan yang memanfaatkan teknologi AI untuk meningkatkan interaksi pengguna dan memberikan informasi yang lebih personalisasi tentang PT. Lematang Coal Lestari. Dengan kesediaan AI lokasi perusahaan dapat dengan mudah ditemukan dari mencari hotel terdekat, restoran terdekat, dan lain-lain.",
+    img: "/project/ptlematangcoallestari.png",
+    tags: ["Laravel", "Bootstrap","Tailwind", "Node.js"," MySQL","AI", "API"],
     demoUrl: "#",
     codeUrl: "#"
   },
@@ -327,7 +335,7 @@ const sectionVariants = {
 };
 
 const TypingTitle = React.memo(() => {
-  const typedName = useTyping('Web Developer | Laravel Senior & React Junior Specialist |', 120, 3000);
+  const typedName = useTyping('Web Developer | Laravel Junior | FullStack', 120, 3000);
   return <>{typedName}</>;
 });
 
