@@ -1112,7 +1112,7 @@ export default function Portfolio() {
                         whileInView={{ opacity: 1 }}
                         transition={{ delay: 0.5 }}
                       >
-                        <motion.a
+                        {/* <motion.a
                           href={proj.demoUrl}
                           target="_blank"
                           rel="noopener noreferrer"
@@ -1122,7 +1122,7 @@ export default function Portfolio() {
                         >
                           <FiExternalLink />
                           Visit Site
-                        </motion.a>
+                        </motion.a> */}
                         <motion.a
                           href={proj.codeUrl}
                           target="_blank"
