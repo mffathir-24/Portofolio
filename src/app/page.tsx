@@ -85,15 +85,15 @@ const projects = [
     img: "/project/ApkE1.jpg",
     tags: ["Laravel", "Bootstrap", "Node.js"," MySQL"],
     demoUrl: "#",
-    codeUrl: "#"
+    codeUrl: "https://github.com/mffathir-24/E-Commerce.git"
   },
     {
     title: "Aplikasi Pengelolaan Dokumen Akreditasi",
     desc: "Aplikasi ini membantu yang dirancang untuk meningkatkan nilai akreditasi pada prodi manajemen informatika dalam mengelola dokumen akreditasi dengan mudah, termasuk upload, pengelompokan, dan pencarian dokumen.",
     img: "/project/Apkpengelola.png",
     tags: ["Laravel", "Bootstrap", "Node.js"," MySQL"],
-    demoUrl: "https://akreditasi.mi.ilkom.unsri.ac.id/login",
-    codeUrl: "#"
+    demoUrl: "#",
+    codeUrl: "https://github.com/mffathir-24/Akre_MI.git"
   },
     {
     title: "Aplikasi Topup Game",
@@ -101,7 +101,7 @@ const projects = [
     img: "/project/topupgame.jpg",
     tags: ["Laravel", "Bootstrap", "Node.js"," MySQL"],
     demoUrl: "#",
-    codeUrl: "#"
+    codeUrl: "https://github.com/mffathir-24/TopUp-Game-ML.git"
   },
     {
     title: "Aplikasi Absensi Siswa Menggunakan Face Recognition",
@@ -109,7 +109,7 @@ const projects = [
     img: "/project/ApkAbsen.png",
     tags: ["Laravel", "Bootstrap", "Node.js"," MySQL","Python", "Face Recognition","Filament", "API"],
     demoUrl: "#",
-    codeUrl: "#"
+    codeUrl: "https://github.com/mffathir-24/Absen-Face_Recognition.git"
   },
       {
     title: "Aplikasi Berita PT.PLN (Persero) Wilayah Sumatera Selatan, Jambi, dan Bengkulu",
@@ -117,7 +117,7 @@ const projects = [
     img: "/project/newspln.jpg",
     tags: ["Laravel", "Bootstrap", "Node.js"," MySQL"],
     demoUrl: "#",
-    codeUrl: "#"
+    codeUrl: "https://github.com/mffathir-24/Berita-PT-PLN-Palembang.git"
   },
         {
     title: "Aplikasi Penjualan Pempek Palembang Secara Online",
@@ -125,7 +125,7 @@ const projects = [
     img: "/project/pempek.png",
     tags: ["Laravel", "Bootstrap","Tailwind", "Node.js"," MySQL"],
     demoUrl: "#",
-    codeUrl: "#"
+    codeUrl: "https://github.com/mffathir-24/Pempek-Online"
   },
    {
     title: "Aplikasi Untuk System Auditi Pada Universitas Sriwijaya",
@@ -133,7 +133,7 @@ const projects = [
     img: "/project/auditi.png",
     tags: ["Laravel", "Bootstrap","Tailwind", "Node.js"," MySQL","API"],
     demoUrl: "#",
-    codeUrl: "#"
+    codeUrl: "https://github.com/mffathir-24/System-Audit_Unsri.git"
   },
   {
     title: "Aplikasi Profile Perusahaan Berbasis Web dengan Penerapan AI di PT. Lematang Coal Lestari",
@@ -141,7 +141,7 @@ const projects = [
     img: "/project/ptlematangcoallestari.png",
     tags: ["Laravel", "Bootstrap","Tailwind", "Node.js"," MySQL","AI", "API"],
     demoUrl: "#",
-    codeUrl: "#"
+    codeUrl: "https://github.com/mffathir-24/Company-Profile-AI_PT-Coal-Lestari.git"
   },
   
 ];
@@ -1014,7 +1014,7 @@ export default function Portfolio() {
                         <h3 className="text-lg font-bold mb-2 text-white">{proj.title}</h3>
                         <p className="text-sm text-indigo-200 mb-3 line-clamp-2">{proj.desc}</p>
                         <div className="flex gap-2 mt-auto">
-                          <a
+                          {/* <a
                             href={proj.demoUrl}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -1022,7 +1022,7 @@ export default function Portfolio() {
                           >
                             <FiExternalLink size={12} />
                             Visit Site
-                          </a>
+                          </a> */}
                           <a
                             href={proj.codeUrl}
                             target="_blank"
