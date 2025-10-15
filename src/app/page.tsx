@@ -142,8 +142,7 @@ const projects = [
     tags: ["Laravel", "Bootstrap", "Tailwind", "Node.js", " MySQL", "AI", "API"],
     demoUrl: "#",
     codeUrl: "https://github.com/mffathir-24/Company-Profile-AI_PT-Coal-Lestari.git"
-  },
-
+  }
 ];
 
 const experiences = [
@@ -411,11 +410,30 @@ export default function Portfolio() {
   const [showContact, setShowContact] = useState(false);
 
   // Gunakan ref untuk menyimpan ukuran window hanya di client
-  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+  const [windowSize, setWindowSize] = useState({
+    width: 0,
+    height: 0,
+  });
+
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-    }
+    // Set initial size
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+
+    // Handler untuk resize
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   // Tambahkan fungsi scroll smooth
@@ -1049,92 +1067,61 @@ export default function Portfolio() {
                   initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: idx * 0.15 }}
-                  viewport={{ once: true, margin: "-100px" }}
+                  viewport={{ once: true, margin: "-50px" }} 
                 >
                   {/* Project Card */}
                   <motion.div
                     className="h-full bg-white/5 backdrop-blur-md rounded-2xl shadow-2xl overflow-hidden border border-indigo-400/30 hover:border-indigo-300/50 transition-all duration-300 flex flex-col"
-                    whileHover={{ y: -10, boxShadow: "0 20px 25px -5px rgba(99, 102, 241, 0.2)" }}
+                    whileHover={{ y: -5, boxShadow: "0 15px 20px -5px rgba(99, 102, 241, 0.2)" }} 
                   >
                     {/* Image Container */}
-                    <div className="relative overflow-hidden h-56">
-                      <motion.img
+                    <div className="relative overflow-hidden h-48"> {/* Kurangi tinggi */}
+                      <img
                         src={proj.img}
                         alt={proj.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        initial={{ scale: 1.1 }}
-                        whileInView={{ scale: 1 }}
-                        transition={{ duration: 0.7 }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
 
                     {/* Content */}
-                    <div className="p-6 flex-1 flex flex-col">
-                      <motion.h3
-                        className="text-xl font-bold mb-3 text-white group-hover:text-indigo-300 transition-colors"
-                        initial={{ opacity: 0, x: 20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                      >
+                    <div className="p-4 flex-1 flex flex-col"> {/* Kurangi padding */}
+                      <h3 className="text-lg font-bold mb-2 text-white group-hover:text-indigo-300 transition-colors line-clamp-2"> {/* Tambah line-clamp */}
                         {proj.title}
-                      </motion.h3>
+                      </h3>
 
-                      <motion.p
-                        className="text-indigo-200 mb-4 flex-1"
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.3 }}
-                      >
+                      <p className="text-sm text-indigo-200 mb-3 flex-1 line-clamp-3"> {/* Kurangi text size, tambah line-clamp */}
                         {proj.desc}
-                      </motion.p>
+                      </p>
 
                       {/* Tags */}
                       {proj.tags && (
-                        <motion.div
-                          className="flex flex-wrap gap-2 mb-4"
-                          initial={{ opacity: 0 }}
-                          whileInView={{ opacity: 1 }}
-                          transition={{ delay: 0.4 }}
-                        >
-                          {proj.tags.map(tag => (
+                        <div className="flex flex-wrap gap-1 mb-3"> {/* Kurangi margin */}
+                          {proj.tags.slice(0, 4).map(tag => ( // Batasi jumlah tags
                             <span key={tag} className="text-xs px-2 py-1 bg-indigo-900/50 rounded-full text-indigo-200">
                               {tag}
                             </span>
                           ))}
-                        </motion.div>
+                          {proj.tags.length > 4 && (
+                            <span className="text-xs px-2 py-1 bg-indigo-900/30 rounded-full text-indigo-300">
+                              +{proj.tags.length - 4}
+                            </span>
+                          )}
+                        </div>
                       )}
 
                       {/* CTA Buttons */}
-                      <motion.div
-                        className="flex gap-3 mt-auto pt-4"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ delay: 0.5 }}
-                      >
-                        {/* <motion.a
-                          href={proj.demoUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <FiExternalLink />
-                          Visit Site
-                        </motion.a> */}
-                        <motion.a
+                      <div className="flex gap-2 mt-auto pt-3"> {/* Kurangi gap dan padding */}
+                        <a
                           href={proj.codeUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-4 py-2 text-sm bg-transparent border border-indigo-400 hover:bg-indigo-900/30 text-indigo-100 rounded-lg font-medium transition-colors flex items-center gap-2"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
+                          className="px-3 py-2 text-xs bg-transparent border border-indigo-400 hover:bg-indigo-900/30 text-indigo-100 rounded-lg font-medium transition-colors flex items-center gap-1 flex-1 justify-center"
                         >
-                          <FiGithub />
+                          <FiGithub size={14} />
                           View Code
-                        </motion.a>
-                      </motion.div>
+                        </a>
+                      </div>
                     </div>
                   </motion.div>
                 </motion.div>
