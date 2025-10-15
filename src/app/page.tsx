@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiBarChart2, FiAward, FiCode, FiDownload, FiMail, FiX, FiMessageSquare, FiLinkedin, FiInstagram, FiExternalLink, FiGithub } from 'react-icons/fi';
+import { FiBarChart2, FiAward, FiCode, FiDownload, FiMail, FiX, FiMessageSquare, FiLinkedin, FiInstagram, FiGithub } from 'react-icons/fi';
 import { FaWhatsapp, FaTelegram, FaLine } from 'react-icons/fa';
 import React from 'react';
 import Image from 'next/image';
@@ -1067,37 +1067,39 @@ export default function Portfolio() {
                   initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: idx * 0.15 }}
-                  viewport={{ once: true, margin: "-50px" }} 
+                  viewport={{ once: true, margin: "-50px" }}
                 >
                   {/* Project Card */}
                   <motion.div
                     className="h-full bg-white/5 backdrop-blur-md rounded-2xl shadow-2xl overflow-hidden border border-indigo-400/30 hover:border-indigo-300/50 transition-all duration-300 flex flex-col"
-                    whileHover={{ y: -5, boxShadow: "0 15px 20px -5px rgba(99, 102, 241, 0.2)" }} 
+                    whileHover={{ y: -5, boxShadow: "0 15px 20px -5px rgba(99, 102, 241, 0.2)" }}
                   >
                     {/* Image Container */}
-                    <div className="relative overflow-hidden h-48"> {/* Kurangi tinggi */}
-                      <img
+                    <div className="relative overflow-hidden h-48">
+                      <Image
                         src={proj.img}
                         alt={proj.title}
+                        width={400}
+                        height={192}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
 
                     {/* Content */}
-                    <div className="p-4 flex-1 flex flex-col"> {/* Kurangi padding */}
-                      <h3 className="text-lg font-bold mb-2 text-white group-hover:text-indigo-300 transition-colors line-clamp-2"> {/* Tambah line-clamp */}
+                    <div className="p-4 flex-1 flex flex-col">
+                      <h3 className="text-lg font-bold mb-2 text-white group-hover:text-indigo-300 transition-colors line-clamp-2">
                         {proj.title}
                       </h3>
 
-                      <p className="text-sm text-indigo-200 mb-3 flex-1 line-clamp-3"> {/* Kurangi text size, tambah line-clamp */}
+                      <p className="text-sm text-indigo-200 mb-3 flex-1 line-clamp-3">
                         {proj.desc}
                       </p>
 
                       {/* Tags */}
                       {proj.tags && (
-                        <div className="flex flex-wrap gap-1 mb-3"> {/* Kurangi margin */}
-                          {proj.tags.slice(0, 4).map(tag => ( // Batasi jumlah tags
+                        <div className="flex flex-wrap gap-1 mb-3">
+                          {proj.tags.slice(0, 4).map(tag => (
                             <span key={tag} className="text-xs px-2 py-1 bg-indigo-900/50 rounded-full text-indigo-200">
                               {tag}
                             </span>
@@ -1111,7 +1113,7 @@ export default function Portfolio() {
                       )}
 
                       {/* CTA Buttons */}
-                      <div className="flex gap-2 mt-auto pt-3"> {/* Kurangi gap dan padding */}
+                      <div className="flex gap-2 mt-auto pt-3">
                         <a
                           href={proj.codeUrl}
                           target="_blank"
