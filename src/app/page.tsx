@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiBarChart2, FiAward, FiCode, FiDownload, FiMail, FiX, FiMessageSquare, FiLinkedin, FiInstagram, FiGithub } from 'react-icons/fi';
+import { FiBarChart2, FiAward, FiCode, FiDownload, FiMail,FiX, FiMessageSquare, FiLinkedin, FiInstagram, FiGithub, FiExternalLink } from 'react-icons/fi';
 import { FaWhatsapp, FaTelegram, FaLine } from 'react-icons/fa';
 import React from 'react';
 import Image from 'next/image';
@@ -83,55 +83,55 @@ const projects = [
     title: "Aplikasi E-Commerce Bernama DekufaShop",
     desc: "Sebuah aplikasi e-commerce yang dibangun dengan Laravel, menyediakan fitur lengkap untuk penjualan online tetapi dengan pembayaran qris/tf secara manual.",
     img: "/project/ApkE1.jpg",
-    tags: ["Laravel", "Bootstrap", "Node.js", " MySQL"],
+    tags: ["Laravel", "Bootstrap", "Node.js"," MySQL"],
     demoUrl: "#",
     codeUrl: "https://github.com/mffathir-24/E-Commerce.git"
   },
-  {
+    {
     title: "Aplikasi Pengelolaan Dokumen Akreditasi",
     desc: "Aplikasi ini membantu yang dirancang untuk meningkatkan nilai akreditasi pada prodi manajemen informatika dalam mengelola dokumen akreditasi dengan mudah, termasuk upload, pengelompokan, dan pencarian dokumen.",
     img: "/project/Apkpengelola.png",
-    tags: ["Laravel", "Bootstrap", "Node.js", " MySQL"],
+    tags: ["Laravel", "Bootstrap", "Node.js"," MySQL"],
     demoUrl: "#",
     codeUrl: "https://github.com/mffathir-24/Akre_MI.git"
   },
-  {
+    {
     title: "Aplikasi Topup Game",
     desc: " Aplikasi ini adalah platform topup game yang memungkinkan pengguna untuk membeli voucher game dengan mudah dan cepat, yang hanya menyediakan game populer seperti ML.",
     img: "/project/topupgame.jpg",
-    tags: ["Laravel", "Bootstrap", "Node.js", " MySQL"],
+    tags: ["Laravel", "Bootstrap", "Node.js"," MySQL"],
     demoUrl: "#",
     codeUrl: "https://github.com/mffathir-24/TopUp-Game-ML.git"
   },
-  {
+    {
     title: "Aplikasi Absensi Siswa Menggunakan Face Recognition",
     desc: "Aplikasi ini adalah sistem absensi siswa yang menggunakan teknologi pengenalan wajah untuk mencatat kehadiran siswa secara otomatis, meningkatkan efisiensi dan akurasi dalam proses absensi walau masih tahab pengembangan tetapi ini sudah bisa digunakan dan semoga dapat bermanfaat kedepannya.",
     img: "/project/ApkAbsen.png",
-    tags: ["Laravel", "Bootstrap", "Node.js", " MySQL", "Python", "Face Recognition", "Filament", "API"],
+    tags: ["Laravel", "Bootstrap", "Node.js"," MySQL","Python", "Face Recognition","Filament", "API"],
     demoUrl: "#",
     codeUrl: "https://github.com/mffathir-24/Absen-Face_Recognition.git"
   },
-  {
+      {
     title: "Aplikasi Berita PT.PLN (Persero) Wilayah Sumatera Selatan, Jambi, dan Bengkulu",
     desc: "Aplikasi portal berita yang menyediakan informasi terkini dan penting dari PT.PLN (Persero) untuk wilayah Sumatera Selatan, Jambi, dan Bengkulu.",
     img: "/project/newspln.jpg",
-    tags: ["Laravel", "Bootstrap", "Node.js", " MySQL"],
+    tags: ["Laravel", "Bootstrap", "Node.js"," MySQL"],
     demoUrl: "#",
     codeUrl: "https://github.com/mffathir-24/Berita-PT-PLN-Palembang.git"
   },
-  {
+        {
     title: "Aplikasi Penjualan Pempek Palembang Secara Online",
     desc: "Aplikasi ini adalah platform penjualan pempek Palembang secara online, memungkinkan pengguna untuk memesan dan membeli pempek dengan mudah walaupun berbeda pulau.",
     img: "/project/pempek.png",
-    tags: ["Laravel", "Bootstrap", "Tailwind", "Node.js", " MySQL"],
+    tags: ["Laravel", "Bootstrap","Tailwind", "Node.js"," MySQL"],
     demoUrl: "#",
     codeUrl: "https://github.com/mffathir-24/Pempek-Online"
   },
-  {
+   {
     title: "Aplikasi Untuk System Auditi Pada Universitas Sriwijaya",
     desc: "Aplikasi ini adalah sistem auditi yang dirancang untuk membantu Universitas Sriwijaya dalam mengelola dan memantau proses audit internal secara efisien.Tetapi Aplikasi ini masih dalam tahap pengembangan dan sudah memasuki tahap testing. mungkin akan ada beberapa bug yang harus diperbaiki jadi kedepannya akan di update oleh tim pengembang yang ada disana.",
     img: "/project/auditi.png",
-    tags: ["Laravel", "Bootstrap", "Tailwind", "Node.js", " MySQL", "API"],
+    tags: ["Laravel", "Bootstrap","Tailwind", "Node.js"," MySQL","API"],
     demoUrl: "#",
     codeUrl: "https://github.com/mffathir-24/System-Audit_Unsri.git"
   },
@@ -139,10 +139,19 @@ const projects = [
     title: "Aplikasi Profile Perusahaan Berbasis Web dengan Penerapan AI di PT. Lematang Coal Lestari",
     desc: "Aplikasi ini adalah website profile perusahaan yang memanfaatkan teknologi AI untuk meningkatkan interaksi pengguna dan memberikan informasi yang lebih personalisasi tentang PT. Lematang Coal Lestari. Dengan kesediaan AI lokasi perusahaan dapat dengan mudah ditemukan dari mencari hotel terdekat, restoran terdekat, dan lain-lain.",
     img: "/project/ptlematangcoallestari.png",
-    tags: ["Laravel", "Bootstrap", "Tailwind", "Node.js", " MySQL", "AI", "API"],
+    tags: ["Laravel", "Bootstrap","Tailwind", "Node.js"," MySQL","AI", "API"],
     demoUrl: "#",
     codeUrl: "https://github.com/mffathir-24/Company-Profile-AI_PT-Coal-Lestari.git"
-  }
+  },
+  {
+    title: "Aplikasi Task and Projek Manajemen System berbasis Mobile",
+    desc: "Aplikasi ini menggunakan backend golang dan frontend react native dengan memiliki 3 role admin,manager,staff",
+    img: "/project/taskprojekmobile.jpg",
+    tags: ["Golang", "React","Tailwind", "Mobile"," PostgresSQL", "API"],
+    demoUrl: "https://expo.dev/accounts/mffathir/projects/taskmanagementapp/builds/17787899-83af-41cf-afd7-2c8df7c40eb5",
+    codeUrl: "https://github.com/mffathir-24/Company-Profile-AI_PT-Coal-Lestari.git"
+  },
+  
 ];
 
 const experiences = [
@@ -194,7 +203,7 @@ const experiences = [
     ],
     skills: ["Laravel", "MySQL", "CSS", "JavaScript", "HTML", "Bootstrap"],
   },
-  {
+    {
     title: "Saya sebagai backend developer yang membuat web topup game, bekerja di dalam team sebanyak 3 orang, untuk projek akhir dari bootcamp",
     company: "Freelance",
     location: "Remote",
@@ -204,7 +213,19 @@ const experiences = [
       "Membuat Alerts untuk notifikasi topup game",
       "Membuat diagram relasi database untuk aplikasi topup game",
     ],
-    skills: ["Laravel", "MySQL", "ERD", "Alerts", "Database Design", "Teamwork"],
+    skills: ["Laravel", "MySQL", "ERD","Alerts", "Database Design", "Teamwork"],
+  },
+  {
+  title: "Saya bekerja freelance sebagai teknisi replace Fortiswitch dan FortiGate dari perangkat lama ke perangkat baru di Jamkrindo kantor cabang dan kantor wilayah Palembang",
+    company: "MSInfokom",
+    location: "Onsite",
+    year: "2023-2024",
+    responsibilities: [
+      "Melakukan replace Fortiswitch dan FortiGate di lokasi klien",
+      "Perapian kabel lan",
+      "Cek config 8.8.8.8 apakah aman atau tidak servernya",
+    ],
+    skills: ["CMD", "Networking", "Troubleshooting", "Customer Service", "Teamwork","FortiGate", "FortiSwitch"],
   },
 ];
 
@@ -213,6 +234,7 @@ const certificates = [
   { name: 'Sertifikat English Conversation,Speaking and Academy Writing', img: '/englishsr.jpg' },
   { name: 'Sertifikat Seminar by Google Developer Student Clubs', img: '/seminarG.jpg' },
   { name: 'Sertifikat Apresiasi Panitia Perlengkapan', img: '/apresiasisr.jpg' },
+  { name: 'Sertifikat Golang Achivement Mastered Bootcamp by Sanbercode', img: '/sertifikat-golang.jpg' },
 ];
 
 const skills = [
@@ -220,12 +242,12 @@ const skills = [
   { name: 'PHP', value: 90, icon: '/icons/php.png' },
   { name: 'CSS', value: 85, icon: '/icons/css.png' },
   { name: 'MySQL', value: 90, icon: '/icons/mysql.png' },
-  { name: 'Ai', value: 88, icon: '/icons/ai.png' },
-  { name: 'NodeJS', value: 93, icon: '/icons/nodejs.png' },
+  { name: 'Golang', value: 95, icon: '/icons/golang.png' },
+  { name: 'React', value: 93, icon: '/icons/react.png' },
 ];
 
 const studies = [
-  {
+    {
     school: "SMA Yayasan Pendidikan Islam (YPI) Palembang",
     major: "Ilmu Pengetahuan Sosial(IPS)",
     year: "2019-2022",
@@ -259,7 +281,7 @@ const testimonials = [
     title: 'Ayah',
     message: 'Fathiir adalah anak yang sangat berbakat dan pekerja keras. Dia selalu berusaha memberikan yang terbaik dalam setiap proyek yang dia kerjakan. Saya bangga padanya.'
   },
-  {
+    {
     name: 'Abdiansah',
     title: 'Kaprodi Manajemen Informatika',
     message: 'Sangat Memuaskan, sangat membantu dalam mengelola dokumen akreditasi prodi kami. Aplikasi ini sangat user-friendly dan efisien.'
@@ -287,32 +309,32 @@ const blogPosts = [
     date: '12 Mei 2024',
     excerpt: 'Menjadi web developer bukan hanya soal coding, tetapi juga soal mindset dan kebiasaan...'
   },
-  {
+    {
     title: 'Tips Menggunakan AI dalam Pengembangan Web',
     date: '28 Mei 2025',
     excerpt: 'AI dapat menjadi alat yang sangat berguna dalam pengembangan web, berikut beberapa tips untuk memanfaatkannya...'
   },
-  {
+    {
     title: 'Laravel vs Node.js: Mana yang Lebih Baik untuk Proyek Anda?',
     date: '20 Mei 2025',
     excerpt: 'Dalam dunia pengembangan web, Laravel dan Node.js adalah dua pilihan populer. Mari kita bahas kelebihan dan kekurangan masing-masing...'
   },
-  {
+    {
     title: 'Mengapa Memilih Laravel untuk Proyek Web Anda',
     date: '12 Mei 2025',
     excerpt: 'Laravel adalah framework PHP yang sangat populer dan banyak digunakan. Berikut adalah beberapa alasan mengapa Anda harus memilih Laravel untuk proyek web Anda...'
   },
-  {
+      {
     title: 'Cara Mudah Membangun Website',
     date: '03 Mei 2025',
     excerpt: 'Membangun website tidak harus rumit. Berikut adalah langkah-langkah mudah untuk memulai...'
   },
-  {
+    {
     title: 'Mengapa Explorasi Sangat Penting dalam Pengembangan Web',
     date: '23 Mei 2025',
     excerpt: 'Dalam dunia pengembangan web yang terus berubah, eksplorasi teknologi baru sangat penting untuk tetap relevan dan inovatif...'
   },
-  {
+      {
     title: 'Selalu Belajar: Kunci Sukses di Dunia Web Development',
     date: '24 Mei 2025',
     excerpt: 'Dunia web development selalu berubah, dan untuk tetap relevan, penting untuk terus belajar dan beradaptasi dengan teknologi baru...'
@@ -410,30 +432,11 @@ export default function Portfolio() {
   const [showContact, setShowContact] = useState(false);
 
   // Gunakan ref untuk menyimpan ukuran window hanya di client
-  const [windowSize, setWindowSize] = useState({
-    width: 0,
-    height: 0,
-  });
-
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   useEffect(() => {
-    // Set initial size
-    setWindowSize({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
-
-    // Handler untuk resize
-    const handleResize = () => {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
-
-    window.addEventListener('resize', handleResize);
-    
-    // Cleanup
-    return () => window.removeEventListener('resize', handleResize);
+    if (typeof window !== "undefined") {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    }
   }, []);
 
   // Tambahkan fungsi scroll smooth
@@ -474,7 +477,7 @@ export default function Portfolio() {
               exit={{ scale: 0.8, y: 50 }}
               transition={{ type: 'spring', damping: 20 }}
             >
-              <button
+              <button 
                 onClick={onClose}
                 className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
               >
@@ -560,7 +563,7 @@ export default function Portfolio() {
           viewport={{ once: false, amount: 0.3 }}
         >
           {/* Left: Text Content */}
-          <motion.div
+          <motion.div 
             className="flex-1 flex flex-col items-center md:items-start text-center md:text-left"
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -629,7 +632,7 @@ export default function Portfolio() {
             </motion.p>
 
             {/* CTA Buttons */}
-            <motion.div
+            <motion.div 
               className="flex gap-4 mt-4"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -640,10 +643,10 @@ export default function Portfolio() {
                 whileHover={{ scale: 1.05, boxShadow: "0 5px 15px rgba(99, 102, 241, 0.4)" }}
                 whileTap={{ scale: 0.98 }}
               >
-                <FiDownload className="text-lg" />
-                <a href="https://drive.google.com/file/d/1JvVmsssM03dJD5CKsokYd3bB7I85x-BJ/view?usp=drive_link" target="_blank" rel="noopener noreferrer" className="inline-block px-6 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-full">Download CV</a>
+                <FiDownload  className="text-lg" />
+                <a href="/CV-Anda.pdf" target="_blank" rel="noopener noreferrer" className="inline-block px-6 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-full">Download CV</a>
               </motion.button>
-
+              
               <motion.button
                 className="px-6 py-3 bg-transparent border border-indigo-400 hover:bg-indigo-900/30 text-indigo-100 rounded-lg font-medium shadow-lg transition-all duration-300 flex items-center gap-2"
                 whileHover={{ scale: 1.05, boxShadow: "0 5px 15px rgba(99, 102, 241, 0.2)" }}
@@ -653,7 +656,7 @@ export default function Portfolio() {
                 <FiMail className="text-lg" />
                 Contact Me
               </motion.button>
-
+              
             </motion.div>
           </motion.div>
 
@@ -665,7 +668,7 @@ export default function Portfolio() {
             transition={{ delay: 0.4, duration: 0.8, type: 'spring' }}
           >
             {/* Glowing Orb Background */}
-            <motion.div
+            <motion.div 
               className="absolute -z-10 w-64 h-64 md:w-80 md:h-80 rounded-full bg-indigo-600/20 blur-3xl"
               animate={{
                 scale: [1, 1.1, 1],
@@ -677,7 +680,7 @@ export default function Portfolio() {
                 ease: "easeInOut"
               }}
             />
-
+            
             {/* Profile Photo Container */}
             <motion.div
               className="flex-1 flex justify-center items-center"
@@ -712,193 +715,193 @@ export default function Portfolio() {
                   animate={{ filter: 'blur(0px)' }}
                   transition={{ duration: 1.2 }}
                 />
-
-                {/* Floating Badge */}
-                <motion.div
-                  className="absolute -bottom-4 -right-4 bg-gradient-to-br from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-full shadow-xl z-20 flex items-center gap-2"
-                  initial={{ scale: 0, y: 20 }}
-                  animate={{ scale: 1, y: 0 }}
-                  transition={{ delay: 1, type: 'spring' }}
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                >
-                  <FiAward className="text-yellow-300" />
-                  <span className="text-sm font-medium">Web Developer</span>
-                </motion.div>
+              
+              {/* Floating Badge */}
+              <motion.div 
+                className="absolute -bottom-4 -right-4 bg-gradient-to-br from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-full shadow-xl z-20 flex items-center gap-2"
+                initial={{ scale: 0, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                transition={{ delay: 1, type: 'spring' }}
+                whileHover={{ scale: 1.1, rotate: 5 }}
+              >
+                <FiAward className="text-yellow-300" />
+                <span className="text-sm font-medium">Web Developer</span>
               </motion.div>
+            </motion.div>
             </motion.div>
           </motion.div>
         </motion.section>
       </AnimatePresence>
 
 
-      <AnimatePresence>
-        <motion.section
-          id="about"
-          className="snap-start min-h-screen flex flex-col justify-center items-center px-6 py-16 bg-gradient-to-br from-gray-900 via-purple-900/20 to-indigo-900/30"
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          exit="exit"
-          transition={{ duration: 0.7 }}
-          viewport={{ once: false, amount: 0.3 }}
+        <AnimatePresence>
+  <motion.section
+    id="about"
+    className="snap-start min-h-screen flex flex-col justify-center items-center px-6 py-16 bg-gradient-to-br from-gray-900 via-purple-900/20 to-indigo-900/30"
+    variants={sectionVariants}
+    initial="hidden"
+    whileInView="visible"
+    exit="exit"
+    transition={{ duration: 0.7 }}
+    viewport={{ once: false, amount: 0.3 }}
+  >
+    <div className="w-full max-w-6xl mx-auto">
+      {/* Section Header */}
+      <motion.div
+        className="text-center mb-12"
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.h2
+          className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-purple-300"
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <div className="w-full max-w-6xl mx-auto">
-            {/* Section Header */}
-            <motion.div
-              className="text-center mb-12"
-              initial={{ opacity: 0, y: -20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <motion.h2
-                className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-purple-300"
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                About Me
-              </motion.h2>
-              <motion.p
-                className="text-lg text-indigo-200 max-w-2xl mx-auto"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-              >
-                The story behind the code and passion
-              </motion.p>
-            </motion.div>
+          About Me
+        </motion.h2>
+        <motion.p
+          className="text-lg text-indigo-200 max-w-2xl mx-auto"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
+          The story behind the code and passion
+        </motion.p>
+      </motion.div>
 
 
-            {/* About Content */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-16">
-              {/* Left Column - Personal Info */}
-              <motion.div
-                className="space-y-6"
-                initial={{ opacity: 0, x: -40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-              >
-                <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        {/* About Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-16">
+          {/* Left Column - Personal Info */}
+          <motion.div
+            className="space-y-6"
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <h3 className="text-2xl font-bold text-white flex items-center gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              Tentang Saya
+            </h3>
+            <p className="text-indigo-200 text-justify leading-relaxed tracking-wide">
+                    Saya Muhammad Fathiir Farhansyah, lahir di Palembang dan saat ini berusia 20 tahun,
+              Hobi saya ialah Futsal, Badminton, Renang, Coding, Gaming, Mancing. 
+              Saya memiliki minat besar dalam mempelajari hal-hal baru, terutama dalam mengeksplorasi 
+              teknologi, framework, dan penggunaan API seperti Python Face Recognition. Pengalaman 
+              saya dalam membangun aplikasi cukup beragam, mulai dari aplikasi web sederhana hingga 
+              sistem manajemen yang kompleks. Saya menguasai berbagai bahasa pemrograman dan framework, 
+              dengan keahlian khusus di Laravel dan React. Selain itu, saya aktif berpartisipasi dalam 
+              komunitas pengembang untuk berbagi pengetahuan dan terus mempelajari teknologi terkini.
+            </p>
+            
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <div className="p-2 bg-indigo-900/50 rounded-lg text-indigo-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
-                  Tentang Saya
-                </h3>
-                <p className="text-indigo-200 text-justify leading-relaxed tracking-wide">
-                  Saya Muhammad Fathiir Farhansyah, lahir di Palembang dan saat ini berusia 20 tahun,
-                  Hobi saya ialah Futsal, Badminton, Renang, Coding, Gaming, Mancing.
-                  Saya memiliki minat besar dalam mempelajari hal-hal baru, terutama dalam mengeksplorasi
-                  teknologi, framework, dan penggunaan API seperti Python Face Recognition. Pengalaman
-                  saya dalam membangun aplikasi cukup beragam, mulai dari aplikasi web sederhana hingga
-                  sistem manajemen yang kompleks. Saya menguasai berbagai bahasa pemrograman dan framework,
-                  dengan keahlian khusus di Laravel dan React. Selain itu, saya aktif berpartisipasi dalam
-                  komunitas pengembang untuk berbagi pengetahuan dan terus mempelajari teknologi terkini.
-                </p>
-
-                <div className="space-y-4">
-                  <div className="flex items-center gap-4">
-                    <div className="p-2 bg-indigo-900/50 rounded-lg text-indigo-300">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-white">Experience</h4>
-                      <p className="text-sm text-indigo-300">2,5+ years in web development</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-4">
-                    <div className="p-2 bg-indigo-900/50 rounded-lg text-indigo-300">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path d="M12 14l9-5-9-5-9 5 9 5z" />
-                        <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-white">Education</h4>
-                      <p className="text-sm text-indigo-300">Informatics Management</p>
-                    </div>
-                  </div>
                 </div>
-              </motion.div>
+                <div>
+                  <h4 className="font-medium text-white">Experience</h4>
+                  <p className="text-sm text-indigo-300">2,5+ years in web development</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-4">
+                <div className="p-2 bg-indigo-900/50 rounded-lg text-indigo-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                    <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-medium text-white">Education</h4>
+                  <p className="text-sm text-indigo-300">Informatics Management</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
 
-              {/* Right Column - Skills */}
-              {/* Laptop Animation */}
-              <div className="relative">
-                {/* Laptop Frame */}
-                <motion.div
-                  className="relative mx-auto w-full max-w-3xl"
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8 }}
-                >
-                  {/* Laptop Screen */}
-                  <div className="relative bg-gray-800 rounded-t-xl border-t-8 border-gray-700 pt-6 px-4 pb-4 shadow-2xl">
-                    {/* Screen Bezel */}
-                    <div className="absolute top-0 left-0 right-0 h-6 bg-gray-900 rounded-t-lg flex items-center px-4">
-                      <div className="flex space-x-2">
-                        <span className="w-3 h-3 rounded-full bg-red-500"></span>
-                        <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
-                        <span className="w-3 h-3 rounded-full bg-green-500"></span>
-                      </div>
-                    </div>
+          {/* Right Column - Skills */}
+                {/* Laptop Animation */}
+      <div className="relative">
+        {/* Laptop Frame */}
+        <motion.div
+          className="relative mx-auto w-full max-w-3xl"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          {/* Laptop Screen */}
+          <div className="relative bg-gray-800 rounded-t-xl border-t-8 border-gray-700 pt-6 px-4 pb-4 shadow-2xl">
+            {/* Screen Bezel */}
+            <div className="absolute top-0 left-0 right-0 h-6 bg-gray-900 rounded-t-lg flex items-center px-4">
+              <div className="flex space-x-2">
+                <span className="w-3 h-3 rounded-full bg-red-500"></span>
+                <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
+                <span className="w-3 h-3 rounded-full bg-green-500"></span>
+              </div>
+            </div>
 
-                    {/* Code Display */}
-                    <div className="bg-gray-900 rounded-lg overflow-hidden h-96">
-                      {/* Code Editor Header */}
-                      <div className="bg-gray-800 px-4 py-2 flex items-center">
-                        <div className="flex space-x-2 mr-4">
-                          <span className="w-2 h-2 rounded-full bg-gray-600"></span>
-                          <span className="w-2 h-2 rounded-full bg-gray-600"></span>
-                          <span className="w-2 h-2 rounded-full bg-gray-600"></span>
-                        </div>
-                        <span className="text-xs text-gray-400">about-me.js</span>
-                      </div>
+            {/* Code Display */}
+            <div className="bg-gray-900 rounded-lg overflow-hidden h-96">
+              {/* Code Editor Header */}
+              <div className="bg-gray-800 px-4 py-2 flex items-center">
+                <div className="flex space-x-2 mr-4">
+                  <span className="w-2 h-2 rounded-full bg-gray-600"></span>
+                  <span className="w-2 h-2 rounded-full bg-gray-600"></span>
+                  <span className="w-2 h-2 rounded-full bg-gray-600"></span>
+                </div>
+                <span className="text-xs text-gray-400">about-me.js</span>
+              </div>
 
-                      {/* Animated Code */}
-                      <div className="p-4 font-mono text-sm">
-                        <TypingAnimation
-                          lines={[
-                            "const aboutMe = {",
-                            "  name: 'Muhammad Fathiir Farhansyah',",
-                            "  role: 'Full Stack Developer',",
-                            "  skills: ['React', 'Node.js', 'Laravel'],",
-                            "  passion: 'Creating beautiful, functional applications',",
-                            "  experience: '2,5+ years in web development',",
-                            "  education: 'Informatics Management',",
-                            "  hobbies: ['Coding', 'Photography', 'Gaming']",
-                            "};",
-                            "",
-                            "function myApproach() {",
-                            "  return {",
-                            "    design: 'Clean & intuitive interfaces',",
-                            "    code: 'Efficient and maintainable',",
-                            "    philosophy: 'Continuous learning',",
-                            "    focus: 'User experience first'",
-                            "  };",
-                            "}",
-                            "",
-                            "export default aboutMe;"
-                          ]}
-                          speed={30}
-                          className="text-gray-300"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Laptop Base */}
-                  <div className="h-4 bg-gray-700 mx-auto w-3/4 rounded-b-xl shadow-lg"></div>
-                  <div className="h-2 bg-gray-600 mx-auto w-1/2 rounded-b-lg"></div>
-                </motion.div>
-
+              {/* Animated Code */}
+              <div className="p-4 font-mono text-sm">
+                <TypingAnimation
+                  lines={[
+                    "const aboutMe = {",
+                    "  name: 'Muhammad Fathiir Farhansyah',",
+                    "  role: 'Full Stack Developer',",
+                    "  skills: ['React', 'Node.js', 'Laravel'],",
+                    "  passion: 'Creating beautiful, functional applications',",
+                    "  experience: '2,5+ years in web development',",
+                    "  education: 'Informatics Management',",
+                    "  hobbies: ['Coding', 'Photography', 'Gaming']",
+                    "};",
+                    "",
+                    "function myApproach() {",
+                    "  return {",
+                    "    design: 'Clean & intuitive interfaces',",
+                    "    code: 'Efficient and maintainable',",
+                    "    philosophy: 'Continuous learning',",
+                    "    focus: 'User experience first'",
+                    "  };",
+                    "}",
+                    "",
+                    "export default aboutMe;"
+                  ]}
+                  speed={30}
+                  className="text-gray-300"
+                />
               </div>
             </div>
           </div>
-        </motion.section>
-      </AnimatePresence>
+
+          {/* Laptop Base */}
+          <div className="h-4 bg-gray-700 mx-auto w-3/4 rounded-b-xl shadow-lg"></div>
+          <div className="h-2 bg-gray-600 mx-auto w-1/2 rounded-b-lg"></div>
+        </motion.div>
+
+        </div>
+      </div>
+    </div>
+  </motion.section>
+</AnimatePresence>
 
       {/* Projek Section */}
       <AnimatePresence>
@@ -918,7 +921,7 @@ export default function Portfolio() {
               <motion.div
                 key={`star-${i}`}
                 className="absolute text-yellow-300 text-xl"
-                initial={{
+                initial={{ 
                   opacity: 0,
                   y: -50,
                   x: Math.random() * window.innerWidth
@@ -1019,7 +1022,7 @@ export default function Portfolio() {
                   >
                     <div className="h-full bg-white/5 backdrop-blur-md rounded-2xl shadow-2xl overflow-hidden border border-indigo-400/30 transition-all duration-300 flex flex-col">
                       <div className="relative overflow-hidden h-40">
-                        <Image
+                        <Image    
                           src={proj.img}
                           alt={proj.title}
                           fill
@@ -1032,7 +1035,7 @@ export default function Portfolio() {
                         <h3 className="text-lg font-bold mb-2 text-white">{proj.title}</h3>
                         <p className="text-sm text-indigo-200 mb-3 line-clamp-2">{proj.desc}</p>
                         <div className="flex gap-2 mt-auto">
-                          {/* <a
+                          <a
                             href={proj.demoUrl}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -1040,7 +1043,7 @@ export default function Portfolio() {
                           >
                             <FiExternalLink size={12} />
                             Visit Site
-                          </a> */}
+                          </a>
                           <a
                             href={proj.codeUrl}
                             target="_blank"
@@ -1067,63 +1070,92 @@ export default function Portfolio() {
                   initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: idx * 0.15 }}
-                  viewport={{ once: true, margin: "-50px" }}
+                  viewport={{ once: true, margin: "-100px" }}
                 >
                   {/* Project Card */}
                   <motion.div
                     className="h-full bg-white/5 backdrop-blur-md rounded-2xl shadow-2xl overflow-hidden border border-indigo-400/30 hover:border-indigo-300/50 transition-all duration-300 flex flex-col"
-                    whileHover={{ y: -5, boxShadow: "0 15px 20px -5px rgba(99, 102, 241, 0.2)" }}
+                    whileHover={{ y: -10, boxShadow: "0 20px 25px -5px rgba(99, 102, 241, 0.2)" }}
                   >
                     {/* Image Container */}
-                    <div className="relative overflow-hidden h-48">
-                      <Image
+                    <div className="relative overflow-hidden h-56">
+                      <motion.img
                         src={proj.img}
                         alt={proj.title}
-                        width={400}
-                        height={192}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        initial={{ scale: 1.1 }}
+                        whileInView={{ scale: 1 }}
+                        transition={{ duration: 0.7 }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
 
                     {/* Content */}
-                    <div className="p-4 flex-1 flex flex-col">
-                      <h3 className="text-lg font-bold mb-2 text-white group-hover:text-indigo-300 transition-colors line-clamp-2">
+                    <div className="p-6 flex-1 flex flex-col">
+                      <motion.h3
+                        className="text-xl font-bold mb-3 text-white group-hover:text-indigo-300 transition-colors"
+                        initial={{ opacity: 0, x: 20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                      >
                         {proj.title}
-                      </h3>
-
-                      <p className="text-sm text-indigo-200 mb-3 flex-1 line-clamp-3">
+                      </motion.h3>
+                      
+                      <motion.p
+                        className="text-indigo-200 mb-4 flex-1"
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.3 }}
+                      >
                         {proj.desc}
-                      </p>
+                      </motion.p>
 
                       {/* Tags */}
                       {proj.tags && (
-                        <div className="flex flex-wrap gap-1 mb-3">
-                          {proj.tags.slice(0, 4).map(tag => (
+                        <motion.div 
+                          className="flex flex-wrap gap-2 mb-4"
+                          initial={{ opacity: 0 }}
+                          whileInView={{ opacity: 1 }}
+                          transition={{ delay: 0.4 }}
+                        >
+                          {proj.tags.map(tag => (
                             <span key={tag} className="text-xs px-2 py-1 bg-indigo-900/50 rounded-full text-indigo-200">
                               {tag}
                             </span>
                           ))}
-                          {proj.tags.length > 4 && (
-                            <span className="text-xs px-2 py-1 bg-indigo-900/30 rounded-full text-indigo-300">
-                              +{proj.tags.length - 4}
-                            </span>
-                          )}
-                        </div>
+                        </motion.div>
                       )}
 
                       {/* CTA Buttons */}
-                      <div className="flex gap-2 mt-auto pt-3">
-                        <a
+                      <motion.div
+                        className="flex gap-3 mt-auto pt-4"
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                      >
+                        <motion.a
+                          href={proj.demoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <FiExternalLink />
+                          Visit Site
+                        </motion.a>
+                        <motion.a
                           href={proj.codeUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-3 py-2 text-xs bg-transparent border border-indigo-400 hover:bg-indigo-900/30 text-indigo-100 rounded-lg font-medium transition-colors flex items-center gap-1 flex-1 justify-center"
+                          className="px-4 py-2 text-sm bg-transparent border border-indigo-400 hover:bg-indigo-900/30 text-indigo-100 rounded-lg font-medium transition-colors flex items-center gap-2"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
                         >
-                          <FiGithub size={14} />
+                          <FiGithub />
                           View Code
-                        </a>
-                      </div>
+                        </motion.a>
+                      </motion.div>
                     </div>
                   </motion.div>
                 </motion.div>
@@ -1134,528 +1166,530 @@ export default function Portfolio() {
       </AnimatePresence>
 
       {/* Pengalaman Section */}
-      <AnimatePresence>
-        <motion.section
-          id="pengalaman"
-          className="snap-start min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 py-12 sm:py-16 bg-gradient-to-b from-indigo-900/20 to-purple-900/10 relative overflow-hidden"
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          exit="exit"
-          transition={{ duration: 0.7 }}
-          viewport={{ once: false, amount: 0.2 }}
+<AnimatePresence>
+  <motion.section
+    id="pengalaman"
+    className="snap-start min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 py-12 sm:py-16 bg-gradient-to-b from-indigo-900/20 to-purple-900/10 relative overflow-hidden"
+    variants={sectionVariants}
+    initial="hidden"
+    whileInView="visible"
+    exit="exit"
+    transition={{ duration: 0.7 }}
+    viewport={{ once: false, amount: 0.2 }}
+  >
+
+        {/* Curved Flying Paper Plane (Main) */}
+{windowSize.width > 0 && windowSize.height > 0 && (
+  <motion.div
+    className="absolute top-0 right-0 text-indigo-300/40 z-0"
+    initial={{ x: 0, y: 0, rotate: -45 }}
+    animate={{
+      x: [-20, -windowSize.width + 80],
+      y: [0, windowSize.height - 80],
+      rotate: [-45, -45], // arah kepala pesawat tetap ke kiri bawah
+    }}
+    transition={{
+      duration: 18,
+      repeat: Infinity,
+      ease: "linear"
+    }}
+  >
+    <PaperPlaneIcon className="w-12 h-12" />
+  </motion.div>
+)}
+
+    {/* Decorative paper planes */}
+    <motion.div 
+      className="absolute top-10 left-5 text-indigo-300/30"
+      animate={{
+        x: [0, 20, 0],
+        y: [0, -15, 0],
+        rotate: [0, 5, -5, 0]
+      }}
+      transition={{
+        duration: 8,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }}
+    >
+      <PaperPlaneIcon className="w-8 h-8" />
+    </motion.div>
+    <motion.div 
+      className="absolute bottom-20 right-8 text-purple-300/30"
+      animate={{
+        x: [0, -15, 0],
+        y: [0, 10, 0],
+        rotate: [0, -5, 5, 0]
+      }}
+      transition={{
+        duration: 10,
+        repeat: Infinity,
+        ease: "easeInOut",
+        delay: 1
+      }}
+    >
+      <PaperPlaneIcon className="w-10 h-10" />
+    </motion.div>
+    
+    <div className="w-full max-w-6xl mx-auto relative z-10">
+      {/* Section Header */}
+      <motion.div
+        className="text-center mb-8 sm:mb-12"
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.h2
+          className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-purple-300"
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
         >
-
-          {/* Curved Flying Paper Plane (Main) */}
-          {windowSize.width > 0 && windowSize.height > 0 && (
-            <motion.div
-              className="absolute top-0 right-0 text-indigo-300/40 z-0"
-              initial={{ x: 0, y: 0, rotate: -45 }}
-              animate={{
-                x: [-20, -windowSize.width + 80],
-                y: [0, windowSize.height - 80],
-                rotate: [-45, -45], // arah kepala pesawat tetap ke kiri bawah
-              }}
-              transition={{
-                duration: 18,
-                repeat: Infinity,
-                ease: "linear"
-              }}
-            >
-              <PaperPlaneIcon className="w-12 h-12" />
-            </motion.div>
-          )}
-
-          {/* Decorative paper planes */}
-          <motion.div
-            className="absolute top-10 left-5 text-indigo-300/30"
-            animate={{
-              x: [0, 20, 0],
-              y: [0, -15, 0],
-              rotate: [0, 5, -5, 0]
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          >
-            <PaperPlaneIcon className="w-8 h-8" />
-          </motion.div>
-          <motion.div
-            className="absolute bottom-20 right-8 text-purple-300/30"
-            animate={{
-              x: [0, -15, 0],
-              y: [0, 10, 0],
-              rotate: [0, -5, 5, 0]
-            }}
-            transition={{
-              duration: 10,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1
-            }}
-          >
-            <PaperPlaneIcon className="w-10 h-10" />
-          </motion.div>
-
-          <div className="w-full max-w-6xl mx-auto relative z-10">
-            {/* Section Header */}
-            <motion.div
-              className="text-center mb-8 sm:mb-12"
-              initial={{ opacity: 0, y: -20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <motion.h2
-                className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-purple-300"
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                My Experience
-              </motion.h2>
-              <motion.p
-                className="text-sm sm:text-lg text-indigo-200 max-w-2xl mx-auto px-2"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-              >
-                Karir dan pengalaman yang pernah saya lakukan
-              </motion.p>
-            </motion.div>
-
-            {/* Timeline - Mobile First Approach */}
-            <div className="relative">
-              {/* Timeline line - hidden on mobile, shown on md+ */}
-              <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-indigo-400/30"></div>
-
-              {/* Mobile timeline line */}
-              <div className="md:hidden absolute left-4 sm:left-6 transform h-full w-0.5 bg-indigo-400/30"></div>
-
-              {experiences.map((exp, idx) => (
-                <motion.div
-                  key={exp.title}
-                  className={`relative mb-6 sm:mb-8 w-full pl-10 sm:pl-12 md:pl-0 ${idx % 2 === 0 ? 'md:pr-8' : 'md:pl-8'} md:w-1/2 ${idx % 2 === 0 ? 'md:ml-auto' : 'md:mr-auto'}`}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: idx * 0.15 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                >
-                  {/* Timeline dot */}
-                  <div className={`absolute top-6 rounded-full w-3 h-3 sm:w-4 sm:h-4 bg-indigo-400 border-2 border-indigo-200 left-0 md:left-auto ${idx % 2 === 0 ? 'md:-right-2' : 'md:-left-2'}`}></div>
-
-                  {/* Experience Card */}
-                  <motion.div
-                    className="bg-white/5 backdrop-blur-sm md:backdrop-blur-md rounded-lg md:rounded-xl shadow-lg md:shadow-xl overflow-hidden border border-indigo-400/30 hover:border-indigo-300/50 transition-all duration-300 group"
-                    whileHover={{ y: -3, boxShadow: "0 5px 15px -3px rgba(99, 102, 241, 0.3)" }}
-                  >
-                    <div className="p-4 sm:p-6">
-                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 gap-2">
-                        <motion.h3
-                          className="text-lg sm:text-xl font-bold text-white group-hover:text-indigo-300 transition-colors"
-                          initial={{ opacity: 0, x: 20 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.5, delay: 0.2 }}
-                        >
-                          {exp.title}
-                        </motion.h3>
-                        <motion.span
-                          className="px-2 py-1 sm:px-3 sm:py-1 bg-indigo-900/50 rounded-full text-xs sm:text-sm text-indigo-200 w-fit"
-                          initial={{ opacity: 0 }}
-                          whileInView={{ opacity: 1 }}
-                          transition={{ delay: 0.3 }}
-                        >
-                          {exp.year}
-                        </motion.span>
-                      </div>
-
-                      <motion.p
-                        className="text-sm sm:text-base text-indigo-200 mb-3 sm:mb-4"
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.3 }}
-                      >
-                        {exp.company} • {exp.location}
-                      </motion.p>
-
-                      <motion.ul
-                        className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ delay: 0.4 }}
-                      >
-                        {exp.responsibilities.map((item, i) => (
-                          <motion.li
-                            key={i}
-                            className="flex items-start text-indigo-100"
-                            initial={{ opacity: 0, x: 10 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.4 + i * 0.05 }}
-                          >
-                            <span className="text-indigo-400 mr-2 mt-1 text-xs">▹</span>
-                            {item}
-                          </motion.li>
-                        ))}
-                      </motion.ul>
-
-                      {/* Skills */}
-                      {exp.skills && (
-                        <motion.div
-                          className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-indigo-400/20"
-                          initial={{ opacity: 0 }}
-                          whileInView={{ opacity: 1 }}
-                          transition={{ delay: 0.5 }}
-                        >
-                          <h4 className="text-xs sm:text-sm font-semibold text-indigo-300 mb-1 sm:mb-2">Skills Applied:</h4>
-                          <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                            {exp.skills.map((skill, i) => (
-                              <motion.span
-                                key={i}
-                                className="text-[10px] sm:text-xs px-2 py-0.5 sm:px-2 sm:py-1 bg-indigo-900/50 rounded-full text-indigo-200"
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: 0.5 + i * 0.05 }}
-                              >
-                                {skill}
-                              </motion.span>
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
-                    </div>
-                  </motion.div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </motion.section>
-      </AnimatePresence>
-
-
-      {/* Skill Section */}
-      <AnimatePresence>
-        <motion.section
-          id="skill"
-          className="snap-start min-h-screen flex flex-col justify-center items-center px-4 py-12 md:py-20 bg-gradient-to-b from-indigo-900/20 to-purple-900/10"
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          exit="exit"
-          transition={{ duration: 0.7 }}
-          viewport={{ once: false, amount: 0.3 }}
+          My Experience
+        </motion.h2>
+        <motion.p
+          className="text-sm sm:text-lg text-indigo-200 max-w-2xl mx-auto px-2"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
         >
-          <motion.h2
-            className="text-4xl font-bold mb-12 text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300"
-            initial={{ opacity: 0, y: -20 }}
+          Karir dan pengalaman yang pernah saya lakukan
+        </motion.p>
+      </motion.div>
+
+      {/* Timeline - Mobile First Approach */}
+      <div className="relative">
+        {/* Timeline line - hidden on mobile, shown on md+ */}
+        <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-indigo-400/30"></div>
+        
+        {/* Mobile timeline line */}
+        <div className="md:hidden absolute left-4 sm:left-6 transform h-full w-0.5 bg-indigo-400/30"></div>
+
+        {experiences.map((exp, idx) => (
+          <motion.div
+            key={exp.title}
+            className={`relative mb-6 sm:mb-8 w-full pl-10 sm:pl-12 md:pl-0 ${idx % 2 === 0 ? 'md:pr-8' : 'md:pl-8'} md:w-1/2 ${idx % 2 === 0 ? 'md:ml-auto' : 'md:mr-auto'}`}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6, delay: idx * 0.15 }}
+            viewport={{ once: true, margin: "-50px" }}
           >
-            My Skills & Certifications
-          </motion.h2>
-
-          <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-8 md:gap-12">
-            {/* Left Column - Skill Bars */}
-            <div className="flex-1 space-y-8">
-              <motion.h3
-                className="text-xl font-semibold text-indigo-200 mb-6 flex items-center gap-2"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                <FiBarChart2 className="text-indigo-400" />
-                Skill Proficiency
-              </motion.h3>
-
-              {skills.map((skill, idx) => (
-                <motion.div
-                  key={skill.name}
-                  className="group relative"
-                  initial={{ opacity: 0, x: 40 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: idx * 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="flex justify-between mb-2">
-                    <span className="font-medium text-indigo-100 flex items-center gap-2">
-                      <Image
-                        src={skill.icon}
-                        alt={skill.name}
-                        width={20}
-                        height={20}
-                        className="w-5 h-5 object-contain"
-                      />
-                      {skill.name}
-                    </span>
-                    <span className="text-indigo-300 font-mono">{skill.value}%</span>
-                  </div>
-                  <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden shadow-inner">
-                    <motion.div
-                      className="h-full bg-gradient-to-r from-indigo-400 to-purple-500 rounded-full shadow-lg relative"
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${skill.value}%` }}
-                      transition={{ duration: 1.2, delay: idx * 0.1, type: 'spring' }}
-                      viewport={{ once: true }}
-                    >
-                      <div className="absolute inset-0 bg-white/10 group-hover:bg-white/20 transition-all duration-300"></div>
-                    </motion.div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Right Column - Certifications & Skills */}
-            <div className="flex-1 flex flex-col gap-8">
-              {/* Certifications Section */}
-              <div>
-                <motion.h3
-                  className="text-xl font-semibold text-indigo-200 mb-6 flex items-center gap-2"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <FiAward className="text-indigo-400" />
-                  Certifications
-                </motion.h3>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  {certificates.map((cert, idx) => (
-                    <motion.div
-                      key={cert.name}
-                      className="relative group"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.5, delay: idx * 0.15 }}
-                      viewport={{ once: true }}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/30 to-purple-600/30 rounded-xl blur-md group-hover:blur-lg transition-all duration-300 -z-10"></div>
-                      <div className="h-full bg-white/5 rounded-xl shadow-lg border border-indigo-400/30 hover:border-indigo-300 transition-all overflow-hidden flex flex-col">
-                        <motion.img
-                          src={cert.img}
-                          alt={cert.name}
-                          className="w-full h-24 object-contain p-2 bg-white/5"
-                          initial={{ scale: 1.1 }}
-                          whileInView={{ scale: 1 }}
-                          transition={{ duration: 0.7 }}
-                          viewport={{ once: true }}
-                        />
-                        <div className="p-2 text-center bg-gradient-to-t from-black/70 to-transparent">
-                          <span className="text-xs font-medium text-indigo-100">{cert.name}</span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
+            {/* Timeline dot */}
+            <div className={`absolute top-6 rounded-full w-3 h-3 sm:w-4 sm:h-4 bg-indigo-400 border-2 border-indigo-200 left-0 md:left-auto ${idx % 2 === 0 ? 'md:-right-2' : 'md:-left-2'}`}></div>
+            
+            {/* Experience Card */}
+            <motion.div
+              className="bg-white/5 backdrop-blur-sm md:backdrop-blur-md rounded-lg md:rounded-xl shadow-lg md:shadow-xl overflow-hidden border border-indigo-400/30 hover:border-indigo-300/50 transition-all duration-300 group"
+              whileHover={{ y: -3, boxShadow: "0 5px 15px -3px rgba(99, 102, 241, 0.3)" }}
+            >
+              <div className="p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 gap-2">
+                  <motion.h3
+                    className="text-lg sm:text-xl font-bold text-white group-hover:text-indigo-300 transition-colors"
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                  >
+                    {exp.title}
+                  </motion.h3>
+                  <motion.span
+                    className="px-2 py-1 sm:px-3 sm:py-1 bg-indigo-900/50 rounded-full text-xs sm:text-sm text-indigo-200 w-fit"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    {exp.year}
+                  </motion.span>
                 </div>
-              </div>
 
-              {/* Skills Grid */}
-              <div>
-                <motion.h3
-                  className="text-xl font-semibold text-indigo-200 mb-6 flex items-center gap-2"
+                <motion.p
+                  className="text-sm sm:text-base text-indigo-200 mb-3 sm:mb-4"
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                >
+                  {exp.company} • {exp.location}
+                </motion.p>
+
+                <motion.ul
+                  className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   transition={{ delay: 0.4 }}
                 >
-                  <FiCode className="text-indigo-400" />
-                  Tech Stack
-                </motion.h3>
-
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-                  {[
-                    { name: 'HTML', icon: '/icons/html.png', color: 'from-orange-500 to-orange-300' },
-                    { name: 'CSS', icon: '/icons/css.png', color: 'from-blue-500 to-blue-300' },
-                    { name: 'JavaScript', icon: '/icons/js.png', color: 'from-yellow-500 to-yellow-300' },
-                    { name: 'React', icon: '/icons/react.png', color: 'from-cyan-500 to-blue-500' },
-                    { name: 'Tailwind', icon: '/icons/tailwind.png', color: 'from-teal-400 to-cyan-400' },
-                    { name: 'Git', icon: '/icons/git.png', color: 'from-red-500 to-orange-500' },
-                    { name: 'Node.js', icon: '/icons/nodejs.png', color: 'from-green-500 to-lime-400' },
-                    { name: 'Bootstrapt', icon: '/icons/Bootstrapt.png', color: 'from-blue-600 to-blue-400' },
-                    { name: 'Python', icon: '/icons/py.png', color: 'from-gray-800 to-gray-600' },
-                    { name: 'UML', icon: '/icons/uml.png', color: 'from-purple-600 to-pink-500' },
-                    { name: 'Photoshop', icon: '/icons/ps.png', color: 'from-blue-600 to-blue-400' },
-                    { name: 'Microsoft Ofice', icon: '/icons/ofice.png', color: 'from-gray-800 to-gray-600' },
-                    { name: 'Capcut', icon: '/icons/capcut.png', color: 'from-purple-600 to-pink-500' },
-                  ].map((skill, idx) => (
-                    <motion.div
-                      key={skill.name}
-                      className="group relative"
-                      initial={{ opacity: 0, scale: 0.8, y: 30 }}
-                      whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: idx * 0.08 }}
-                      viewport={{ once: true }}
+                  {exp.responsibilities.map((item, i) => (
+                    <motion.li
+                      key={i}
+                      className="flex items-start text-indigo-100"
+                      initial={{ opacity: 0, x: 10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.4 + i * 0.05 }}
                     >
-                      <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl blur-md -z-10"></div>
-                      <div className="flex flex-col items-center justify-center bg-white/5 rounded-xl shadow-lg border border-indigo-400/20 p-4 hover:bg-white/10 hover:border-indigo-300/50 hover:shadow-indigo-500/20 transition-all duration-300 h-full">
-                        <div className="w-12 h-12 mb-3 flex items-center justify-center">
-                          <Image
-                            src={skill.icon}
-                            alt={skill.name}
-                            width={48}
-                            height={48}
-                            className="w-full h-full object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-300"
-                          />
-                        </div>
-                        <span className="text-xs font-medium text-center text-indigo-100 group-hover:text-white transition-colors">
-                          {skill.name}
-                        </span>
-                      </div>
-                    </motion.div>
+                      <span className="text-indigo-400 mr-2 mt-1 text-xs">▹</span>
+                      {item}
+                    </motion.li>
                   ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.section>
-      </AnimatePresence>
-      {/* Studi Section */}
-      <AnimatePresence>
-        <motion.section
-          id="studi"
-          className="snap-start min-h-screen flex flex-col justify-center items-center px-6 py-16 bg-gradient-to-b from-indigo-900/20 to-purple-900/10"
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          exit="exit"
-          transition={{ duration: 0.7 }}
-          viewport={{ once: false, amount: 0.3 }}
-        >
-          <div className="w-full max-w-4xl mx-auto">
-            {/* Section Header */}
-            <motion.div
-              className="text-center mb-12"
-              initial={{ opacity: 0, y: -20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <motion.h2
-                className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-purple-300"
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                Education Journey
-              </motion.h2>
-              <motion.p
-                className="text-lg text-indigo-200 max-w-2xl mx-auto"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-              >
-                My academic achievements and learning milestones
-              </motion.p>
-            </motion.div>
+                </motion.ul>
 
-            {/* Education Timeline */}
-            <div className="relative">
-              {/* Timeline line */}
-              <div className="absolute left-6 md:left-1/2 h-full w-0.5 bg-gradient-to-b from-purple-400/50 to-indigo-400/50"></div>
-
-              {studies.map((study, idx) => (
-                <motion.div
-                  key={study.school}
-                  className="relative pl-12 md:pl-0 mb-8 w-full"
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: idx * 0.15 }}
-                  viewport={{ once: true }}
-                >
-                  {/* Timeline dot */}
-                  <div className="absolute left-0 top-6 rounded-full w-4 h-4 bg-purple-400 border-2 border-purple-200 z-10"></div>
-
-                  {/* Education Card */}
+                {/* Skills */}
+                {exp.skills && (
                   <motion.div
-                    className="bg-white/5 backdrop-blur-md rounded-xl shadow-xl overflow-hidden border border-indigo-400/30 hover:border-purple-300/50 transition-all duration-300 group"
-                    whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(139, 92, 246, 0.2)" }}
+                    className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-indigo-400/20"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
                   >
-                    <div className="p-6">
-                      <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-3 gap-2">
-                        <motion.h3
-                          className="text-xl font-bold text-white group-hover:text-purple-300 transition-colors"
-                          initial={{ opacity: 0, x: 20 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.5, delay: 0.2 }}
-                        >
-                          {study.school}
-                        </motion.h3>
+                    <h4 className="text-xs sm:text-sm font-semibold text-indigo-300 mb-1 sm:mb-2">Skills Applied:</h4>
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                      {exp.skills.map((skill, i) => (
                         <motion.span
-                          className="px-3 py-1 bg-purple-900/50 rounded-full text-sm text-purple-200 self-start md:self-center"
-                          initial={{ opacity: 0 }}
-                          whileInView={{ opacity: 1 }}
-                          transition={{ delay: 0.3 }}
+                          key={i}
+                          className="text-[10px] sm:text-xs px-2 py-0.5 sm:px-2 sm:py-1 bg-indigo-900/50 rounded-full text-indigo-200"
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: 0.5 + i * 0.05 }}
                         >
-                          {study.year}
+                          {skill}
                         </motion.span>
-                      </div>
-
-                      <motion.div
-                        className="flex items-center gap-2 text-indigo-300 mb-3"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ delay: 0.3 }}
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
-                        </svg>
-                        <span className="font-medium">{study.major}</span>
-                      </motion.div>
-
-                      <motion.p
-                        className="text-indigo-200 mb-4 leading-relaxed"
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.3 }}
-                      >
-                        {study.desc}
-                      </motion.p>
-
-                      {/* Achievements */}
-                      {study.achievements && (
-                        <motion.div
-                          className="mt-4 pt-4 border-t border-indigo-400/20"
-                          initial={{ opacity: 0 }}
-                          whileInView={{ opacity: 1 }}
-                          transition={{ delay: 0.4 }}
-                        >
-                          <h4 className="text-sm font-semibold text-purple-300 mb-2 flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                              <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                            </svg>
-                            Key Achievements
-                          </h4>
-                          <ul className="space-y-2">
-                            {study.achievements.map((achievement, i) => (
-                              <motion.li
-                                key={i}
-                                className="flex items-start text-indigo-100"
-                                initial={{ opacity: 0, x: 10 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.4 + i * 0.05 }}
-                              >
-                                <span className="text-purple-400 mr-2 mt-1">•</span>
-                                {achievement}
-                              </motion.li>
-                            ))}
-                          </ul>
-                        </motion.div>
-                      )}
+                      ))}
                     </div>
                   </motion.div>
-                </motion.div>
-              ))}
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </motion.section>
+</AnimatePresence>
+
+
+      {/* Skill Section */}
+      <AnimatePresence>
+  <motion.section
+    id="skill"
+    className="snap-start min-h-screen flex flex-col justify-center items-center px-4 py-12 md:py-20 bg-gradient-to-b from-indigo-900/20 to-purple-900/10"
+    variants={sectionVariants}
+    initial="hidden"
+    whileInView="visible"
+    exit="exit"
+    transition={{ duration: 0.7 }}
+    viewport={{ once: false, amount: 0.3 }}
+  >
+    <motion.h2 
+      className="text-4xl font-bold mb-12 text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300"
+      initial={{ opacity: 0, y: -20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      My Skills & Certifications
+    </motion.h2>
+
+    <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-8 md:gap-12">
+      {/* Left Column - Skill Bars */}
+      <div className="flex-1 space-y-8">
+        <motion.h3 
+          className="text-xl font-semibold text-indigo-200 mb-6 flex items-center gap-2"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <FiBarChart2 className="text-indigo-400" />
+          Skill Proficiency
+        </motion.h3>
+        
+        {skills.map((skill, idx) => (
+          <motion.div
+            key={skill.name}
+            className="group relative"
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: idx * 0.1 }}
+            viewport={{ once: true }}
+          >
+            <div className="flex justify-between mb-2">
+                <span className="font-medium text-indigo-100 flex items-center gap-2">
+                <Image
+                  src={skill.icon}
+                  alt={skill.name}
+                  width={20}
+                  height={20}
+                  className="w-5 h-5 object-contain"
+                />
+                {skill.name}
+                </span>
+              <span className="text-indigo-300 font-mono">{skill.value}%</span>
             </div>
+            <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden shadow-inner">
+              <motion.div
+                className="h-full bg-gradient-to-r from-indigo-400 to-purple-500 rounded-full shadow-lg relative"
+                initial={{ width: 0 }}
+                whileInView={{ width: `${skill.value}%` }}
+                transition={{ duration: 1.2, delay: idx * 0.1, type: 'spring' }}
+                viewport={{ once: true }}
+              >
+                <div className="absolute inset-0 bg-white/10 group-hover:bg-white/20 transition-all duration-300"></div>
+              </motion.div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Right Column - Certifications & Skills */}
+      <div className="flex-1 flex flex-col gap-8">
+        {/* Certifications Section */}
+        <div>
+          <motion.h3 
+            className="text-xl font-semibold text-indigo-200 mb-6 flex items-center gap-2"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <FiAward className="text-indigo-400" />
+            Certifications
+          </motion.h3>
+          
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {certificates.map((cert, idx) => (
+              <motion.div
+                key={cert.name}
+                className="relative group"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: idx * 0.15 }}
+                viewport={{ once: true }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/30 to-purple-600/30 rounded-xl blur-md group-hover:blur-lg transition-all duration-300 -z-10"></div>
+                <div className="h-full bg-white/5 rounded-xl shadow-lg border border-indigo-400/30 hover:border-indigo-300 transition-all overflow-hidden flex flex-col">
+                  <motion.img
+                    src={cert.img}
+                    alt={cert.name}
+                    className="w-full h-24 object-contain p-2 bg-white/5"
+                    initial={{ scale: 1.1 }}
+                    whileInView={{ scale: 1 }}
+                    transition={{ duration: 0.7 }}
+                    viewport={{ once: true }}
+                  />
+                  <div className="p-2 text-center bg-gradient-to-t from-black/70 to-transparent">
+                    <span className="text-xs font-medium text-indigo-100">{cert.name}</span>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
-        </motion.section>
-      </AnimatePresence>
+        </div>
+
+        {/* Skills Grid */}
+        <div>
+          <motion.h3 
+            className="text-xl font-semibold text-indigo-200 mb-6 flex items-center gap-2"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            <FiCode className="text-indigo-400" />
+            Tech Stack
+          </motion.h3>
+          
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+            {[
+              { name: 'HTML', icon: '/icons/html.png', color: 'from-orange-500 to-orange-300' },
+              { name: 'CSS', icon: '/icons/css.png', color: 'from-blue-500 to-blue-300' },
+              { name: 'JavaScript', icon: '/icons/js.png', color: 'from-yellow-500 to-yellow-300' },
+              { name: 'React', icon: '/icons/react.png', color: 'from-cyan-500 to-blue-500' },
+              { name: 'Tailwind', icon: '/icons/tailwind.png', color: 'from-teal-400 to-cyan-400' },
+              { name: 'Git', icon: '/icons/git.png', color: 'from-red-500 to-orange-500' },
+              { name: 'Node.js', icon: '/icons/nodejs.png', color: 'from-green-500 to-lime-400' },
+              { name: 'Bootstrapt', icon: '/icons/Bootstrapt.png', color: 'from-blue-600 to-blue-400' },
+              { name: 'Python', icon: '/icons/py.png', color: 'from-gray-800 to-gray-600' },
+              { name: 'UML', icon: '/icons/uml.png', color: 'from-purple-600 to-pink-500' },
+              { name: 'Photoshop', icon: '/icons/ps.png', color: 'from-blue-600 to-blue-400' },
+              { name: 'Microsoft Ofice', icon: '/icons/ofice.png', color: 'from-gray-800 to-gray-600' },
+              { name: 'Capcut', icon: '/icons/capcut.png', color: 'from-purple-600 to-pink-500' },
+              { name: 'Golang', icon: '/icons/golang.png', color: 'from-purple-600 to-pink-500' },
+            ].map((skill, idx) => (
+              <motion.div
+                key={skill.name}
+                className="group relative"
+                initial={{ opacity: 0, scale: 0.8, y: 30 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: idx * 0.08 }}
+                viewport={{ once: true }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl blur-md -z-10"></div>
+                <div className="flex flex-col items-center justify-center bg-white/5 rounded-xl shadow-lg border border-indigo-400/20 p-4 hover:bg-white/10 hover:border-indigo-300/50 hover:shadow-indigo-500/20 transition-all duration-300 h-full">
+                  <div className="w-12 h-12 mb-3 flex items-center justify-center">
+                    <Image 
+                      src={skill.icon}
+                      alt={skill.name}
+                      width={48}
+                      height={48}
+                      className="w-full h-full object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-300" 
+                    />
+                  </div>
+                  <span className="text-xs font-medium text-center text-indigo-100 group-hover:text-white transition-colors">
+                    {skill.name}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </motion.section>
+</AnimatePresence>
+      {/* Studi Section */}
+      <AnimatePresence>
+  <motion.section
+    id="studi"
+    className="snap-start min-h-screen flex flex-col justify-center items-center px-6 py-16 bg-gradient-to-b from-indigo-900/20 to-purple-900/10"
+    variants={sectionVariants}
+    initial="hidden"
+    whileInView="visible"
+    exit="exit"
+    transition={{ duration: 0.7 }}
+    viewport={{ once: false, amount: 0.3 }}
+  >
+    <div className="w-full max-w-4xl mx-auto">
+      {/* Section Header */}
+      <motion.div
+        className="text-center mb-12"
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.h2
+          className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-purple-300"
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          Education Journey
+        </motion.h2>
+        <motion.p
+          className="text-lg text-indigo-200 max-w-2xl mx-auto"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
+          My academic achievements and learning milestones
+        </motion.p>
+      </motion.div>
+
+      {/* Education Timeline */}
+      <div className="relative">
+        {/* Timeline line */}
+        <div className="absolute left-6 md:left-1/2 h-full w-0.5 bg-gradient-to-b from-purple-400/50 to-indigo-400/50"></div>
+
+        {studies.map((study, idx) => (
+          <motion.div
+            key={study.school}
+            className="relative pl-12 md:pl-0 mb-8 w-full"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: idx * 0.15 }}
+            viewport={{ once: true }}
+          >
+            {/* Timeline dot */}
+            <div className="absolute left-0 top-6 rounded-full w-4 h-4 bg-purple-400 border-2 border-purple-200 z-10"></div>
+
+            {/* Education Card */}
+            <motion.div
+              className="bg-white/5 backdrop-blur-md rounded-xl shadow-xl overflow-hidden border border-indigo-400/30 hover:border-purple-300/50 transition-all duration-300 group"
+              whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(139, 92, 246, 0.2)" }}
+            >
+              <div className="p-6">
+                <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-3 gap-2">
+                  <motion.h3
+                    className="text-xl font-bold text-white group-hover:text-purple-300 transition-colors"
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                  >
+                    {study.school}
+                  </motion.h3>
+                  <motion.span
+                    className="px-3 py-1 bg-purple-900/50 rounded-full text-sm text-purple-200 self-start md:self-center"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    {study.year}
+                  </motion.span>
+                </div>
+
+                <motion.div
+                  className="flex items-center gap-2 text-indigo-300 mb-3"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+                  </svg>
+                  <span className="font-medium">{study.major}</span>
+                </motion.div>
+
+                <motion.p
+                  className="text-indigo-200 mb-4 leading-relaxed"
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                >
+                  {study.desc}
+                </motion.p>
+
+                {/* Achievements */}
+                {study.achievements && (
+                  <motion.div
+                    className="mt-4 pt-4 border-t border-indigo-400/20"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                  >
+                    <h4 className="text-sm font-semibold text-purple-300 mb-2 flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      Key Achievements
+                    </h4>
+                    <ul className="space-y-2">
+                      {study.achievements.map((achievement, i) => (
+                        <motion.li
+                          key={i}
+                          className="flex items-start text-indigo-100"
+                          initial={{ opacity: 0, x: 10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.4 + i * 0.05 }}
+                        >
+                          <span className="text-purple-400 mr-2 mt-1">•</span>
+                          {achievement}
+                        </motion.li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </motion.section>
+</AnimatePresence>
 
       {/* Testimoni, Blog, Kontak (tetap seperti sebelumnya) */}
       {sections.slice(5).map((section) => (
         <AnimatePresence key={section.id}>
           <motion.section
             id={section.id}
-            className={`snap-start min-h-screen flex flex-col justify-center items-center px-6 py-16 ${section.id === 'testimoni' ? 'bg-gradient-to-b from-purple-900/10 to-indigo-900/20' :
+            className={`snap-start min-h-screen flex flex-col justify-center items-center px-6 py-16 ${
+              section.id === 'testimoni' ? 'bg-gradient-to-b from-purple-900/10 to-indigo-900/20' : 
               section.id === 'blog' ? 'bg-gradient-to-b from-gray-900/10 to-indigo-900/10' :
-                'bg-gradient-to-b from-indigo-900/20 to-purple-900/10'
-              }`}
+              'bg-gradient-to-b from-indigo-900/20 to-purple-900/10'
+            }`}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: false, amount: 0.3 }}
@@ -1763,7 +1797,7 @@ export default function Portfolio() {
                   transition={{ duration: 0.6 }}
                 >
                   <h3 className="text-2xl font-bold text-center mb-8 text-white">Get In Touch</h3>
-
+                  
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Contact Form */}
                     <motion.form
@@ -1873,7 +1907,7 @@ export default function Portfolio() {
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                           </svg>
-                          <a href="https://drive.google.com/file/d/1JvVmsssM03dJD5CKsokYd3bB7I85x-BJ/view?usp=drive_link" target="_blank" rel="noopener noreferrer" className="inline-block px-6 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-full">Download My CV</a>
+                          Download My CV
                         </motion.button>
                       </motion.div>
                     </motion.div>
@@ -1884,7 +1918,7 @@ export default function Portfolio() {
           </motion.section>
         </AnimatePresence>
       ))}
-
+      
       {/* Tombol di section profil */}
       <motion.button
         className="px-6 py-3 bg-transparent border border-indigo-400 hover:bg-indigo-900/30 text-indigo-100 rounded-lg font-medium shadow-lg transition-all duration-300 flex items-center gap-2"
@@ -1907,7 +1941,7 @@ export default function Portfolio() {
 
       {/* Bubble */}
       <ContactBubble isOpen={showContact} onClose={() => setShowContact(false)} />
-
+        
     </div>
   );
 }
