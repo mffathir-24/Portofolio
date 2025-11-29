@@ -1,32 +1,12 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, JSX } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiBarChart2, FiAward, FiCode, FiDownload, FiMail,FiX, FiMessageSquare, FiLinkedin, FiInstagram, FiGithub, FiExternalLink } from 'react-icons/fi';
+import { FiBarChart2, FiAward, FiCode, FiDownload, FiMail, FiX, FiMessageSquare, FiLinkedin, FiInstagram, FiGithub, FiStar, FiExternalLink, FiCalendar, FiEye, FiClock, FiUser } from 'react-icons/fi';
 import { FaWhatsapp, FaTelegram, FaLine } from 'react-icons/fa';
 import React from 'react';
-import Image from 'next/image';
+import Link from 'next/link';
 
 // Typing animation hook
-function PaperPlaneIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.5"
-        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-      />
-    </svg>
-  );
-}
-
-
 function useTyping(text: string, delay = 100, pause = 3000) {
   const [display, setDisplay] = useState('');
   const [phase, setPhase] = useState<'typing' | 'waiting' | 'deleting'>('typing');
@@ -66,305 +46,388 @@ function useTyping(text: string, delay = 100, pause = 3000) {
   return display;
 }
 
-const sections = [
-  { id: 'profil', label: 'Profil' },
-  { id: 'projek', label: 'Projek' },
-  { id: 'pengalaman', label: 'Pengalaman' },
-  { id: 'skill', label: 'Skill' },
-  { id: 'studi', label: 'Studi' },
-  { id: 'testimoni', label: 'Testimoni' },
-  { id: 'blog', label: 'Blog' },
-  { id: 'kontak', label: 'Kontak' }
-];
+// Particle Background Component - Fixed for hydration
+const FloatingParticles = () => {
+  const [isClient, setIsClient] = useState(false);
 
-// Data dummy untuk projek, pengalaman, skill, studi
-const projects = [
-  {
-    title: "Aplikasi E-Commerce Bernama DekufaShop",
-    desc: "Sebuah aplikasi e-commerce yang dibangun dengan Laravel, menyediakan fitur lengkap untuk penjualan online tetapi dengan pembayaran qris/tf secara manual.",
-    img: "/project/ApkE1.jpg",
-    tags: ["Laravel", "Bootstrap", "Node.js"," MySQL"],
-    demoUrl: "#",
-    codeUrl: "https://github.com/mffathir-24/E-Commerce.git"
-  },
-    {
-    title: "Aplikasi Pengelolaan Dokumen Akreditasi",
-    desc: "Aplikasi ini membantu yang dirancang untuk meningkatkan nilai akreditasi pada prodi manajemen informatika dalam mengelola dokumen akreditasi dengan mudah, termasuk upload, pengelompokan, dan pencarian dokumen.",
-    img: "/project/Apkpengelola.png",
-    tags: ["Laravel", "Bootstrap", "Node.js"," MySQL"],
-    demoUrl: "#",
-    codeUrl: "https://github.com/mffathir-24/Akre_MI.git"
-  },
-    {
-    title: "Aplikasi Topup Game",
-    desc: " Aplikasi ini adalah platform topup game yang memungkinkan pengguna untuk membeli voucher game dengan mudah dan cepat, yang hanya menyediakan game populer seperti ML.",
-    img: "/project/topupgame.jpg",
-    tags: ["Laravel", "Bootstrap", "Node.js"," MySQL"],
-    demoUrl: "#",
-    codeUrl: "https://github.com/mffathir-24/TopUp-Game-ML.git"
-  },
-    {
-    title: "Aplikasi Absensi Siswa Menggunakan Face Recognition",
-    desc: "Aplikasi ini adalah sistem absensi siswa yang menggunakan teknologi pengenalan wajah untuk mencatat kehadiran siswa secara otomatis, meningkatkan efisiensi dan akurasi dalam proses absensi walau masih tahab pengembangan tetapi ini sudah bisa digunakan dan semoga dapat bermanfaat kedepannya.",
-    img: "/project/ApkAbsen.png",
-    tags: ["Laravel", "Bootstrap", "Node.js"," MySQL","Python", "Face Recognition","Filament", "API"],
-    demoUrl: "#",
-    codeUrl: "https://github.com/mffathir-24/Absen-Face_Recognition.git"
-  },
-      {
-    title: "Aplikasi Berita PT.PLN (Persero) Wilayah Sumatera Selatan, Jambi, dan Bengkulu",
-    desc: "Aplikasi portal berita yang menyediakan informasi terkini dan penting dari PT.PLN (Persero) untuk wilayah Sumatera Selatan, Jambi, dan Bengkulu.",
-    img: "/project/newspln.jpg",
-    tags: ["Laravel", "Bootstrap", "Node.js"," MySQL"],
-    demoUrl: "#",
-    codeUrl: "https://github.com/mffathir-24/Berita-PT-PLN-Palembang.git"
-  },
-        {
-    title: "Aplikasi Penjualan Pempek Palembang Secara Online",
-    desc: "Aplikasi ini adalah platform penjualan pempek Palembang secara online, memungkinkan pengguna untuk memesan dan membeli pempek dengan mudah walaupun berbeda pulau.",
-    img: "/project/pempek.png",
-    tags: ["Laravel", "Bootstrap","Tailwind", "Node.js"," MySQL"],
-    demoUrl: "#",
-    codeUrl: "https://github.com/mffathir-24/Pempek-Online"
-  },
-   {
-    title: "Aplikasi Untuk System Auditi Pada Universitas Sriwijaya",
-    desc: "Aplikasi ini adalah sistem auditi yang dirancang untuk membantu Universitas Sriwijaya dalam mengelola dan memantau proses audit internal secara efisien.Tetapi Aplikasi ini masih dalam tahap pengembangan dan sudah memasuki tahap testing. mungkin akan ada beberapa bug yang harus diperbaiki jadi kedepannya akan di update oleh tim pengembang yang ada disana.",
-    img: "/project/auditi.png",
-    tags: ["Laravel", "Bootstrap","Tailwind", "Node.js"," MySQL","API"],
-    demoUrl: "#",
-    codeUrl: "https://github.com/mffathir-24/System-Audit_Unsri.git"
-  },
-  {
-    title: "Aplikasi Profile Perusahaan Berbasis Web dengan Penerapan AI di PT. Lematang Coal Lestari",
-    desc: "Aplikasi ini adalah website profile perusahaan yang memanfaatkan teknologi AI untuk meningkatkan interaksi pengguna dan memberikan informasi yang lebih personalisasi tentang PT. Lematang Coal Lestari. Dengan kesediaan AI lokasi perusahaan dapat dengan mudah ditemukan dari mencari hotel terdekat, restoran terdekat, dan lain-lain.",
-    img: "/project/ptlematangcoallestari.png",
-    tags: ["Laravel", "Bootstrap","Tailwind", "Node.js"," MySQL","AI", "API"],
-    demoUrl: "#",
-    codeUrl: "https://github.com/mffathir-24/Company-Profile-AI_PT-Coal-Lestari.git"
-  },
-  {
-    title: "Aplikasi Task and Projek Manajemen System berbasis Mobile",
-    desc: "Aplikasi ini menggunakan backend golang dan frontend react native dengan memiliki 3 role admin,manager,staff",
-    img: "/project/taskprojekmobile.jpg",
-    tags: ["Golang", "React","Tailwind", "Mobile"," PostgresSQL", "API"],
-    demoUrl: "https://expo.dev/accounts/mffathir/projects/taskmanagementapp/builds/17787899-83af-41cf-afd7-2c8df7c40eb5",
-    codeUrl: "https://github.com/mffathir-24/Company-Profile-AI_PT-Coal-Lestari.git"
-  },
-  
-];
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
-const experiences = [
-  {
-    title: "Saya membuat aplikasi pengelolaan dokumen akreditasi untuk Prodi Manajemen Informatika",
-    company: "University Sriwijaya",
-    location: "Bukit Lama, Palembang,South Sumatra, Indonesia",
-    year: "2024-2025",
-    responsibilities: [
-      "Membangun aplikasi web untuk pengelolaan dokumen akreditasi",
-      "Menerapkan fitur upload, pengelompokan, dan pencarian dokumen",
-      "Memastikan keamanan dan aksesibilitas data",
-    ],
-    skills: ["Laravel", "Node.js", "MySQL", "Bootstrap", "javascript", "HTML", "CSS"],
-  },
-  {
-    title: "Saya bekerja paruh waktu sebagai installer Wi-Fi dan SD-WAN di PT. Enseval Megatrading Putera Tbk.Palembang",
-    company: "Freelance Team Installation Wi-fi Sdwan",
-    location: "Remote",
-    year: "2023-2024",
-    responsibilities: [
-      "Melakukan instalasi dan konfigurasi jaringan Wi-Fi dan SD-WAN",
-      "Memasang Perangkat keras jaringan di lokasi klien",
-      "Dapat melakukan configurasi jaringan dan troubleshooting",
-    ],
-    skills: ["CMD", "Networking", "Troubleshooting", "Customer Service", "Teamwork"],
-  },
-  {
-    title: "Saya membuat aplikasi e-commerce bernama DekufaShop dengan fitur pembayaran qris/tf secara manual",
-    company: "Hybrid Developer",
-    location: "Palembang, South Sumatra, Indonesia",
-    year: "2023-2024",
-    responsibilities: [
-      "Mengembangkan dan memelihara aplikasi web menggunakan Laravel",
-      "Bekerja sama dengan tim desain untuk implementasi UI/UX",
-      "Mengoptimalkan performa aplikasi dan database",
-    ],
-    skills: ["Laravel", "MySQL", "CSS", "JavaScript", "HTML", "Bootstrap"],
-  },
-  {
-    title: "Saya membuat website portal berita untuk PT.PLN Persero Wilayah Sumatera Selatan, Jambi, dan Bengkulu",
-    company: "Apprenticeship at PT.PLN (Persero) Wilayah Sumatera Selatan, Jambi, dan Bengkulu",
-    location: "Palembang, South Sumatra, Indonesia",
-    year: "2023-2024",
-    responsibilities: [
-      "Mengembangkan sistem portal berita menggunakan Laravel",
-      "Menerapkan fitur manajemen konten untuk berita dan artikel",
-      "Hanya diperuntukan wilayah Sumatera Selatan, Jambi, dan Bengkulu",
-    ],
-    skills: ["Laravel", "MySQL", "CSS", "JavaScript", "HTML", "Bootstrap"],
-  },
-    {
-    title: "Saya sebagai backend developer yang membuat web topup game, bekerja di dalam team sebanyak 3 orang, untuk projek akhir dari bootcamp",
-    company: "Freelance",
-    location: "Remote",
-    year: "2023-2024",
-    responsibilities: [
-      "Sebagai pembuat database relasi untuk aplikasi topup game",
-      "Membuat Alerts untuk notifikasi topup game",
-      "Membuat diagram relasi database untuk aplikasi topup game",
-    ],
-    skills: ["Laravel", "MySQL", "ERD","Alerts", "Database Design", "Teamwork"],
-  },
-  {
-  title: "Saya bekerja freelance sebagai teknisi replace Fortiswitch dan FortiGate dari perangkat lama ke perangkat baru di Jamkrindo kantor cabang dan kantor wilayah Palembang",
-    company: "MSInfokom",
-    location: "Onsite",
-    year: "2023-2024",
-    responsibilities: [
-      "Melakukan replace Fortiswitch dan FortiGate di lokasi klien",
-      "Perapian kabel lan",
-      "Cek config 8.8.8.8 apakah aman atau tidak servernya",
-    ],
-    skills: ["CMD", "Networking", "Troubleshooting", "Customer Service", "Teamwork","FortiGate", "FortiSwitch"],
-  },
-];
-
-const certificates = [
-  { name: 'Sertifikat Laravel Achivement Mastered Bootcamp by Sanbercode', img: '/sertifikat-laravel.jpg' },
-  { name: 'Sertifikat English Conversation,Speaking and Academy Writing', img: '/englishsr.jpg' },
-  { name: 'Sertifikat Seminar by Google Developer Student Clubs', img: '/seminarG.jpg' },
-  { name: 'Sertifikat Apresiasi Panitia Perlengkapan', img: '/apresiasisr.jpg' },
-  { name: 'Sertifikat Golang Achivement Mastered Bootcamp by Sanbercode', img: '/sertifikat-golang.jpg' },
-];
-
-const skills = [
-  { name: 'Laravel', value: 95, icon: '/icons/laravel.png' },
-  { name: 'PHP', value: 90, icon: '/icons/php.png' },
-  { name: 'CSS', value: 85, icon: '/icons/css.png' },
-  { name: 'MySQL', value: 90, icon: '/icons/mysql.png' },
-  { name: 'Golang', value: 95, icon: '/icons/golang.png' },
-  { name: 'React', value: 93, icon: '/icons/react.png' },
-];
-
-const studies = [
-    {
-    school: "SMA Yayasan Pendidikan Islam (YPI) Palembang",
-    major: "Ilmu Pengetahuan Sosial(IPS)",
-    year: "2019-2022",
-    desc: " Saya menyelesaikan pendidikan menengah di SMA YPI Palembang dengan fokus pada Ilmu Pengetahuan Sosial. Selama di sekolah, saya aktif dalam berbagai kegiatan ekstrakurikuler dan organisasi siswa.",
-    achievements: [
-      "Sertifikat Pramuka Siswa",
-      "Sertifikat MIPA (Musyawarah Ilmiah Pelajar)",
-    ]
-  },
-  {
-    school: "University Sriwijaya",
-    major: "Manajemen Informatika",
-    year: "2022-2025",
-    desc: "Saya sedang menempuh pendidikan di Universitas Sriwijaya, jurusan Manajemen Informatika, dengan fokus pada pengembangan web dan teknologi informasi.",
-    achievements: [
-      "Student of the Year 2022",
-      "Completed 5+ major projects",
-      "Active member of Web Development Club",
-    ]
-  },
-];
-
-const testimonials = [
-  {
-    name: 'Bayu Wijaya Putra',
-    title: 'Lektor Fakultas Ilmu Komputer',
-    message: 'Fathiir mahasiswa yang sangat berdedikasi dan memiliki kemampuan teknis yang luar biasa. Dia telah menunjukkan kemampuannya dalam mengembangkan aplikasi yang kompleks dengan efisiensi tinggi.'
-  },
-  {
-    name: 'Syahlan',
-    title: 'Ayah',
-    message: 'Fathiir adalah anak yang sangat berbakat dan pekerja keras. Dia selalu berusaha memberikan yang terbaik dalam setiap proyek yang dia kerjakan. Saya bangga padanya.'
-  },
-    {
-    name: 'Abdiansah',
-    title: 'Kaprodi Manajemen Informatika',
-    message: 'Sangat Memuaskan, sangat membantu dalam mengelola dokumen akreditasi prodi kami. Aplikasi ini sangat user-friendly dan efisien.'
-  },
-  {
-    name: 'Purwita Sari',
-    title: 'Dosen Pratikum E-Commerce',
-    message: 'Aplikasi e-commerce sangat akurant dan mudah digunakan.Hanya saja fitur pembayaran masih manual.'
-  },
-  {
-    name: 'Fitri',
-    title: 'Ibu',
-    message: 'Kamu harus bangga dengan dirimu sendiri, Fathiir. Kamu telah bekerja keras dan mencapai banyak hal. Teruslah belajar dan berkembang, saya selalu mendukungmu.'
-  },
-  {
-    name: 'Teman Seperjuangan',
-    title: 'Teman Seperjuangan',
-    message: 'Fathiir adalah teman yang sangat inspiratif. Dia selalu siap membantu dan berbagi ilmu dengan kami. Kerja kerasnya dalam mengembangkan aplikasi pengelolaan dokumen akreditasi sangat menginspirasi kami semua.'
-  },
-];
-
-const blogPosts = [
-  {
-    title: '5 Tips Menjadi Web Developer Handal',
-    date: '12 Mei 2024',
-    excerpt: 'Menjadi web developer bukan hanya soal coding, tetapi juga soal mindset dan kebiasaan...'
-  },
-    {
-    title: 'Tips Menggunakan AI dalam Pengembangan Web',
-    date: '28 Mei 2025',
-    excerpt: 'AI dapat menjadi alat yang sangat berguna dalam pengembangan web, berikut beberapa tips untuk memanfaatkannya...'
-  },
-    {
-    title: 'Laravel vs Node.js: Mana yang Lebih Baik untuk Proyek Anda?',
-    date: '20 Mei 2025',
-    excerpt: 'Dalam dunia pengembangan web, Laravel dan Node.js adalah dua pilihan populer. Mari kita bahas kelebihan dan kekurangan masing-masing...'
-  },
-    {
-    title: 'Mengapa Memilih Laravel untuk Proyek Web Anda',
-    date: '12 Mei 2025',
-    excerpt: 'Laravel adalah framework PHP yang sangat populer dan banyak digunakan. Berikut adalah beberapa alasan mengapa Anda harus memilih Laravel untuk proyek web Anda...'
-  },
-      {
-    title: 'Cara Mudah Membangun Website',
-    date: '03 Mei 2025',
-    excerpt: 'Membangun website tidak harus rumit. Berikut adalah langkah-langkah mudah untuk memulai...'
-  },
-    {
-    title: 'Mengapa Explorasi Sangat Penting dalam Pengembangan Web',
-    date: '23 Mei 2025',
-    excerpt: 'Dalam dunia pengembangan web yang terus berubah, eksplorasi teknologi baru sangat penting untuk tetap relevan dan inovatif...'
-  },
-      {
-    title: 'Selalu Belajar: Kunci Sukses di Dunia Web Development',
-    date: '24 Mei 2025',
-    excerpt: 'Dunia web development selalu berubah, dan untuk tetap relevan, penting untuk terus belajar dan beradaptasi dengan teknologi baru...'
-  },
-  {
-    title: 'Mengapa React Masih Jadi Pilihan Utama',
-    date: '15 April 2025',
-    excerpt: 'Dalam ekosistem JavaScript yang terus berkembang, React tetap menjadi pilar utama...'
+  // Jangan render particles di server
+  if (!isClient) {
+    return (
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" />
+    );
   }
-];
 
-
-
-// Variants untuk animasi masuk dan keluar
-const sectionVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: 40 }
+  return (
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      {[...Array(15)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full bg-gradient-to-r from-purple-400/20 to-pink-400/20"
+          initial={{
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            scale: Math.random() * 0.5 + 0.5,
+          }}
+          animate={{
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            scale: Math.random() * 0.8 + 0.2,
+          }}
+          transition={{
+            duration: Math.random() * 20 + 20,
+            repeat: Infinity,
+            ease: "linear",
+            delay: Math.random() * 5,
+          }}
+          style={{
+            width: Math.random() * 15 + 5,
+            height: Math.random() * 15 + 5,
+          }}
+        />
+      ))}
+    </div>
+  );
 };
 
-const TypingTitle = React.memo(() => {
-  const typedName = useTyping('Web Developer | Laravel Junior | FullStack', 120, 3000);
-  return <>{typedName}</>;
-});
+// Animated Background Gradient
+const AnimatedBackground = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0.5, y: 0.5 });
+  const [isClient, setIsClient] = useState(false);
+  const [particles, setParticles] = useState<Array<{left: string, top: string, width: string, height: string, delay: string, duration: string}>>([]);
 
-// Tambahkan display name
-TypingTitle.displayName = "TypingTitle";
+  useEffect(() => {
+    setIsClient(true);
+    
+    // Generate particles hanya di client
+    const generatedParticles = Array.from({ length: 15 }, () => ({
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      width: `${Math.random() * 3 + 1}px`,
+      height: `${Math.random() * 3 + 1}px`,
+      delay: `${Math.random() * 5}s`,
+      duration: `${Math.random() * 10 + 10}s`
+    }));
+    setParticles(generatedParticles);
 
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: e.clientX / window.innerWidth,
+        y: e.clientY / window.innerHeight,
+      });
+    };
 
-// TypingAnimation component for animated code typing effect
+    // Throttle mouse events untuk performa
+    let ticking = false;
+    const throttledMouseMove = (e: MouseEvent) => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleMouseMove(e);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('mousemove', throttledMouseMove);
+    return () => window.removeEventListener('mousemove', throttledMouseMove);
+  }, []);
+
+  // Untuk menghindari hydration mismatch, render minimal di server
+  if (!isClient) {
+    return (
+      <div className="fixed inset-0 z-0 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="fixed inset-0 z-0 overflow-hidden">
+      {/* Base gradient static - lebih ringan */}
+      <div 
+        className="absolute inset-0"
+        style={{
+          background: 'radial-gradient(circle at 50% 50%, #1e1b4b 0%, #581c87 50%, #831843 100%)',
+        }}
+      />
+
+      {/* Interactive gradient yang mengikuti mouse - simplified */}
+      <motion.div
+        className="absolute inset-0 opacity-30"
+        animate={{
+          background: `radial-gradient(circle 600px at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, rgba(139, 92, 246, 0.25), transparent 50%)`,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 100,
+          damping: 30,
+          mass: 0.5
+        }}
+      />
+
+      {/* Reduced animated orbs - hanya 2 dengan animasi lebih sederhana */}
+      <motion.div
+        className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/15 rounded-full blur-2xl"
+        animate={{
+          x: [0, 40, 0],
+          y: [0, -30, 0],
+          scale: [1, 1.1, 1],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+      
+      <motion.div
+        className="absolute bottom-1/3 right-1/4 w-56 h-56 bg-pink-500/15 rounded-full blur-2xl"
+        animate={{
+          x: [0, -30, 0],
+          y: [0, 40, 0],
+          scale: [1, 1.05, 1],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 1,
+        }}
+      />
+
+      {/* Simplified particles - hanya di-render di client */}
+      <div className="absolute inset-0">
+        {particles.map((particle, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full bg-white/20 animate-float"
+            style={{
+              left: particle.left,
+              top: particle.top,
+              width: particle.width,
+              height: particle.height,
+              animationDelay: particle.delay,
+              animationDuration: particle.duration,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Static mesh grid - tanpa animasi */}
+      <div
+        className="absolute inset-0 opacity-5"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '80px 80px',
+        }}
+      />
+
+      {/* Static vignette effect */}
+      <div
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/5 to-black/40"
+      />
+
+      {/* Reduced shimmer effect - hanya 1 dengan durasi lebih lama */}
+      <motion.div
+        className="absolute inset-0 opacity-20"
+        style={{
+          background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent)',
+          transform: 'skewX(-20deg)',
+        }}
+        animate={{
+          x: ['-100%', '200%'],
+        }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+          ease: "easeInOut",
+          repeatDelay: 3,
+        }}
+      />
+    </div>
+  );
+};
+
+// Glass Morphism Card Component
+const GlassCard = ({ children, className = "", onClick }: { children: React.ReactNode; className?: string; onClick?: () => void }) => {
+  return (
+    <motion.div
+      className={`backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-2xl ${className}`}
+      whileHover={{
+        scale: 1.02,
+        backgroundColor: "rgba(255, 255, 255, 0.15)",
+        transition: { duration: 0.2 }
+      }}
+      onClick={onClick}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+// Interface definitions
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string;
+  demo_url: string;
+  code_url: string;
+  display_order: number;
+  is_featured: boolean;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  tags: ProjectTag[];
+}
+
+interface ProjectTag {
+  id: string;
+  name: string;
+  color: string;
+  created_at: string;
+}
+
+interface Experience {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  start_year: string;
+  end_year: string;
+  current_job: boolean;
+  display_order: number;
+  responsibilities: Responsibility[];
+  skills: ExperienceSkill[];
+}
+
+interface Responsibility {
+  id: string;
+  experience_id: string;
+  description: string;
+  display_order: number;
+  created_at: string;
+}
+
+interface ExperienceSkill {
+  experience_id: string;
+  skill_name: string;
+}
+
+interface Skill {
+  id: string;
+  name: string;
+  value: number;
+  icon_url: string;
+  category: string;
+  display_order: number;
+  is_featured: boolean | string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Certificate {
+  id: string;
+  name: string;
+  image_url: string;
+  issue_date: string;
+  issuer: string;
+  credential_url: string;
+  display_order: number;
+  created_at: string;
+}
+
+interface Education {
+  id: string;
+  school: string;
+  major: string;
+  start_year: string;
+  end_year: string;
+  description: string;
+  degree: string;
+  display_order: number;
+  achievements: Achievement[];
+}
+
+interface Achievement {
+  id: string;
+  education_id: string;
+  achievement: string;
+  display_order: number;
+  created_at: string;
+}
+
+interface Testimonial {
+  id: string;
+  name: string;
+  title: string;
+  message: string;
+  avatar_url: string;
+  rating: number;
+  is_featured: boolean;
+  display_order: number;
+  status: string;
+  created_at: string;
+}
+
+interface BlogPost {
+  id: string;
+  title: string;
+  content: string;
+  excerpt: string;
+  slug: string;
+  featured_image: string;
+  publish_date: string;
+  status: string;
+  view_count: number;
+  tags: BlogTag[];
+}
+
+interface BlogTag {
+  id: string;
+  name: string;
+  created_at: string;
+}
+
+interface Section {
+  id: string;
+  section_id: string;
+  label: string;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+interface SocialLink {
+  id: string;
+  platform: string;
+  url: string;
+  icon_name: string;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Setting {
+  id: string;
+  key: string;
+  value: string;
+  data_type: string;
+  description: string;
+  created_at: string;
+  updated_at:string;
+}
+
+// Enhanced Typing Animation Component
 const TypingAnimation = ({ lines, speed, className }: { lines: string[]; speed: number; className?: string }) => {
   const [displayedLines, setDisplayedLines] = useState<string[]>([]);
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
@@ -396,13 +459,19 @@ const TypingAnimation = ({ lines, speed, className }: { lines: string[]; speed: 
   return (
     <div className={className}>
       {displayedLines.map((line, index) => (
-        <div key={index} className="flex">
-          <span className="text-gray-500 mr-2 select-none">{index + 1}</span>
-          <span>
+        <motion.div
+          key={index}
+          className="flex"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: index * 0.1 }}
+        >
+          <span className="text-purple-400 mr-2 select-none font-mono">{index + 1}</span>
+          <span className="font-mono">
             {typeof line === 'string'
               ? line.split('').map((char, i) => {
                 let color = 'text-gray-300';
-                if (char === "'" || char === '"') color = 'text-yellow-400';
+                if (char === "'" || char === '"') color = 'text-yellow-300';
                 if (char === '{' || char === '}' || char === '(' || char === ')' || char === '[' || char === ']') color = 'text-white';
                 if (
                   line.trim().startsWith('const') ||
@@ -410,1538 +479,1953 @@ const TypingAnimation = ({ lines, speed, className }: { lines: string[]; speed: 
                   line.trim().startsWith('return') ||
                   line.trim().startsWith('export')
                 ) {
-                  color = 'text-purple-400';
+                  color = 'text-purple-300';
                 }
-                return <span key={i} className={color}>{char}</span>;
+                if (line.includes('//')) {
+                  const commentIndex = line.indexOf('//');
+                  if (i >= commentIndex) color = 'text-green-400';
+                }
+                return (
+                  <motion.span
+                    key={i}
+                    className={color}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: (index * 0.1) + (i * 0.02) }}
+                  >
+                    {char}
+                  </motion.span>
+                );
               })
               : null}
           </span>
-        </div>
+        </motion.div>
       ))}
-      <div className="flex">
-        <span className="text-gray-500 mr-2 select-none">{displayedLines.length + 1}</span>
-        <span className="w-4 h-6 bg-purple-400 animate-pulse inline-block"></span>
-      </div>
+      <motion.div
+        className="flex"
+        animate={{ opacity: [1, 0, 1] }}
+        transition={{ duration: 1, repeat: Infinity }}
+      >
+        <span className="text-purple-400 mr-2 select-none font-mono">{displayedLines.length + 1}</span>
+        <span className="w-3 h-5 bg-purple-400 inline-block ml-1"></span>
+      </motion.div>
     </div>
   );
 };
 
-export default function Portfolio() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  // const [darkMode, setDarkMode] = useState(true);
-  const [showContact, setShowContact] = useState(false);
+const TypingTitle = React.memo(() => {
+  const typedName = useTyping('Web Developer | Mobile Developer | FullStack', 120, 3000);
+  return <>{typedName}</>;
+});
 
-  // Gunakan ref untuk menyimpan ukuran window hanya di client
-  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-    }
-  }, []);
+TypingTitle.displayName = "TypingTitle";
 
-  // Tambahkan fungsi scroll smooth
+// Enhanced Contact Bubble Component
+const ContactBubble = ({ isOpen, onClose, socialLinks }: { isOpen: boolean; onClose: () => void; socialLinks: SocialLink[] }) => {
+  const iconMap: { [key: string]: JSX.Element } = {
+    'FaWhatsapp': <FaWhatsapp className="text-2xl text-green-400" />,
+    'FiInstagram': <FiInstagram className="text-2xl text-pink-400" />,
+    'FiLinkedin': <FiLinkedin className="text-2xl text-blue-400" />,
+    'FaTelegram': <FaTelegram className="text-2xl text-blue-300" />,
+    'FaLine': <FaLine className="text-2xl text-green-300" />,
+    'FiMail': <FiMail className="text-2xl text-indigo-300" />,
+    'FiGithub': <FiGithub className="text-2xl text-gray-300" />
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          {/* Backdrop */}
+          <motion.div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+          />
+          
+          {/* Modal */}
+          <motion.div
+            className="relative bg-gray-900/90 backdrop-blur-xl border border-purple-500/30 rounded-3xl p-8 max-w-md w-full mx-auto shadow-2xl"
+            initial={{ scale: 0.8, opacity: 0, y: 50 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.8, opacity: 0, y: 50 }}
+            transition={{ type: 'spring', damping: 25 }}
+          >
+            <button 
+              onClick={onClose}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-white/10"
+            >
+              <FiX className="text-xl" />
+            </button>
+            
+            <motion.h3 
+              className="text-2xl font-bold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300 flex items-center justify-center gap-3"
+              initial={{ y: -20 }}
+              animate={{ y: 0 }}
+            >
+              <FiMessageSquare className="text-purple-300" />
+              Let&apos;s Connect
+            </motion.h3>
+            
+            <div className="grid grid-cols-2 gap-4">
+              {socialLinks.map((social, index) => (
+                <motion.a
+                  key={social.id}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-card p-4 flex flex-col items-center gap-3 group relative overflow-hidden"
+                  whileHover={{ y: -5, scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + index * 0.05 }}
+                >
+                  <motion.div
+                    className="p-3 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 group-hover:from-purple-500/30 group-hover:to-pink-500/30 transition-all duration-300"
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    {iconMap[social.icon_name] || <FiMail className="text-2xl text-indigo-300" />}
+                  </motion.div>
+                  <span className="text-sm font-medium text-gray-200 group-hover:text-white transition-colors">
+                    {social.platform}
+                  </span>
+                  
+                  {/* Hover effect */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"
+                    initial={false}
+                  />
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+// Enhanced Navigation Component
+const EnhancedNavigation = ({ sections, menuOpen, setMenuOpen }: { 
+  sections: Section[]; 
+  menuOpen: boolean; 
+  setMenuOpen: (open: boolean) => void;
+}) => {
   const handleNavClick = (id: string) => (e: React.MouseEvent) => {
     e.preventDefault();
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
-      setMenuOpen(false); // Tutup menu jika di mobile
+      setMenuOpen(false);
     }
   };
 
-  // ContactBubble Component
-  const ContactBubble = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
-    const socials = [
-      { name: 'WhatsApp', icon: <FaWhatsapp className="text-2xl text-green-500" />, url: 'https://wa.me/6285809735614' },
-      { name: 'Instagram', icon: <FiInstagram className="text-2xl text-pink-500" />, url: 'https://instagram.com/mfathir_fh' },
-      { name: 'LinkedIn', icon: <FiLinkedin className="text-2xl text-blue-500" />, url: 'https://linkedin.com/in/muhammad-fathiir-farhansyah-58baa6279' },
-      { name: 'Telegram', icon: <FaTelegram className="text-2xl text-blue-400" />, url: 'https://t.me/Mffathir' },
-      { name: 'Line', icon: <FaLine className="text-2xl text-green-400" />, url: 'https://line.me/ti/p/5JxYtPuxe3' },
-      { name: 'Email', icon: <FiMail className="text-2xl text-indigo-300" />, url: 'mailto:fathirfarhansyah24@gmail .com' },
-    ];
-
-    return (
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+  return (
+    <motion.nav
+      className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50"
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6 }}
+    >
+      {/* Desktop Navigation */}
+      <div className="hidden md:flex items-center gap-2 backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl px-6 py-3 shadow-2xl">
+        {sections.map((sec, index) => (
+          <motion.a
+            key={sec.id}
+            href={`#${sec.section_id}`}
+            onClick={handleNavClick(sec.section_id)}
+            className="px-4 py-2 rounded-xl text-sm font-medium text-gray-200 hover:text-white hover:bg-white/10 transition-all duration-300 relative group"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
           >
+            {sec.label}
+            <motion.span
+              className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 group-hover:w-full transition-all duration-300"
+              initial={false}
+            />
+          </motion.a>
+        ))}
+      </div>
+
+      {/* Mobile Navigation */}
+      <div className="md:hidden">
+        <motion.button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-3 shadow-2xl"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <div className="w-6 h-6 flex flex-col justify-between">
+            <motion.span
+              className="w-full h-0.5 bg-white rounded"
+              animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 8 : 0 }}
+            />
+            <motion.span
+              className="w-full h-0.5 bg-white rounded"
+              animate={{ opacity: menuOpen ? 0 : 1 }}
+            />
+            <motion.span
+              className="w-full h-0.5 bg-white rounded"
+              animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -8 : 0 }}
+            />
+          </div>
+        </motion.button>
+
+        <AnimatePresence>
+          {menuOpen && (
             <motion.div
-              className="bg-gray-800/90 border border-indigo-400/30 rounded-2xl p-6 max-w-md w-full mx-4 relative shadow-2xl"
-              initial={{ scale: 0.8, y: 50 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.8, y: 50 }}
-              transition={{ type: 'spring', damping: 20 }}
+              className="absolute top-16 left-0 backdrop-blur-xl bg-gray-900/95 border border-white/20 rounded-2xl p-4 shadow-2xl min-w-48"
+              initial={{ opacity: 0, scale: 0.8, y: -20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: -20 }}
             >
-              <button 
-                onClick={onClose}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
-              >
-                <FiX className="text-xl" />
-              </button>
-              <h3 className="text-xl font-bold mb-6 text-center text-indigo-200 flex items-center justify-center gap-2">
-                <FiMessageSquare />
-                Contact Me
-              </h3>
-              <div className="grid grid-cols-2 gap-4">
-                {socials.map((social, index) => (
-                  <motion.a
-                    key={social.name}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-gray-700/50 hover:bg-indigo-900/50 border border-gray-600/30 rounded-xl p-4 flex flex-col items-center gap-2 transition-all duration-300 group"
-                    whileHover={{ y: -5, scale: 1.05 }}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 + index * 0.05 }}
-                  >
-                    <div className="p-3 bg-gray-600/20 rounded-full group-hover:bg-indigo-500/20 transition-colors">
-                      {social.icon}
-                    </div>
-                    <span className="text-sm font-medium">{social.name}</span>
-                  </motion.a>
-                ))}
-              </div>
+              {sections.map((sec, index) => (
+                <motion.a
+                  key={sec.id}
+                  href={`#${sec.section_id}`}
+                  onClick={handleNavClick(sec.section_id)}
+                  className="block px-4 py-3 rounded-lg text-gray-200 hover:text-white hover:bg-white/10 transition-all duration-300"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ x: 5 }}
+                >
+                  {sec.label}
+                </motion.a>
+              ))}
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    );
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.nav>
+  );
+};
+
+// Enhanced Profile Section with 3D Effect
+const EnhancedProfileSection = ({ settings, setShowContact }: { 
+  settings: Setting[]; 
+  setShowContact: (show: boolean) => void;
+}) => {
+  const getSettingValue = (key: string): string => {
+    const setting = settings.find(s => s.key === key);
+    return setting?.value || '';
   };
 
   return (
-    <div className="bg-gradient-to-br from-indigo-900 to-purple-900 text-white relative min-h-screen w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth font-sans">
-
-      {/* Toggle Theme */}
-      {/* <button
-        onClick={() => setDarkMode(!darkMode)}
-        aria-label="Toggle dark mode"
-        className="fixed top-4 right-4 z-50 p-2 rounded-xl backdrop-blur-md bg-white/10 hover:bg-white/20 outline-none"
-      >
-        {darkMode ? <Sun className="text-yellow-300" /> : <Moon className="text-gray-800" />}
-      </button> */}
-
-      {/* Navigation */}
-      <nav className="fixed top-4 left-4 z-50">
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
-          className="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-md outline-none"
+    <section id="profil" className="min-h-screen flex items-center justify-center relative overflow-hidden px-4 py-20">
+      <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        {/* Text Content */}
+        <motion.div
+          className="text-center lg:text-left space-y-6"
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
         >
-          Menu
-        </button>
-        <ul className={`md:flex md:space-x-4 ${menuOpen ? 'block' : 'hidden'} md:block bg-white/10 backdrop-blur-md p-4 rounded-xl space-y-2 md:space-y-0`}>
-          {sections.map(sec => (
-            <li key={sec.id}>
-              <a
-                href={`#${sec.id}`}
-                onClick={handleNavClick(sec.id)}
-                className="block px-4 py-2 rounded hover:bg-white/20 transition cursor-pointer"
-              >
-                {sec.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      {/* Profil Section */}
-      <AnimatePresence>
-        <motion.section
-          id="profil"
-          className="snap-start min-h-screen flex flex-col md:flex-row justify-center items-center px-6 md:px-12 py-16 gap-12 md:gap-16 bg-gradient-to-br from-indigo-900/30 via-purple-900/10 to-gray-900/5"
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          exit="exit"
-          transition={{ duration: 0.7 }}
-          viewport={{ once: false, amount: 0.3 }}
-        >
-          {/* Left: Text Content */}
-          <motion.div 
-            className="flex-1 flex flex-col items-center md:items-start text-center md:text-left"
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+          <motion.div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 backdrop-blur-sm"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
           >
-            {/* Name Tag */}
-            <div className="mb-6 px-4 py-2 bg-indigo-900/50 rounded-full border border-indigo-400/30 shadow-lg">
-              <span className="text-sm font-medium text-indigo-200">Hello, I&apos;m</span>
+            <FiStar className="text-yellow-400" />
+            <span className="text-sm font-medium text-purple-200">Hello, I&apos;m</span>
+          </motion.div>
+
+          <motion.h1
+            className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-300 to-white block">
+              Muhammad
+            </span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-white block">
+              Fathiir Farhansyah
+            </span>
+          </motion.h1>
+
+          <motion.div
+            className="text-xl md:text-2xl text-gray-300 mb-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            <span className="font-mono bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">
+              <TypingTitle />
+            </span>
+          </motion.div>
+
+          <motion.p
+            className="text-lg text-gray-400 leading-relaxed max-w-2xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+          >
+            Pengembang yang penuh semangat menciptakan pengalaman digital dengan teknologi modern. 
+            Mengkhususkan diri dalam membuat aplikasi web yang responsif dan berkinerja tinggi yang memberikan pengalaman pengguna yang luar biasa, 
+            serta aplikasi mobile yang performa tinggi dan ramah pengguna. Saya selalu berusaha untuk belajar, explore, dan berinovasi dalam setiap proyek yang saya kerjakan.
+          </motion.p>
+
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+          >
+            <motion.button
+              className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl font-semibold text-white shadow-2xl flex items-center gap-3 group"
+              whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(192, 132, 252, 0.3)" }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <FiDownload className="text-xl" />
+              <a href={getSettingValue('cv_url')} target="_blank" rel="noopener noreferrer" className="inline-block">
+                Download CV
+              </a>
+            </motion.button>
+            
+            <motion.button
+              onClick={() => setShowContact(true)}
+              className="px-8 py-4 border-2 border-purple-400 text-purple-300 rounded-2xl font-semibold backdrop-blur-sm hover:bg-purple-500/10 transition-all duration-300 flex items-center gap-3 group"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <FiMail className="text-xl" />
+              Get In Touch
+            </motion.button>
+          </motion.div>
+        </motion.div>
+
+        {/* 3D ID Card */}
+        <motion.div
+          className="flex justify-center lg:justify-end"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <InteractiveIDCard />
+        </motion.div>
+      </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        animate={{ y: [0, 10, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        <div className="w-6 h-10 border-2 border-purple-400 rounded-full flex justify-center">
+          <motion.div
+            className="w-1 h-3 bg-purple-400 rounded-full mt-2"
+            animate={{ y: [0, 12, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+        </div>
+      </motion.div>
+    </section>
+  );
+};
+
+// Interactive 3D ID Card Component
+const InteractiveIDCard = () => {
+  const [rotation, setRotation] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateY = ((x - centerX) / centerX) * 10;
+    const rotateX = ((centerY - y) / centerY) * 10;
+    
+    setRotation({ x: rotateX, y: rotateY });
+  };
+
+  const handleMouseLeave = () => {
+    setRotation({ x: 0, y: 0 });
+    setIsHovered(false);
+  };
+
+  return (
+    <motion.div
+      className="relative w-80 h-96 lg:w-96 lg:h-[480px] cursor-grab active:cursor-grabbing"
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      animate={{
+        rotateX: rotation.x,
+        rotateY: rotation.y,
+        scale: isHovered ? 1.05 : 1,
+      }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      style={{
+        transformStyle: "preserve-3d",
+        perspective: "1000px",
+      }}
+    >
+      {/* Main Card */}
+      <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl">
+        {/* Animated Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900" />
+        
+        {/* Holographic Effect */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="w-full h-full bg-gradient-to-r from-transparent via-white to-transparent transform rotate-45 scale-150" />
+        </div>
+
+        {/* Glow Effect */}
+        <motion.div
+          className="absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20"
+          animate={{ opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: 3, repeat: Infinity }}
+        />
+
+        {/* Card Content */}
+        <div className="relative z-10 w-full h-full p-8 flex flex-col justify-between">
+          {/* Header */}
+          <div className="flex justify-between items-start">
+            <div>
+              <motion.div
+                className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-2xl mb-4"
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.5 }}
+              >
+                <FiCode className="text-white text-xl" />
+              </motion.div>
+              <h3 className="text-white text-sm font-semibold opacity-80">JUNIOR DEVELOPER</h3>
+            </div>
+            
+            {/* Company Logo/Badge */}
+            <motion.div
+              className="bg-white/10 backdrop-blur-lg rounded-2xl p-3 border border-white/20"
+              whileHover={{ scale: 1.1 }}
+            >
+              <div className="w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center">
+                <FiAward className="text-white text-sm" />
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Profile Section */}
+          <div className="flex-1 flex flex-col justify-center items-center space-y-6">
+            {/* Profile Image with Frame */}
+            <motion.div
+              className="relative"
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              {/* Outer Ring */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 animate-spin-slow -m-2" />
+              {/* Image Container */}
+              <div className="relative rounded-full overflow-hidden w-32 h-32 border-4 border-gray-900 bg-gray-800">
+                <img
+                  src="/fatirr.jpg"
+                  alt="Muhammad Fathiir Farhansyah"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </motion.div>
+
+            {/* Name and Title */}
+            <div className="text-center">
+              <motion.h2
+                className="text-2xl font-bold text-white mb-2"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                Muhammad Fathiir Farhansyah
+              </motion.h2>
+              <motion.p
+                className="text-purple-300 font-mono text-sm"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                Web/Mobile Developer
+              </motion.p>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="space-y-4">
+            {/* Status Bar */}
+            <div className="flex items-center justify-between text-xs text-gray-400">
+              <span>STATUS</span>
+              <motion.div
+                className="flex items-center gap-2"
+                animate={{ opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <div className="w-2 h-2 bg-green-400 rounded-full" />
+                <span className="text-green-400 font-semibold">AVAILABLE</span>
+              </motion.div>
             </div>
 
-            {/* Name */}
-            <motion.h2
-              className="text-3xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-200 to-purple-200"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              Muhammad Fathiir Farhansyah
-            </motion.h2>
+            {/* Tech Stack */}
+            <div className="flex justify-center gap-3">
+              {['Golang', 'Laravel', 'React', 'Python'].map((tech, index) => (
+                <motion.span
+                  key={tech}
+                  className="px-3 py-1 bg-white/5 rounded-full text-xs text-gray-300 border border-white/10 backdrop-blur-sm"
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.7 + index * 0.1 }}
+                  whileHover={{ scale: 1.1, backgroundColor: "rgba(147, 51, 234, 0.2)" }}
+                >
+                  {tech}
+                </motion.span>
+              ))}
+            </div>
+          </div>
+        </div>
 
-            {/* Animated Title */}
-            <motion.div
-              className="mb-8"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-            >
-              <motion.h1
-                className="text-2xl md:text-4xl font-extrabold tracking-wide inline-flex items-center"
-                whileHover={{ scale: 1.02 }}
-              >
-                <span className="border-b-4 border-indigo-400/80 pb-1 inline-flex items-center">
-                  <motion.span
-                    className="inline-block bg-clip-text text-transparent"
-                    animate={{
-                      backgroundImage: [
-                        'linear-gradient(90deg, #ffffff, #ffd700)',
-                        'linear-gradient(90deg, #ffd700, #ff4d4d)',
-                        'linear-gradient(90deg, #ff4d4d, #ff69b4)',
-                        'linear-gradient(90deg, #ff69b4, #4dffb8)',
-                        'linear-gradient(90deg, #4dffb8, #4dc3ff)',
-                        'linear-gradient(90deg, #4dc3ff, #ffffff)',
-                      ],
-                    }}
-                    transition={{
-                      duration: 12,
-                      repeat: Infinity,
-                      ease: 'linear',
-                    }}
-                  >
-                    <TypingTitle />
-                  </motion.span>
-                  <span className="inline-block h-8 w-0.5 bg-current ml-2 animate-pulse"></span>
-                </span>
-              </motion.h1>
-            </motion.div>
+        {/* Floating Elements */}
+        <motion.div
+          className="absolute top-6 right-6 w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full shadow-2xl"
+          animate={{ y: [0, -10, 0], rotate: [0, 180, 360] }}
+          transition={{ duration: 4, repeat: Infinity }}
+        />
+        
+        <motion.div
+          className="absolute bottom-6 left-6 w-4 h-4 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full shadow-2xl"
+          animate={{ y: [0, 10, 0], scale: [1, 1.2, 1] }}
+          transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+        />
 
-            {/* Description */}
-            <motion.p
-              className="max-w-2xl text-base md:text-lg mb-8 text-gray-300 leading-relaxed"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.7 }}
-            >
-              Saya adalah seorang <span className="text-indigo-300 font-medium">web developer</span> yang berpengalaman dalam membangun aplikasi modern, scalable, dan efisien. Memiliki passion di bidang teknologi, selalu belajar hal baru, dan siap membantu Anda mewujudkan ide menjadi solusi digital yang nyata.
-            </motion.p>
+        {/* Scan Lines Effect */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent opacity-20 pointer-events-none" />
+      </div>
 
-            {/* CTA Buttons */}
-            <motion.div 
-              className="flex gap-4 mt-4"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-            >
-              <motion.button
-                className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium shadow-lg transition-all duration-300 flex items-center gap-2"
-                whileHover={{ scale: 1.05, boxShadow: "0 5px 15px rgba(99, 102, 241, 0.4)" }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <FiDownload  className="text-lg" />
-                <a href="/CV-Anda.pdf" target="_blank" rel="noopener noreferrer" className="inline-block px-6 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-full">Download CV</a>
-              </motion.button>
-              
-              <motion.button
-                className="px-6 py-3 bg-transparent border border-indigo-400 hover:bg-indigo-900/30 text-indigo-100 rounded-lg font-medium shadow-lg transition-all duration-300 flex items-center gap-2"
-                whileHover={{ scale: 1.05, boxShadow: "0 5px 15px rgba(99, 102, 241, 0.2)" }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setShowContact(true)}
-              >
-                <FiMail className="text-lg" />
-                Contact Me
-              </motion.button>
-              
-            </motion.div>
-          </motion.div>
-
-          {/* Right: Photo */}
-          <motion.div
-            className="flex-1 flex justify-center items-center relative"
-            initial={{ scale: 0.8, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.8, type: 'spring' }}
-          >
-            {/* Glowing Orb Background */}
-            <motion.div 
-              className="absolute -z-10 w-64 h-64 md:w-80 md:h-80 rounded-full bg-indigo-600/20 blur-3xl"
-              animate={{
-                scale: [1, 1.1, 1],
-                opacity: [0.4, 0.6, 0.4]
-              }}
-              transition={{
-                duration: 8,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
-            
-            {/* Profile Photo Container */}
-            <motion.div
-              className="flex-1 flex justify-center items-center"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.7, duration: 0.8, type: 'spring' }}
-            >
-              <motion.div
-                className="relative w-72 h-72 md:w-96 md:h-96 lg:w-112 lg:h-112 rounded-full"
-                animate={{
-                  boxShadow: [
-                    '0 0 20px 8px rgba(255, 255, 255, 0.7)',
-                    '0 0 20px 8px rgba(255, 215, 0, 0.7)',
-                    '0 0 20px 8px rgba(255, 0, 0, 0.7)',
-                    '0 0 20px 8px rgba(255, 105, 180, 0.7)',
-                    '0 0 20px 8px rgba(0, 255, 0, 0.7)',
-                  ],
-                }}
-                transition={{
-                  duration: 8,
-                  repeat: Infinity,
-                  ease: "linear"
-                }}
-              >
-                <motion.img
-                  src="/fatirr.jpg"
-                  alt="Foto Atin"
-                  className="w-full h-full object-cover rounded-full border-[6px] border-white"
-                  whileHover={{ scale: 1.05, rotate: 2 }}
-                  whileTap={{ scale: 0.98, rotate: -2 }}
-                  initial={{ filter: 'blur(8px)' }}
-                  animate={{ filter: 'blur(0px)' }}
-                  transition={{ duration: 1.2 }}
-                />
-              
-              {/* Floating Badge */}
-              <motion.div 
-                className="absolute -bottom-4 -right-4 bg-gradient-to-br from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-full shadow-xl z-20 flex items-center gap-2"
-                initial={{ scale: 0, y: 20 }}
-                animate={{ scale: 1, y: 0 }}
-                transition={{ delay: 1, type: 'spring' }}
-                whileHover={{ scale: 1.1, rotate: 5 }}
-              >
-                <FiAward className="text-yellow-300" />
-                <span className="text-sm font-medium">Web Developer</span>
-              </motion.div>
-            </motion.div>
-            </motion.div>
-          </motion.div>
-        </motion.section>
-      </AnimatePresence>
-
-
-        <AnimatePresence>
-  <motion.section
-    id="about"
-    className="snap-start min-h-screen flex flex-col justify-center items-center px-6 py-16 bg-gradient-to-br from-gray-900 via-purple-900/20 to-indigo-900/30"
-    variants={sectionVariants}
-    initial="hidden"
-    whileInView="visible"
-    exit="exit"
-    transition={{ duration: 0.7 }}
-    viewport={{ once: false, amount: 0.3 }}
-  >
-    <div className="w-full max-w-6xl mx-auto">
-      {/* Section Header */}
+      {/* Reflection Shadow */}
       <motion.div
-        className="text-center mb-12"
-        initial={{ opacity: 0, y: -20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <motion.h2
-          className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-purple-300"
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+        className="absolute -bottom-4 left-4 right-4 h-8 bg-purple-500/20 blur-xl rounded-full"
+        animate={{ opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      />
+    </motion.div>
+  );
+};
+
+// Enhanced About Section
+const EnhancedAboutSection = ({ projects }: { projects: Project[] }) => {
+  const [projectsCount, setProjectsCount] = useState(0);
+  const [experienceYears, setExperienceYears] = useState(0);
+
+  useEffect(() => {
+    // Gunakan projects.length dari API (bukan hardcoded)
+    const targetProjects = projects.length; // Ini yang penting!
+    const targetYears = 2.5;
+    
+    const duration = 2000;
+    const startTime = Date.now();
+    
+    const animateCount = () => {
+      const currentTime = Date.now();
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+      
+      const currentProjects = Math.floor(easeOut(progress) * targetProjects);
+      const currentYears = (easeOut(progress) * targetYears).toFixed(1);
+      
+      setProjectsCount(currentProjects);
+      setExperienceYears(parseFloat(currentYears));
+      
+      if (progress < 1) {
+        requestAnimationFrame(animateCount);
+      }
+    };
+    
+    animateCount();
+  }, [projects]); // projects sebagai dependency
+
+  return (
+    <section id="about" className="min-h-screen flex items-center justify-center px-4 py-20">
+      <div className="w-full max-w-6xl mx-auto">
+        <motion.h2 
+          className="text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
         >
           About Me
         </motion.h2>
-        <motion.p
-          className="text-lg text-indigo-200 max-w-2xl mx-auto"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          The story behind the code and passion
-        </motion.p>
-      </motion.div>
-
-
-        {/* About Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-16">
-          {/* Left Column - Personal Info */}
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Laptop Animation */}
           <motion.div
-            className="space-y-6"
-            initial={{ opacity: 0, x: -40 }}
+            initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: 0.8 }}
+            className="relative"
           >
-            <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-              Tentang Saya
-            </h3>
-            <p className="text-indigo-200 text-justify leading-relaxed tracking-wide">
-                    Saya Muhammad Fathiir Farhansyah, lahir di Palembang dan saat ini berusia 20 tahun,
-              Hobi saya ialah Futsal, Badminton, Renang, Coding, Gaming, Mancing. 
-              Saya memiliki minat besar dalam mempelajari hal-hal baru, terutama dalam mengeksplorasi 
-              teknologi, framework, dan penggunaan API seperti Python Face Recognition. Pengalaman 
-              saya dalam membangun aplikasi cukup beragam, mulai dari aplikasi web sederhana hingga 
-              sistem manajemen yang kompleks. Saya menguasai berbagai bahasa pemrograman dan framework, 
-              dengan keahlian khusus di Laravel dan React. Selain itu, saya aktif berpartisipasi dalam 
-              komunitas pengembang untuk berbagi pengetahuan dan terus mempelajari teknologi terkini.
-            </p>
-            
-            <div className="space-y-4">
-              <div className="flex items-center gap-4">
-                <div className="p-2 bg-indigo-900/50 rounded-lg text-indigo-300">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-medium text-white">Experience</h4>
-                  <p className="text-sm text-indigo-300">2,5+ years in web development</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-4">
-                <div className="p-2 bg-indigo-900/50 rounded-lg text-indigo-300">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path d="M12 14l9-5-9-5-9 5 9 5z" />
-                    <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-medium text-white">Education</h4>
-                  <p className="text-sm text-indigo-300">Informatics Management</p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Right Column - Skills */}
-                {/* Laptop Animation */}
-      <div className="relative">
-        {/* Laptop Frame */}
-        <motion.div
-          className="relative mx-auto w-full max-w-3xl"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          {/* Laptop Screen */}
-          <div className="relative bg-gray-800 rounded-t-xl border-t-8 border-gray-700 pt-6 px-4 pb-4 shadow-2xl">
-            {/* Screen Bezel */}
-            <div className="absolute top-0 left-0 right-0 h-6 bg-gray-900 rounded-t-lg flex items-center px-4">
-              <div className="flex space-x-2">
-                <span className="w-3 h-3 rounded-full bg-red-500"></span>
-                <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
-                <span className="w-3 h-3 rounded-full bg-green-500"></span>
-              </div>
-            </div>
-
-            {/* Code Display */}
-            <div className="bg-gray-900 rounded-lg overflow-hidden h-96">
-              {/* Code Editor Header */}
-              <div className="bg-gray-800 px-4 py-2 flex items-center">
-                <div className="flex space-x-2 mr-4">
-                  <span className="w-2 h-2 rounded-full bg-gray-600"></span>
-                  <span className="w-2 h-2 rounded-full bg-gray-600"></span>
-                  <span className="w-2 h-2 rounded-full bg-gray-600"></span>
-                </div>
-                <span className="text-xs text-gray-400">about-me.js</span>
-              </div>
-
-              {/* Animated Code */}
-              <div className="p-4 font-mono text-sm">
+            <GlassCard className="p-8">
+              <div className="bg-gray-800 rounded-xl p-6">
                 <TypingAnimation
                   lines={[
-                    "const aboutMe = {",
-                    "  name: 'Muhammad Fathiir Farhansyah',",
-                    "  role: 'Full Stack Developer',",
-                    "  skills: ['React', 'Node.js', 'Laravel'],",
-                    "  passion: 'Creating beautiful, functional applications',",
-                    "  experience: '2,5+ years in web development',",
-                    "  education: 'Informatics Management',",
-                    "  hobbies: ['Coding', 'Photography', 'Gaming']",
+                    "const developer = {",
+                    `  name: 'Muhammad Fathiir Farhansyah',`,
+                    `  projects: ${projects.length},`, // Tampilkan jumlah real
+                    "  skills: ['React', 'Golang', 'Laravel'],",
+                    "  focus: 'User experience & performance',",
+                    "  philosophy: 'Clean, maintainable code',",
                     "};",
                     "",
-                    "function myApproach() {",
-                    "  return {",
-                    "    design: 'Clean & intuitive interfaces',",
-                    "    code: 'Efficient and maintainable',",
-                    "    philosophy: 'Continuous learning',",
-                    "    focus: 'User experience first'",
-                    "  };",
-                    "}",
-                    "",
-                    "export default aboutMe;"
+                    "function buildFuture() {",
+                    "  return innovate().then(grow);",
+                    "}"
                   ]}
-                  speed={30}
-                  className="text-gray-300"
+                  speed={40}
+                  className="text-sm"
                 />
               </div>
-            </div>
-          </div>
+            </GlassCard>
+          </motion.div>
 
-          {/* Laptop Base */}
-          <div className="h-4 bg-gray-700 mx-auto w-3/4 rounded-b-xl shadow-lg"></div>
-          <div className="h-2 bg-gray-600 mx-auto w-1/2 rounded-b-lg"></div>
-        </motion.div>
+          {/* Personal Info */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="space-y-6"
+          >
+            <GlassCard className="p-6">
+              <h3 className="text-2xl font-bold mb-4 text-purple-300">My Journey</h3>
+              <p className="text-gray-300 leading-relaxed">
+                Dengan pengalaman lebih dari {experienceYears} dalam pengembangan web, saya mengkhususkan diri dalam membuat aplikasi modern dan responsif, serta sekarang mulai dalam pengembangan mobile dengan menggunakan React Native dan Golang, saya dapat membuat aplikasi yang memiliki performa dan UI yang modern,responsive serta interaktif. Saya telah menyelesaikan <span className="text-purple-300 font-semibold">{projects.length} projects </span> 
+                 menggunakan teknologi terkini.
+              </p>
+            </GlassCard>
 
-        </div>
-      </div>
-    </div>
-  </motion.section>
-</AnimatePresence>
-
-      {/* Projek Section */}
-      <AnimatePresence>
-        <motion.section
-          id="projek"
-          className="snap-start min-h-screen flex flex-col justify-center items-center px-6 py-16 bg-gradient-to-b from-indigo-900/20 to-purple-900/10 relative overflow-hidden"
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          exit="exit"
-          transition={{ duration: 0.7 }}
-          viewport={{ once: false, amount: 0.3 }}
-        >
-          {/* Falling Stars Animation */}
-          {windowSize.width > 0 && [...Array(8)].map((_, i) => {
-            return (
-              <motion.div
-                key={`star-${i}`}
-                className="absolute text-yellow-300 text-xl"
-                initial={{ 
-                  opacity: 0,
-                  y: -50,
-                  x: Math.random() * window.innerWidth
-                }}
-                animate={{
-                  opacity: [0, 1, 0],
-                  y: [0, window.innerHeight],
-                  x: Math.random() * 100 - 50
-                }}
-                transition={{
-                  duration: 5 + Math.random() * 5,
-                  repeat: Infinity,
-                  delay: Math.random() * 5,
-                  ease: "linear"
-                }}
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `-50px`
-                }}
-              >
-                ★
-              </motion.div>
-            );
-          })}
-
-          {/* Floating Bubbles */}
-          {windowSize.width > 0 && [...Array(12)].map((_, i) => {
-            const xPos = Math.random() * windowSize.width;
-            const yPos = Math.random() * windowSize.height;
-            return (
-              <motion.div
-                key={`bubble-${i}`}
-                className="absolute rounded-full bg-purple-500/20 backdrop-blur-sm"
-                initial={{
-                  opacity: 0,
-                  y: yPos,
-                  x: xPos,
-                  scale: 0
-                }}
-                animate={{
-                  opacity: [0.2, 0.5, 0.2],
-                  y: [0, -100],
-                  x: [0, xPos + Math.random() * 100 - 50],
-                  scale: [0.5, 1.2, 0.8]
-                }}
-                transition={{
-                  duration: 10 + Math.random() * 10,
-                  repeat: Infinity,
-                  delay: Math.random() * 5,
-                  ease: "easeInOut"
-                }}
-                style={{
-                  width: `${10 + Math.random() * 20}px`,
-                  height: `${10 + Math.random() * 20}px`,
-                  left: `${(xPos / windowSize.width) * 100}%`
-                }}
-              />
-            );
-          })}
-
-          <motion.div className="w-full max-w-7xl mx-auto relative z-10">
-            {/* Section Header */}
-            <motion.div
-              className="text-center mb-12"
-              initial={{ opacity: 0, y: -20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <motion.h2
-                className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-purple-300"
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                My Projects
-              </motion.h2>
-              <motion.p
-                className="text-lg text-indigo-200 max-w-2xl mx-auto"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-              >
-                Jelajahi portofolio karya kreatif dan solusi teknis saya
-              </motion.p>
-            </motion.div>
-
-            {/* Projects Grid - Mobile Version (Carousel) */}
-            <div className="md:hidden w-full overflow-x-auto pb-4">
-              <div className="flex gap-4 px-4 w-max">
-                {projects.map((proj, idx) => (
-                  <motion.div
-                    key={proj.title}
-                    className="w-64 flex-shrink-0"
-                    initial={{ opacity: 0, x: 40 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, delay: idx * 0.15 }}
-                    viewport={{ once: true }}
-                  >
-                    <div className="h-full bg-white/5 backdrop-blur-md rounded-2xl shadow-2xl overflow-hidden border border-indigo-400/30 transition-all duration-300 flex flex-col">
-                      <div className="relative overflow-hidden h-40">
-                        <Image    
-                          src={proj.img}
-                          alt={proj.title}
-                          fill
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                      </div>
-                      <div className="p-4 flex-1 flex flex-col">
-                        <h3 className="text-lg font-bold mb-2 text-white">{proj.title}</h3>
-                        <p className="text-sm text-indigo-200 mb-3 line-clamp-2">{proj.desc}</p>
-                        <div className="flex gap-2 mt-auto">
-                          <a
-                            href={proj.demoUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-3 py-1 text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors flex items-center gap-1"
-                          >
-                            <FiExternalLink size={12} />
-                            Visit Site
-                          </a>
-                          <a
-                            href={proj.codeUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-3 py-1 text-xs bg-transparent border border-indigo-400 hover:bg-indigo-900/30 text-indigo-100 rounded-lg font-medium transition-colors flex items-center gap-1"
-                          >
-                            <FiGithub size={12} />
-                            Code
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-            {/* Projects Grid - Desktop Version */}
-            <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
-              {projects.map((proj, idx) => (
-                <motion.div
-                  key={proj.title}
-                  className="group relative"
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: idx * 0.15 }}
-                  viewport={{ once: true, margin: "-100px" }}
+            <div className="grid grid-cols-2 gap-4">
+              <GlassCard className="p-4 text-center">
+                <FiAward className="text-3xl text-yellow-400 mx-auto mb-2" />
+                <motion.div 
+                  className="text-2xl font-bold text-white"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 1 }}
                 >
-                  {/* Project Card */}
-                  <motion.div
-                    className="h-full bg-white/5 backdrop-blur-md rounded-2xl shadow-2xl overflow-hidden border border-indigo-400/30 hover:border-indigo-300/50 transition-all duration-300 flex flex-col"
-                    whileHover={{ y: -10, boxShadow: "0 20px 25px -5px rgba(99, 102, 241, 0.2)" }}
-                  >
-                    {/* Image Container */}
-                    <div className="relative overflow-hidden h-56">
-                      <motion.img
-                        src={proj.img}
-                        alt={proj.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        initial={{ scale: 1.1 }}
-                        whileInView={{ scale: 1 }}
-                        transition={{ duration: 0.7 }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    </div>
-
-                    {/* Content */}
-                    <div className="p-6 flex-1 flex flex-col">
-                      <motion.h3
-                        className="text-xl font-bold mb-3 text-white group-hover:text-indigo-300 transition-colors"
-                        initial={{ opacity: 0, x: 20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                      >
-                        {proj.title}
-                      </motion.h3>
-                      
-                      <motion.p
-                        className="text-indigo-200 mb-4 flex-1"
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.3 }}
-                      >
-                        {proj.desc}
-                      </motion.p>
-
-                      {/* Tags */}
-                      {proj.tags && (
-                        <motion.div 
-                          className="flex flex-wrap gap-2 mb-4"
-                          initial={{ opacity: 0 }}
-                          whileInView={{ opacity: 1 }}
-                          transition={{ delay: 0.4 }}
-                        >
-                          {proj.tags.map(tag => (
-                            <span key={tag} className="text-xs px-2 py-1 bg-indigo-900/50 rounded-full text-indigo-200">
-                              {tag}
-                            </span>
-                          ))}
-                        </motion.div>
-                      )}
-
-                      {/* CTA Buttons */}
-                      <motion.div
-                        className="flex gap-3 mt-auto pt-4"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ delay: 0.5 }}
-                      >
-                        <motion.a
-                          href={proj.demoUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <FiExternalLink />
-                          Visit Site
-                        </motion.a>
-                        <motion.a
-                          href={proj.codeUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="px-4 py-2 text-sm bg-transparent border border-indigo-400 hover:bg-indigo-900/30 text-indigo-100 rounded-lg font-medium transition-colors flex items-center gap-2"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <FiGithub />
-                          View Code
-                        </motion.a>
-                      </motion.div>
-                    </div>
-                  </motion.div>
+                  {experienceYears}+
                 </motion.div>
-              ))}
+                <div className="text-gray-400 text-sm">Years Experience</div>
+              </GlassCard>
+              
+              <GlassCard className="p-4 text-center">
+                <FiCode className="text-3xl text-purple-400 mx-auto mb-2" />
+                <motion.div 
+                  className="text-2xl font-bold text-white"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 1.5 }}
+                >
+                  {projectsCount}+
+                </motion.div>
+                <div className="text-gray-400 text-sm">Projects Completed</div>
+              </GlassCard>
             </div>
           </motion.div>
-        </motion.section>
-      </AnimatePresence>
+        </div>
+      </div>
+    </section>
+  );
+};
 
-      {/* Pengalaman Section */}
-<AnimatePresence>
-  <motion.section
-    id="pengalaman"
-    className="snap-start min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 py-12 sm:py-16 bg-gradient-to-b from-indigo-900/20 to-purple-900/10 relative overflow-hidden"
-    variants={sectionVariants}
-    initial="hidden"
-    whileInView="visible"
-    exit="exit"
-    transition={{ duration: 0.7 }}
-    viewport={{ once: false, amount: 0.2 }}
-  >
-
-        {/* Curved Flying Paper Plane (Main) */}
-{windowSize.width > 0 && windowSize.height > 0 && (
-  <motion.div
-    className="absolute top-0 right-0 text-indigo-300/40 z-0"
-    initial={{ x: 0, y: 0, rotate: -45 }}
-    animate={{
-      x: [-20, -windowSize.width + 80],
-      y: [0, windowSize.height - 80],
-      rotate: [-45, -45], // arah kepala pesawat tetap ke kiri bawah
-    }}
-    transition={{
-      duration: 18,
-      repeat: Infinity,
-      ease: "linear"
-    }}
-  >
-    <PaperPlaneIcon className="w-12 h-12" />
-  </motion.div>
-)}
-
-    {/* Decorative paper planes */}
-    <motion.div 
-      className="absolute top-10 left-5 text-indigo-300/30"
-      animate={{
-        x: [0, 20, 0],
-        y: [0, -15, 0],
-        rotate: [0, 5, -5, 0]
-      }}
-      transition={{
-        duration: 8,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }}
-    >
-      <PaperPlaneIcon className="w-8 h-8" />
-    </motion.div>
-    <motion.div 
-      className="absolute bottom-20 right-8 text-purple-300/30"
-      animate={{
-        x: [0, -15, 0],
-        y: [0, 10, 0],
-        rotate: [0, -5, 5, 0]
-      }}
-      transition={{
-        duration: 10,
-        repeat: Infinity,
-        ease: "easeInOut",
-        delay: 1
-      }}
-    >
-      <PaperPlaneIcon className="w-10 h-10" />
-    </motion.div>
-    
-    <div className="w-full max-w-6xl mx-auto relative z-10">
-      {/* Section Header */}
-      <motion.div
-        className="text-center mb-8 sm:mb-12"
-        initial={{ opacity: 0, y: -20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <motion.h2
-          className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-purple-300"
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+// Enhanced Projects Section
+const EnhancedProjectsSection = ({ projects }: { projects: Project[] }) => {
+  console.log('Projects data in EnhancedProjectsSection:', projects);
+  
+  return (
+    <section id="projek" className="min-h-screen flex items-center justify-center px-4 py-20">
+      <div className="w-full max-w-7xl mx-auto">
+        <motion.h2 
+          className="text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
         >
-          My Experience
+          My Projects
         </motion.h2>
-        <motion.p
-          className="text-sm sm:text-lg text-indigo-200 max-w-2xl mx-auto px-2"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          Karir dan pengalaman yang pernah saya lakukan
-        </motion.p>
-      </motion.div>
 
-      {/* Timeline - Mobile First Approach */}
-      <div className="relative">
-        {/* Timeline line - hidden on mobile, shown on md+ */}
-        <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-indigo-400/30"></div>
-        
-        {/* Mobile timeline line */}
-        <div className="md:hidden absolute left-4 sm:left-6 transform h-full w-0.5 bg-indigo-400/30"></div>
-
-        {experiences.map((exp, idx) => (
-          <motion.div
-            key={exp.title}
-            className={`relative mb-6 sm:mb-8 w-full pl-10 sm:pl-12 md:pl-0 ${idx % 2 === 0 ? 'md:pr-8' : 'md:pl-8'} md:w-1/2 ${idx % 2 === 0 ? 'md:ml-auto' : 'md:mr-auto'}`}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: idx * 0.15 }}
-            viewport={{ once: true, margin: "-50px" }}
-          >
-            {/* Timeline dot */}
-            <div className={`absolute top-6 rounded-full w-3 h-3 sm:w-4 sm:h-4 bg-indigo-400 border-2 border-indigo-200 left-0 md:left-auto ${idx % 2 === 0 ? 'md:-right-2' : 'md:-left-2'}`}></div>
-            
-            {/* Experience Card */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {projects.map((project, index) => (
             <motion.div
-              className="bg-white/5 backdrop-blur-sm md:backdrop-blur-md rounded-lg md:rounded-xl shadow-lg md:shadow-xl overflow-hidden border border-indigo-400/30 hover:border-indigo-300/50 transition-all duration-300 group"
-              whileHover={{ y: -3, boxShadow: "0 5px 15px -3px rgba(99, 102, 241, 0.3)" }}
+              key={project.id}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              whileHover={{ y: -10, scale: 1.02 }}
+              className="group cursor-pointer"
             >
-              <div className="p-4 sm:p-6">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 gap-2">
-                  <motion.h3
-                    className="text-lg sm:text-xl font-bold text-white group-hover:text-indigo-300 transition-colors"
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                  >
-                    {exp.title}
-                  </motion.h3>
-                  <motion.span
-                    className="px-2 py-1 sm:px-3 sm:py-1 bg-indigo-900/50 rounded-full text-xs sm:text-sm text-indigo-200 w-fit"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    {exp.year}
-                  </motion.span>
+              <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl overflow-hidden h-full flex flex-col hover:bg-white/10 transition-all duration-300 shadow-xl hover:shadow-2xl">
+                {/* Project Image */}
+                <div className="relative h-48 overflow-hidden">
+                  <motion.img
+                    src={project.image_url || '/default-project.jpg'}
+                    alt={project.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    whileHover={{ scale: 1.1 }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  
+                  {/* Project Status Badge */}
+                  <div className="absolute top-4 left-4">
+                    <span className={`px-3 py-1 text-xs font-medium rounded-full backdrop-blur-sm border ${
+                      project.status === 'completed' 
+                        ? 'bg-green-500/20 text-green-300 border-green-400/30'
+                        : project.status === 'in_progress'
+                        ? 'bg-yellow-500/20 text-yellow-300 border-yellow-400/30'
+                        : project.status === 'published'
+                        ? 'bg-blue-500/20 text-blue-300 border-blue-400/30'
+                        : 'bg-purple-500/20 text-purple-300 border-purple-400/30'
+                    }`}>
+                      {project.status === 'published' ? '🚀 Published' : 
+                       project.status === 'completed' ? '✅ Completed' :
+                       project.status === 'in_progress' ? '🔄 In Progress' : '💡 Planned'}
+                    </span>
+                  </div>
+
+                  {/* Featured Badge */}
+                  {project.is_featured && (
+                    <div className="absolute top-4 right-4">
+                      <span className="px-2 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold rounded-full backdrop-blur-sm border border-white/20">
+                        ⭐ Featured
+                      </span>
+                    </div>
+                  )}
                 </div>
 
-                <motion.p
-                  className="text-sm sm:text-base text-indigo-200 mb-3 sm:mb-4"
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                >
-                  {exp.company} • {exp.location}
-                </motion.p>
+                {/* Project Content */}
+                <div className="p-6 flex-1 flex flex-col">
+                  {/* Project Title */}
+                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors line-clamp-2">
+                    {project.title}
+                  </h3>
+                  
+                  {/* Project Description */}
+                  <p className="text-gray-300 text-sm mb-4 flex-1 line-clamp-3 leading-relaxed">
+                    {project.description}
+                  </p>
 
-                <motion.ul
-                  className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                >
-                  {exp.responsibilities.map((item, i) => (
-                    <motion.li
-                      key={i}
-                      className="flex items-start text-indigo-100"
-                      initial={{ opacity: 0, x: 10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.4 + i * 0.05 }}
-                    >
-                      <span className="text-indigo-400 mr-2 mt-1 text-xs">▹</span>
-                      {item}
-                    </motion.li>
-                  ))}
-                </motion.ul>
-
-                {/* Skills */}
-                {exp.skills && (
-                  <motion.div
-                    className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-indigo-400/20"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                  >
-                    <h4 className="text-xs sm:text-sm font-semibold text-indigo-300 mb-1 sm:mb-2">Skills Applied:</h4>
-                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                      {exp.skills.map((skill, i) => (
+                  {/* Project Tags */}
+                  {project.tags && project.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.tags.map(tag => (
                         <motion.span
-                          key={i}
-                          className="text-[10px] sm:text-xs px-2 py-0.5 sm:px-2 sm:py-1 bg-indigo-900/50 rounded-full text-indigo-200"
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.5 + i * 0.05 }}
+                          key={tag.id}
+                          className="px-3 py-1.5 text-xs font-medium rounded-full border backdrop-blur-sm flex items-center gap-1"
+                          style={{
+                            backgroundColor: `${tag.color}15`,
+                            color: tag.color,
+                            borderColor: `${tag.color}30`
+                          }}
+                          whileHover={{ 
+                            scale: 1.05,
+                            backgroundColor: `${tag.color}25`,
+                            boxShadow: `0 0 10px ${tag.color}40`
+                          }}
+                          transition={{ duration: 0.2 }}
                         >
-                          {skill}
+                          <div 
+                            className="w-2 h-2 rounded-full"
+                            style={{ backgroundColor: tag.color }}
+                          />
+                          {tag.name}
                         </motion.span>
                       ))}
                     </div>
-                  </motion.div>
-                )}
+                  )}
+
+                  {/* Project Meta */}
+                  <div className="flex items-center justify-between mb-4 text-xs text-gray-400">
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1">
+                        <FiCalendar className="text-xs" />
+                        <span>
+                          {new Date(project.created_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })}
+                        </span>
+                      </div>
+                      {project.display_order > 0 && (
+                        <div className="flex items-center gap-1">
+                          <FiStar className="text-xs" />
+                          <span>#{project.display_order}</span>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Tech Stack Icons based on tags */}
+                    <div className="flex gap-1">
+                      {project.tags?.slice(0, 3).map(tag => (
+                        <div 
+                          key={tag.id}
+                          className="w-3 h-3 rounded-full border border-white/20"
+                          style={{ backgroundColor: tag.color }}
+                          title={tag.name}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Project Links */}
+                  <div className="flex gap-3 mt-auto pt-4 border-t border-white/10">
+                    {project.demo_url && project.demo_url !== '#' && (
+                      <motion.a
+                        href={project.demo_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 px-3 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-purple-500/25"
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <FiExternalLink className="text-xs" />
+                        Live Demo
+                      </motion.a>
+                    )}
+                    
+                    {project.code_url && project.code_url !== '#' && (
+                      <motion.a
+                        href={project.code_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`flex-1 px-3 py-2 border rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 backdrop-blur-sm ${
+                          project.demo_url && project.demo_url !== '#'
+                            ? 'border-purple-400 text-purple-300 hover:bg-purple-500/10'
+                            : 'border-purple-400 text-purple-300 hover:bg-purple-500/10'
+                        }`}
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <FiCode className="text-xs" />
+                        Source Code
+                      </motion.a>
+                    )}
+                  </div>
+                </div>
+
+                {/* Hover Effect Border */}
+                <motion.div
+                  className="absolute inset-0 border-2 border-transparent bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                  whileHover={{ opacity: 1 }}
+                />
               </div>
             </motion.div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  </motion.section>
-</AnimatePresence>
+          ))}
+        </div>
 
-
-      {/* Skill Section */}
-      <AnimatePresence>
-  <motion.section
-    id="skill"
-    className="snap-start min-h-screen flex flex-col justify-center items-center px-4 py-12 md:py-20 bg-gradient-to-b from-indigo-900/20 to-purple-900/10"
-    variants={sectionVariants}
-    initial="hidden"
-    whileInView="visible"
-    exit="exit"
-    transition={{ duration: 0.7 }}
-    viewport={{ once: false, amount: 0.3 }}
-  >
-    <motion.h2 
-      className="text-4xl font-bold mb-12 text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300"
-      initial={{ opacity: 0, y: -20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      My Skills & Certifications
-    </motion.h2>
-
-    <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-8 md:gap-12">
-      {/* Left Column - Skill Bars */}
-      <div className="flex-1 space-y-8">
-        <motion.h3 
-          className="text-xl font-semibold text-indigo-200 mb-6 flex items-center gap-2"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          <FiBarChart2 className="text-indigo-400" />
-          Skill Proficiency
-        </motion.h3>
-        
-        {skills.map((skill, idx) => (
+        {/* Empty State */}
+        {projects.length === 0 && (
           <motion.div
-            key={skill.name}
-            className="group relative"
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: idx * 0.1 }}
-            viewport={{ once: true }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="text-center py-20"
           >
-            <div className="flex justify-between mb-2">
-                <span className="font-medium text-indigo-100 flex items-center gap-2">
-                <Image
-                  src={skill.icon}
-                  alt={skill.name}
-                  width={20}
-                  height={20}
-                  className="w-5 h-5 object-contain"
+            <motion.div
+              className="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-3xl flex items-center justify-center border border-white/10 shadow-2xl"
+              animate={{ rotate: [0, 5, -5, 0] }}
+              transition={{ duration: 4, repeat: Infinity }}
+            >
+              <FiCode className="text-4xl text-purple-300" />
+            </motion.div>
+            <h3 className="text-2xl font-semibold text-white mb-4">No Projects Yet</h3>
+            <p className="text-gray-300 text-lg max-w-md mx-auto mb-8">
+              Amazing projects are coming soon! Stay tuned for some exciting developments.
+            </p>
+            
+            {/* Animated Dots */}
+            <div className="flex justify-center gap-3 mt-6">
+              {[0, 1, 2].map((dot) => (
+                <motion.div
+                  key={dot}
+                  className="w-3 h-3 bg-purple-400 rounded-full"
+                  animate={{ y: [0, -12, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity, delay: dot * 0.2 }}
                 />
-                {skill.name}
-                </span>
-              <span className="text-indigo-300 font-mono">{skill.value}%</span>
-            </div>
-            <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden shadow-inner">
-              <motion.div
-                className="h-full bg-gradient-to-r from-indigo-400 to-purple-500 rounded-full shadow-lg relative"
-                initial={{ width: 0 }}
-                whileInView={{ width: `${skill.value}%` }}
-                transition={{ duration: 1.2, delay: idx * 0.1, type: 'spring' }}
-                viewport={{ once: true }}
-              >
-                <div className="absolute inset-0 bg-white/10 group-hover:bg-white/20 transition-all duration-300"></div>
-              </motion.div>
+              ))}
             </div>
           </motion.div>
-        ))}
+        )}
       </div>
+    </section>
+  );
+};
 
-      {/* Right Column - Certifications & Skills */}
-      <div className="flex-1 flex flex-col gap-8">
-        {/* Certifications Section */}
-        <div>
-          <motion.h3 
-            className="text-xl font-semibold text-indigo-200 mb-6 flex items-center gap-2"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            <FiAward className="text-indigo-400" />
-            Certifications
-          </motion.h3>
+// Enhanced Experiences Section
+const EnhancedExperiencesSection = ({ experiences }: { experiences: Experience[] }) => {
+  return (
+    <section id="pengalaman" className="min-h-screen flex items-center justify-center px-4 py-20">
+      <div className="w-full max-w-6xl mx-auto">
+        <motion.h2 
+          className="text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          My Experience
+        </motion.h2>
+
+        <div className="relative">
+          {/* Timeline Line */}
+          <div className="absolute left-6 md:left-1/2 h-full w-1 bg-gradient-to-b from-purple-500/30 to-pink-500/30 transform -translate-x-1/2" />
           
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            {certificates.map((cert, idx) => (
+          <div className="space-y-12">
+            {experiences.map((exp, index) => (
               <motion.div
-                key={cert.name}
-                className="relative group"
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: idx * 0.15 }}
-                viewport={{ once: true }}
+                key={exp.id}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className={`relative flex ${
+                  index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                } items-start gap-8`}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/30 to-purple-600/30 rounded-xl blur-md group-hover:blur-lg transition-all duration-300 -z-10"></div>
-                <div className="h-full bg-white/5 rounded-xl shadow-lg border border-indigo-400/30 hover:border-indigo-300 transition-all overflow-hidden flex flex-col">
-                  <motion.img
-                    src={cert.img}
-                    alt={cert.name}
-                    className="w-full h-24 object-contain p-2 bg-white/5"
-                    initial={{ scale: 1.1 }}
-                    whileInView={{ scale: 1 }}
-                    transition={{ duration: 0.7 }}
-                    viewport={{ once: true }}
-                  />
-                  <div className="p-2 text-center bg-gradient-to-t from-black/70 to-transparent">
-                    <span className="text-xs font-medium text-indigo-100">{cert.name}</span>
-                  </div>
+                {/* Timeline Dot */}
+                <div className="absolute left-6 md:left-1/2 w-4 h-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transform -translate-x-1/2 z-10" />
+                
+                {/* Content */}
+                <div className={`flex-1 ml-12 md:ml-0 ${
+                  index % 2 === 0 ? 'md:pr-8' : 'md:pl-8'
+                }`}>
+                  <GlassCard className="p-8 group hover:bg-white/15 transition-all duration-300">
+                    {/* Date Badge */}
+                    <motion.div
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full mb-4"
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      <FiStar className="text-yellow-400 text-sm" />
+                      <span className="text-sm font-medium text-purple-200">
+                        {exp.start_year} - {exp.current_job ? 'Present' : exp.end_year}
+                      </span>
+                    </motion.div>
+
+                    {/* Job Title */}
+                    <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-purple-300 transition-colors">
+                      {exp.title}
+                    </h3>
+
+                    {/* Company & Location */}
+                    <div className="flex items-center gap-4 text-gray-300 mb-4">
+                      <span className="font-semibold text-purple-300">{exp.company}</span>
+                      <span className="text-sm">• {exp.location}</span>
+                    </div>
+
+                    {/* Responsibilities */}
+                    <div className="space-y-3 mb-6">
+                      <h4 className="text-lg font-semibold text-white">Responsibilities:</h4>
+                      <ul className="space-y-2">
+                        {exp.responsibilities.map((responsibility, idx) => (
+                          <motion.li
+                            key={responsibility.id}
+                            initial={{ opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.1 + idx * 0.05 }}
+                            className="flex items-start gap-3 text-gray-300"
+                          >
+                            <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0" />
+                            <span>{responsibility.description}</span>
+                          </motion.li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Skills */}
+                    {exp.skills && exp.skills.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {exp.skills.map((skill, idx) => (
+                          <motion.span
+                            key={idx}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: index * 0.1 + idx * 0.05 }}
+                            className="px-3 py-1 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/30 rounded-full text-sm text-purple-200"
+                          >
+                            {skill.skill_name}
+                          </motion.span>
+                        ))}
+                      </div>
+                    )}
+                  </GlassCard>
                 </div>
               </motion.div>
             ))}
           </div>
         </div>
+      </div>
+    </section>
+  );
+};
 
-        {/* Skills Grid */}
-        <div>
-          <motion.h3 
-            className="text-xl font-semibold text-indigo-200 mb-6 flex items-center gap-2"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-          >
-            <FiCode className="text-indigo-400" />
-            Tech Stack
-          </motion.h3>
-          
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-            {[
-              { name: 'HTML', icon: '/icons/html.png', color: 'from-orange-500 to-orange-300' },
-              { name: 'CSS', icon: '/icons/css.png', color: 'from-blue-500 to-blue-300' },
-              { name: 'JavaScript', icon: '/icons/js.png', color: 'from-yellow-500 to-yellow-300' },
-              { name: 'React', icon: '/icons/react.png', color: 'from-cyan-500 to-blue-500' },
-              { name: 'Tailwind', icon: '/icons/tailwind.png', color: 'from-teal-400 to-cyan-400' },
-              { name: 'Git', icon: '/icons/git.png', color: 'from-red-500 to-orange-500' },
-              { name: 'Node.js', icon: '/icons/nodejs.png', color: 'from-green-500 to-lime-400' },
-              { name: 'Bootstrapt', icon: '/icons/Bootstrapt.png', color: 'from-blue-600 to-blue-400' },
-              { name: 'Python', icon: '/icons/py.png', color: 'from-gray-800 to-gray-600' },
-              { name: 'UML', icon: '/icons/uml.png', color: 'from-purple-600 to-pink-500' },
-              { name: 'Photoshop', icon: '/icons/ps.png', color: 'from-blue-600 to-blue-400' },
-              { name: 'Microsoft Ofice', icon: '/icons/ofice.png', color: 'from-gray-800 to-gray-600' },
-              { name: 'Capcut', icon: '/icons/capcut.png', color: 'from-purple-600 to-pink-500' },
-              { name: 'Golang', icon: '/icons/golang.png', color: 'from-purple-600 to-pink-500' },
-            ].map((skill, idx) => (
-              <motion.div
-                key={skill.name}
-                className="group relative"
-                initial={{ opacity: 0, scale: 0.8, y: 30 }}
-                whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: idx * 0.08 }}
-                viewport={{ once: true }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl blur-md -z-10"></div>
-                <div className="flex flex-col items-center justify-center bg-white/5 rounded-xl shadow-lg border border-indigo-400/20 p-4 hover:bg-white/10 hover:border-indigo-300/50 hover:shadow-indigo-500/20 transition-all duration-300 h-full">
-                  <div className="w-12 h-12 mb-3 flex items-center justify-center">
-                    <Image 
-                      src={skill.icon}
-                      alt={skill.name}
-                      width={48}
-                      height={48}
-                      className="w-full h-full object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-300" 
-                    />
-                  </div>
-                  <span className="text-xs font-medium text-center text-indigo-100 group-hover:text-white transition-colors">
-                    {skill.name}
+// Enhanced Education Section
+const EnhancedEducationSection = ({ education }: { education: Education[] }) => {
+  return (
+    <section id="studi" className="min-h-screen flex items-center justify-center px-4 py-20">
+      <div className="w-full max-w-4xl mx-auto">
+        <motion.h2 
+          className="text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          Education
+        </motion.h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {education.map((edu, index) => (
+            <motion.div
+              key={edu.id}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              whileHover={{ y: -10 }}
+            >
+              <GlassCard className="p-8 h-full group hover:bg-white/15 transition-all duration-300">
+                {/* School Icon */}
+                <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl flex items-center justify-center group-hover:from-purple-500/30 group-hover:to-pink-500/30 transition-all duration-300">
+                  <FiAward className="text-2xl text-purple-300" />
+                </div>
+
+                {/* Degree & Major */}
+                <h3 className="text-xl font-bold text-white text-center mb-2 group-hover:text-purple-300 transition-colors">
+                  {edu.degree}
+                </h3>
+                <p className="text-lg text-purple-300 text-center font-semibold mb-4">
+                  {edu.major}
+                </p>
+
+                {/* School Name */}
+                <p className="text-gray-300 text-center mb-4 font-medium">
+                  {edu.school}
+                </p>
+
+                {/* Duration */}
+                <div className="flex justify-center mb-4">
+                  <span className="px-3 py-1 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full text-sm text-purple-200">
+                    {edu.start_year} - {edu.end_year}
                   </span>
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  </motion.section>
-</AnimatePresence>
-      {/* Studi Section */}
-      <AnimatePresence>
-  <motion.section
-    id="studi"
-    className="snap-start min-h-screen flex flex-col justify-center items-center px-6 py-16 bg-gradient-to-b from-indigo-900/20 to-purple-900/10"
-    variants={sectionVariants}
-    initial="hidden"
-    whileInView="visible"
-    exit="exit"
-    transition={{ duration: 0.7 }}
-    viewport={{ once: false, amount: 0.3 }}
-  >
-    <div className="w-full max-w-4xl mx-auto">
-      {/* Section Header */}
-      <motion.div
-        className="text-center mb-12"
-        initial={{ opacity: 0, y: -20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <motion.h2
-          className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-purple-300"
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          Education Journey
-        </motion.h2>
-        <motion.p
-          className="text-lg text-indigo-200 max-w-2xl mx-auto"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          My academic achievements and learning milestones
-        </motion.p>
-      </motion.div>
 
-      {/* Education Timeline */}
-      <div className="relative">
-        {/* Timeline line */}
-        <div className="absolute left-6 md:left-1/2 h-full w-0.5 bg-gradient-to-b from-purple-400/50 to-indigo-400/50"></div>
-
-        {studies.map((study, idx) => (
-          <motion.div
-            key={study.school}
-            className="relative pl-12 md:pl-0 mb-8 w-full"
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: idx * 0.15 }}
-            viewport={{ once: true }}
-          >
-            {/* Timeline dot */}
-            <div className="absolute left-0 top-6 rounded-full w-4 h-4 bg-purple-400 border-2 border-purple-200 z-10"></div>
-
-            {/* Education Card */}
-            <motion.div
-              className="bg-white/5 backdrop-blur-md rounded-xl shadow-xl overflow-hidden border border-indigo-400/30 hover:border-purple-300/50 transition-all duration-300 group"
-              whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(139, 92, 246, 0.2)" }}
-            >
-              <div className="p-6">
-                <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-3 gap-2">
-                  <motion.h3
-                    className="text-xl font-bold text-white group-hover:text-purple-300 transition-colors"
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                  >
-                    {study.school}
-                  </motion.h3>
-                  <motion.span
-                    className="px-3 py-1 bg-purple-900/50 rounded-full text-sm text-purple-200 self-start md:self-center"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    {study.year}
-                  </motion.span>
-                </div>
-
-                <motion.div
-                  className="flex items-center gap-2 text-indigo-300 mb-3"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
-                  </svg>
-                  <span className="font-medium">{study.major}</span>
-                </motion.div>
-
-                <motion.p
-                  className="text-indigo-200 mb-4 leading-relaxed"
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                >
-                  {study.desc}
-                </motion.p>
+                {/* Description */}
+                <p className="text-gray-400 text-center text-sm mb-6 leading-relaxed">
+                  {edu.description}
+                </p>
 
                 {/* Achievements */}
-                {study.achievements && (
-                  <motion.div
-                    className="mt-4 pt-4 border-t border-indigo-400/20"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ delay: 0.4 }}
-                  >
-                    <h4 className="text-sm font-semibold text-purple-300 mb-2 flex items-center gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      Key Achievements
-                    </h4>
+                {edu.achievements && edu.achievements.length > 0 && (
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-semibold text-white text-center">Achievements:</h4>
                     <ul className="space-y-2">
-                      {study.achievements.map((achievement, i) => (
+                      {edu.achievements.map((achievement, idx) => (
                         <motion.li
-                          key={i}
-                          className="flex items-start text-indigo-100"
-                          initial={{ opacity: 0, x: 10 }}
+                          key={achievement.id}
+                          initial={{ opacity: 0, x: -10 }}
                           whileInView={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.4 + i * 0.05 }}
+                          transition={{ delay: index * 0.1 + idx * 0.05 }}
+                          className="flex items-center gap-2 text-xs text-gray-300"
                         >
-                          <span className="text-purple-400 mr-2 mt-1">•</span>
-                          {achievement}
+                          <div className="w-1.5 h-1.5 bg-purple-400 rounded-full flex-shrink-0" />
+                          <span>{achievement.achievement}</span>
                         </motion.li>
                       ))}
                     </ul>
-                  </motion.div>
+                  </div>
                 )}
-              </div>
+              </GlassCard>
             </motion.div>
-          </motion.div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
-  </motion.section>
-</AnimatePresence>
+    </section>
+  );
+};
 
-      {/* Testimoni, Blog, Kontak (tetap seperti sebelumnya) */}
-      {sections.slice(5).map((section) => (
-        <AnimatePresence key={section.id}>
-          <motion.section
-            id={section.id}
-            className={`snap-start min-h-screen flex flex-col justify-center items-center px-6 py-16 ${
-              section.id === 'testimoni' ? 'bg-gradient-to-b from-purple-900/10 to-indigo-900/20' : 
-              section.id === 'blog' ? 'bg-gradient-to-b from-gray-900/10 to-indigo-900/10' :
-              'bg-gradient-to-b from-indigo-900/20 to-purple-900/10'
-            }`}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: false, amount: 0.3 }}
-          >
-            {/* Section Header */}
+// Enhanced Testimonials Section
+const EnhancedTestimonialsSection = ({ testimonials }: { testimonials: Testimonial[] }) => {
+  return (
+    <section id="testimoni" className="min-h-screen flex items-center justify-center px-4 py-20">
+      <div className="w-full max-w-6xl mx-auto">
+        <motion.h2 
+          className="text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          Testimonials
+        </motion.h2>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+          {testimonials.map((testimonial, index) => (
             <motion.div
-              className="text-center mb-12 w-full max-w-6xl mx-auto"
-              initial={{ opacity: 0, y: -20 }}
+              key={testimonial.id}
+              initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              whileHover={{ y: -10 }}
             >
-              <motion.h2
-                className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-purple-300"
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                {section.label}
-              </motion.h2>
-            </motion.div>
+              <GlassCard className="p-8 h-full group hover:bg-white/15 transition-all duration-300">
+                {/* Quote Icon */}
+                <div className="text-4xl text-purple-400/50 mb-4">&quot;</div>
+                
+                {/* Testimonial Text */}
+                <p className="text-gray-300 italic mb-6 leading-relaxed">
+                  &quot;{testimonial.message}&quot;
+                </p>
 
-            {/* Testimonial Section */}
-            {section.id === 'testimoni' && (
-              <div className="w-full max-w-6xl mx-auto">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 px-4">
-                  {testimonials.map((testi, index) => (
+                {/* Rating */}
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
                     <motion.div
-                      key={index}
-                      className="relative group"
-                      initial={{ opacity: 0, y: 40 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: index * 0.1 }}
-                      viewport={{ once: true }}
+                      key={i}
+                      initial={{ scale: 0 }}
+                      whileInView={{ scale: 1 }}
+                      transition={{ delay: index * 0.1 + i * 0.1 }}
                     >
-                      <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl opacity-0 group-hover:opacity-20 blur transition-all duration-300 -z-10"></div>
-                      <div className="h-full bg-white/5 backdrop-blur-md rounded-xl p-6 shadow-xl border border-indigo-400/30 hover:border-purple-300/50 transition-all duration-300">
-                        <div className="flex items-start mb-4">
-                          <div className="text-4xl font-serif text-purple-400/50 mr-4">&quot;</div>
-                          <p className="text-lg italic text-indigo-100 flex-1">&quot;{testi.message}&quot;</p>
-                        </div>
-                        <div className="flex items-center mt-6">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold mr-4">
-                            {testi.name.charAt(0)}
-                          </div>
-                          <div>
-                            <h4 className="font-bold text-white">{testi.name}</h4>
-                            <p className="text-sm text-purple-300">{testi.title}</p>
-                          </div>
-                        </div>
-                      </div>
+                      <FiStar 
+                        className={`text-sm ${
+                          i < testimonial.rating 
+                            ? 'text-yellow-400 fill-yellow-400' 
+                            : 'text-gray-600'
+                        }`}
+                      />
                     </motion.div>
                   ))}
                 </div>
-              </div>
-            )}
 
-            {/* Blog Section */}
-            {section.id === 'blog' && (
-              <div className="w-full max-w-4xl mx-auto px-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {blogPosts.map((post, index) => (
-                    <motion.div
-                      key={index}
-                      className="group relative overflow-hidden rounded-xl shadow-2xl"
-                      initial={{ opacity: 0, y: 40 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: index * 0.1 }}
-                      viewport={{ once: true }}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/30 to-purple-600/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
-                      <div className="relative z-10 h-full bg-white/5 backdrop-blur-md border border-indigo-400/30 hover:border-purple-300/50 transition-all duration-300">
-                        <div className="p-6">
-                          <span className="text-xs font-semibold px-3 py-1 bg-indigo-900/50 rounded-full text-indigo-300 mb-2 inline-block">
-                            {post.date}
-                          </span>
-                          <h3 className="text-xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors">
-                            {post.title}
-                          </h3>
-                          <p className="text-indigo-200 mb-4">{post.excerpt}</p>
-                          <motion.button
-                            className="px-4 py-2 text-sm bg-transparent border border-indigo-400 hover:bg-indigo-900/30 text-indigo-100 rounded-lg font-medium transition-colors flex items-center gap-2"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                          >
-                            Read More
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                          </motion.button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Contact Section */}
-            {section.id === 'kontak' && (
-              <div className="w-full max-w-4xl mx-auto">
-                <motion.div
-                  className="bg-white/5 backdrop-blur-md rounded-2xl shadow-xl border border-indigo-400/30 p-8 md:p-12"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <h3 className="text-2xl font-bold text-center mb-8 text-white">Get In Touch</h3>
+                {/* Client Info */}
+                <div className="flex items-center gap-4">
+                  {/* Avatar */}
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
+                    {testimonial.name.charAt(0)}
+                  </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {/* Contact Form */}
-                    <motion.form
-                      action="https://formspree.io/f/xpwdvwvr"
-                      method="POST"
-                      className="space-y-6"
+                  <div>
+                    <h4 className="font-semibold text-white">{testimonial.name}</h4>
+                    <p className="text-sm text-purple-300">{testimonial.title}</p>
+                  </div>
+                </div>
+              </GlassCard>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Empty State */}
+        {testimonials.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="text-center py-12"
+          >
+            <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-3xl flex items-center justify-center">
+              <FiMessageSquare className="text-3xl text-purple-300" />
+            </div>
+            <h3 className="text-xl font-semibold text-white mb-2">No Testimonials Yet</h3>
+            <p className="text-gray-400">Be the first to share your experience!</p>
+          </motion.div>
+        )}
+      </div>
+    </section>
+  );
+};
+
+// Enhanced Blog Section
+const EnhancedBlogSection = ({ blogPosts }: { blogPosts: BlogPost[] }) => {
+  // Sort blog posts by publish_date (newest first) and take 5 latest
+  const latestBlogPosts = blogPosts
+    .sort((a, b) => new Date(b.publish_date).getTime() - new Date(a.publish_date).getTime())
+    .slice(0, 5);
+
+  return (
+    <section id="blog" className="min-h-screen flex items-center justify-center px-4 py-20">
+      <div className="w-full max-w-6xl mx-auto">
+        <motion.h2 
+          className="text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          Latest Blog
+        </motion.h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {latestBlogPosts.map((post, index) => (
+            <Link key={post.id} href={`/blog/${post.id}`} className="block">
+              <motion.article
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ y: -10, scale: 1.02 }}
+                className="group cursor-pointer h-full"
+              >
+                {/* Glass Card Replacement */}
+                <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl overflow-hidden h-full flex flex-col hover:bg-white/10 transition-all duration-300 shadow-xl hover:shadow-2xl">
+                  {/* Gradient Header sebagai pengganti gambar */}
+                  <div className="relative h-40 overflow-hidden">
+                    <motion.div 
+                      className="absolute inset-0 bg-gradient-to-br from-purple-500/40 via-pink-500/30 to-indigo-500/40"
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.5 }}
+                    />
+                    
+                    {/* Pattern Overlay */}
+                    <div className="absolute inset-0 opacity-[0.15]">
+                      <div className="w-full h-full bg-gradient-to-r from-transparent via-white to-transparent transform rotate-45 scale-150" />
+                    </div>
+                    
+                    {/* Icon dan Title di Header */}
+                    <div className="absolute inset-0 flex items-center justify-center p-6">
+                      <div className="text-center w-full">
+                        <motion.div
+                          className="w-14 h-14 mx-auto mb-4 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-white/30"
+                          whileHover={{ rotate: 360, scale: 1.1 }}
+                          transition={{ duration: 0.5 }}
+                        >
+                          <FiMessageSquare className="text-2xl text-white" />
+                        </motion.div>
+                        <h3 className="text-xl font-bold text-white line-clamp-2 leading-tight px-2">
+                          {post.title}
+                        </h3>
+                      </div>
+                    </div>
+
+                    {/* Date Badge */}
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-2 bg-black/50 backdrop-blur-sm rounded-full text-sm text-white border border-white/20 font-medium">
+                        {new Date(post.publish_date).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric'
+                        })}
+                      </span>
+                    </div>
+
+                    {/* New Badge untuk artikel terbaru (3 hari terakhir) */}
+                    {isNewPost(post.publish_date) && (
+                      <div className="absolute top-4 right-4">
+                        <span className="px-2 py-1 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full text-xs text-white font-bold animate-pulse">
+                          NEW
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6 flex-1 flex flex-col">
+                    {/* Tags */}
+                    {post.tags && post.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {post.tags.slice(0, 3).map(tag => (
+                          <motion.span
+                            key={tag.id}
+                            className="px-3 py-1.5 text-sm bg-gradient-to-r from-purple-500/40 to-pink-500/40 rounded-full text-purple-100 border border-purple-400/40 backdrop-blur-sm font-medium"
+                            whileHover={{ scale: 1.05 }}
+                          >
+                            #{tag.name}
+                          </motion.span>
+                        ))}
+                      </div>
+                    )}
+                    
+                    {/* Excerpt */}
+                    <motion.p 
+                      className="text-gray-300 text-base mb-6 flex-1 line-clamp-3 leading-relaxed"
+                      whileHover={{ color: "#E9D5FF" }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {post.excerpt || "Discover more about this fascinating topic in our latest blog post..."}
+                    </motion.p>
+
+                    {/* Stats */}
+                    <div className="flex items-center gap-6 mb-4 text-sm text-gray-400">
+                      <div className="flex items-center gap-2">
+                        <FiEye className="text-base" />
+                        <span>{post.view_count || 0} views</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <FiClock className="text-base" />
+                        <span>{Math.ceil((post.content?.length || 0) / 200)} min read</span>
+                      </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="flex items-center justify-between pt-4 border-t border-white/20">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center shadow-lg">
+                          <FiUser className="text-sm text-white" />
+                        </div>
+                        <span className="text-sm text-gray-300 font-medium">Admin</span>
+                      </div>
+                      
+                      <motion.div
+                        className="flex items-center gap-2 text-purple-300 hover:text-purple-200 transition-colors text-base font-semibold"
+                        whileHover={{ x: 5 }}
+                      >
+                        Read More
+                        <FiExternalLink className="text-sm" />
+                      </motion.div>
+                    </div>
+                  </div>
+
+                  {/* Hover Effect Border */}
+                  <motion.div
+                    className="absolute inset-0 border-2 border-transparent bg-gradient-to-r from-purple-500/30 to-pink-500/30 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                    whileHover={{ opacity: 1 }}
+                  />
+                </div>
+              </motion.article>
+            </Link>
+          ))}
+        </div>
+
+        {/* View All Button */}
+        {blogPosts.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="text-center mt-16"
+          >
+            <div className="mb-6 text-gray-400">
+              <p className="text-lg">Showing {latestBlogPosts.length} latest articles</p>
+              {blogPosts.length > 5 && (
+                <p className="text-sm mt-1">
+                  {blogPosts.length - 5} more articles available
+                </p>
+              )}
+            </div>
+            
+            <Link href="/blog">
+              <motion.button
+                className="px-8 py-4 bg-gradient-to-r from-purple-500/30 to-pink-500/30 border border-purple-400/50 text-purple-100 rounded-2xl font-semibold hover:from-purple-500/40 hover:to-pink-500/40 transition-all duration-300 flex items-center gap-3 mx-auto backdrop-blur-lg shadow-lg hover:shadow-xl text-lg"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                View All {blogPosts.length} Articles
+                <FiExternalLink className="text-xl" />
+              </motion.button>
+            </Link>
+          </motion.div>
+        )}
+
+        {/* Empty State */}
+        {blogPosts.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="text-center py-20"
+          >
+            <motion.div
+              className="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-3xl flex items-center justify-center border border-white/20 shadow-2xl"
+              animate={{ rotate: [0, 5, -5, 0] }}
+              transition={{ duration: 4, repeat: Infinity }}
+            >
+              <FiMessageSquare className="text-4xl text-purple-200" />
+            </motion.div>
+            <h3 className="text-2xl font-semibold text-white mb-4">No Articles Yet</h3>
+            <p className="text-gray-300 text-lg max-w-md mx-auto mb-8">
+              Stay tuned! Amazing blog posts are coming soon to inspire and educate.
+            </p>
+            
+            {/* Animated Dots */}
+            <div className="flex justify-center gap-3 mt-6">
+              {[0, 1, 2].map((dot) => (
+                <motion.div
+                  key={dot}
+                  className="w-3 h-3 bg-purple-400 rounded-full"
+                  animate={{ y: [0, -12, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity, delay: dot * 0.2 }}
+                />
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </div>
+    </section>
+  );
+};
+
+// Helper function to check if post is new (published within last 3 days)
+function isNewPost(publishDate: string): boolean {
+  const postDate = new Date(publishDate);
+  const threeDaysAgo = new Date();
+  threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+  return postDate > threeDaysAgo;
+}
+
+// Enhanced Skills Section
+const EnhancedSkillsSection = ({ skills, certificates }: { skills: Skill[]; certificates: Certificate[] }) => {
+  // Handle undefined or null data
+  const safeSkills = skills || [];
+  const safeCertificates = certificates || [];
+
+  // Filter skills dengan handling untuk null/undefined
+  const featuredSkills = safeSkills.filter(skill => {
+    // Handle berbagai kemungkinan tipe data
+    if (skill.is_featured === true || skill.is_featured === 'true') return true;
+    if (skill.is_featured === false || skill.is_featured === 'false' || skill.is_featured === null) return false;
+    return false; // default untuk nilai yang tidak dikenali
+  });
+
+  const skillCollection = safeSkills.filter(skill => {
+    // Handle berbagai kemungkinan tipe data
+    if (skill.is_featured === false || skill.is_featured === 'false') return true;
+    if (skill.is_featured === true || skill.is_featured === 'true' || skill.is_featured === null) return false;
+    return true; // default anggap sebagai non-featured
+  });
+
+  // Debug: console.log untuk memastikan filter bekerja
+  console.log('All skills:', safeSkills);
+  console.log('Featured skills:', featuredSkills);
+  console.log('Skill collection:', skillCollection);
+  console.log('Certificates:', safeCertificates);
+
+  // Debug detail untuk setiap skill
+  safeSkills.forEach((skill, index) => {
+    console.log(`Skill ${index}:`, {
+      name: skill.name,
+      is_featured: skill.is_featured,
+      type: typeof skill.is_featured,
+      value: skill.is_featured
+    });
+  });
+
+  return (
+    <section id="skill" className="min-h-screen flex items-center justify-center px-4 py-20">
+      <div className="w-full max-w-7xl mx-auto">
+        <motion.h2 
+          className="text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          Skills & Certifications
+        </motion.h2>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+          {/* Featured Skills dengan Progress Bars */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <GlassCard className="p-8">
+              <h3 className="text-2xl font-bold mb-8 text-purple-300 flex items-center gap-3">
+                <FiBarChart2 />
+                Core Competencies
+              </h3>
+              
+              {featuredSkills.length > 0 ? (
+                <div className="space-y-6">
+                  {featuredSkills.map((skill, index) => (
+                    <motion.div
+                      key={skill.id}
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.2 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="group"
                     >
-                      <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-indigo-300 mb-1">Name</label>
-                        <input
-                          type="text"
-                          id="name"
-                          name='name'
-                          className="w-full px-4 py-3 bg-white/10 border border-indigo-400/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-indigo-400/70"
-                          placeholder="Your name"
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-indigo-300 mb-1">Email</label>
-                        <input
-                          type="email"
-                          id="email"
-                          name='email'
-                          className="w-full px-4 py-3 bg-white/10 border border-indigo-400/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-indigo-400/70"
-                          placeholder="your.email@example.com"
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="message" className="block text-sm font-medium text-indigo-300 mb-1">Message</label>
-                        <textarea
-                          id="message"
-                          name='message'
-                          rows={4}
-                          className="w-full px-4 py-3 bg-white/10 border border-indigo-400/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-indigo-400/70"
-                          placeholder="Your message here..."
-                        ></textarea>
-                      </div>
-                      <motion.button
-                        type="submit"
-                        className="w-full px-6 py-3 bg-transparent border-2 border-purple-500 text-white font-medium rounded-lg shadow-lg hover:bg-purple-900/30 transition-all duration-300"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        Send Message
-                      </motion.button>
-                    </motion.form>
-
-                    {/* Contact Info */}
-                    <motion.div
-                      className="space-y-6"
-                      initial={{ opacity: 0, x: 20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.4 }}
-                    >
-                      <div className="flex items-start gap-4">
-                        <div className="p-3 bg-indigo-900/50 rounded-lg text-indigo-300">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                          </svg>
+                      <div className="flex justify-between items-center mb-2">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center group-hover:from-purple-500/30 group-hover:to-pink-500/30 transition-all duration-300">
+                            {skill.icon_url ? (
+                              <img 
+                                src={skill.icon_url} 
+                                alt={skill.name}
+                                className="w-6 h-6 object-contain"
+                              />
+                            ) : (
+                              <FiCode className="text-purple-300 text-lg" />
+                            )}
+                          </div>
+                          <span className="font-medium text-white group-hover:text-purple-300 transition-colors">
+                            {skill.name}
+                          </span>
                         </div>
-                        <div>
-                          <h4 className="font-medium text-white mb-1">Email</h4>
-                          <a href="mailto:contact@example.com" className="text-indigo-300 hover:text-purple-300 transition-colors">fathirfarhansyah24@gmail.com</a>
-                        </div>
+                        <span className="text-purple-300 font-mono text-sm bg-purple-500/10 px-2 py-1 rounded">
+                          {skill.value}%
+                        </span>
                       </div>
-
-                      <div className="flex items-start gap-4">
-                        <div className="p-3 bg-indigo-900/50 rounded-lg text-indigo-300">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <h4 className="font-medium text-white mb-1">Phone</h4>
-                          <a href="tel:+1234567890" className="text-indigo-300 hover:text-purple-300 transition-colors">+62 858-0973-5614</a>
-                        </div>
-                      </div>
-
-                      <div className="flex items-start gap-4">
-                        <div className="p-3 bg-indigo-900/50 rounded-lg text-indigo-300">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <h4 className="font-medium text-white mb-1">Location</h4>
-                          <p className="text-indigo-300">Kalidoni,Palembang,Sumatera Selatan,Indonesia</p>
-                        </div>
-                      </div>
-
-                      {/* CV Download Button */}
-                      <motion.div
-                        className="pt-6 mt-6 border-t border-indigo-400/20"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ delay: 0.6 }}
-                      >
-                        <motion.button
-                          className="w-full px-6 py-3 bg-transparent border-2 border-purple-500 text-white font-medium rounded-lg shadow-lg hover:bg-purple-900/30 transition-all duration-300 flex items-center justify-center gap-2"
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
+                      
+                      <div className="w-full h-2.5 bg-white/10 rounded-full overflow-hidden">
+                        <motion.div
+                          className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full relative"
+                          initial={{ width: 0 }}
+                          whileInView={{ width: `${skill.value}%` }}
+                          transition={{ duration: 1.2, delay: index * 0.1, type: "spring" }}
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                          </svg>
-                          Download My CV
-                        </motion.button>
-                      </motion.div>
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
+                        </motion.div>
+                      </div>
                     </motion.div>
-                  </div>
-                </motion.div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-gray-400">
+                  <FiBarChart2 className="text-4xl mx-auto mb-4 opacity-50" />
+                  <p>No featured skills available</p>
+                  <p className="text-sm mt-2">
+                    {safeSkills.length === 0 ? 'No skills data found' : 'Skills with is_featured: true will appear here'}
+                  </p>
+                  <p className="text-xs mt-1">Total skills: {safeSkills.length}, Featured: {featuredSkills.length}</p>
+                </div>
+              )}
+            </GlassCard>
+          </motion.div>
+
+          {/* Certifications - tetap sama */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <GlassCard className="p-8">
+              <h3 className="text-2xl font-bold mb-8 text-purple-300 flex items-center gap-3">
+                <FiAward />
+                Certifications
+              </h3>
+              
+              {safeCertificates.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {safeCertificates.map((cert, index) => (
+                    <motion.a
+                      key={cert.id}
+                      href={cert.credential_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      whileHover={{ y: -8, scale: 1.03 }}
+                      className="block cursor-pointer group"
+                    >
+                      <GlassCard className="p-6 h-full transition-all duration-300 hover:bg-white/15 border border-white/10 hover:border-purple-400/30">
+                        {/* Certificate Image Container */}
+                        <div className="relative mb-4 rounded-xl overflow-hidden bg-gradient-to-br from-purple-500/10 to-pink-500/10">
+                          {cert.image_url ? (
+                            <div className="aspect-video relative">
+                              <img
+                                src={cert.image_url}
+                                alt={cert.name}
+                                className="w-full h-full object-contain p-2 transition-transform duration-500 group-hover:scale-105"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            </div>
+                          ) : (
+                            <div className="aspect-video flex items-center justify-center">
+                              <FiAward className="text-4xl text-purple-300 opacity-60" />
+                            </div>
+                          )}
+                          
+                          <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-sm rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <FiExternalLink className="text-white text-xs" />
+                          </div>
+                        </div>
+
+                        <div className="text-center">
+                          <h4 className="font-bold text-white mb-2 text-sm leading-tight line-clamp-2 group-hover:text-purple-300 transition-colors">
+                            {cert.name}
+                          </h4>
+                          
+                          <p className="text-gray-400 text-xs mb-3 line-clamp-2">
+                            {cert.issuer}
+                          </p>
+                          
+                          <div className="flex items-center justify-center gap-1 text-purple-300 text-xs">
+                            <FiCalendar className="text-xs" />
+                            <span>{new Date(cert.issue_date).toLocaleDateString('en-US', { 
+                              year: 'numeric', 
+                              month: 'short',
+                              day: 'numeric'
+                            })}</span>
+                          </div>
+                        </div>
+
+                        <div className="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-purple-500/20 transition-all duration-300" />
+                      </GlassCard>
+                    </motion.a>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-gray-400">
+                  <FiAward className="text-4xl mx-auto mb-4 opacity-50" />
+                  <p>No certifications available</p>
+                </div>
+              )}
+            </GlassCard>
+          </motion.div>
+        </div>
+
+        {/* Skill Collection - Non-featured skills */}
+        {skillCollection.length > 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <GlassCard className="p-8">
+              <h3 className="text-2xl font-bold mb-8 text-purple-300 flex items-center gap-3">
+                <FiCode />
+                Technology Stack
+              </h3>
+              
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                {skillCollection.map((skill, index) => (
+                  <motion.div
+                    key={skill.id}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, delay: index * 0.05 }}
+                    whileHover={{ y: -5, scale: 1.05 }}
+                    className="group"
+                  >
+                    <GlassCard className="p-4 text-center transition-all duration-300 hover:bg-white/15 border border-white/10 hover:border-purple-400/30">
+                      <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center group-hover:from-purple-500/30 group-hover:to-pink-500/30 transition-all duration-300">
+                        {skill.icon_url ? (
+                          <img 
+                            src={skill.icon_url} 
+                            alt={skill.name}
+                            className="w-6 h-6 object-contain"
+                          />
+                        ) : (
+                          <FiCode className="text-purple-300 text-lg" />
+                        )}
+                      </div>
+                      
+                      <span className="text-sm font-medium text-white group-hover:text-purple-300 transition-colors">
+                        {skill.name}
+                      </span>
+                    </GlassCard>
+                  </motion.div>
+                ))}
               </div>
-            )}
-          </motion.section>
-        </AnimatePresence>
-      ))}
+            </GlassCard>
+          </motion.div>
+        ) : (
+          safeSkills.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <GlassCard className="p-8">
+                <h3 className="text-2xl font-bold mb-8 text-purple-300 flex items-center gap-3">
+                  <FiCode />
+                  Technology Stack
+                </h3>
+                <div className="text-center py-8 text-gray-400">
+                  <FiCode className="text-4xl mx-auto mb-4 opacity-50" />
+                  <p>No additional skills available</p>
+                  <p className="text-sm mt-2">Skills with is_featured: false will appear here</p>
+                  <p className="text-xs mt-1">Total skills: {safeSkills.length}, Featured: {featuredSkills.length}, Non-featured: {skillCollection.length}</p>
+                </div>
+              </GlassCard>
+            </motion.div>
+          )
+        )}
+      </div>
+    </section>
+  );
+};
+
+// Enhanced Contact Section
+const EnhancedContactSection = ({ settings }: { settings: Setting[] }) => {
+  const getSettingValue = (key: string): string => {
+    const setting = settings.find(s => s.key === key);
+    return setting?.value || '';
+  };
+
+  return (
+    <section id="kontak" className="min-h-screen flex items-center justify-center px-4 py-20">
+      <div className="w-full max-w-4xl mx-auto">
+        <motion.h2 
+          className="text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          Get In Touch
+        </motion.h2>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Contact Form */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <GlassCard className="p-8">
+              <h3 className="text-2xl font-bold mb-6 text-purple-300">Send Message</h3>
+              
+              <form className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Name</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400"
+                    placeholder="Your name"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                  <input
+                    type="email"
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400"
+                    placeholder="your.email@example.com"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Message</label>
+                  <textarea
+                    rows={5}
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400 resize-none"
+                    placeholder="Your message here..."
+                  />
+                </div>
+                
+                <motion.button
+                  type="submit"
+                  className="w-full px-6 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-300"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Send Message
+                </motion.button>
+              </form>
+            </GlassCard>
+          </motion.div>
+
+          {/* Contact Info */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="space-y-6"
+          >
+            <GlassCard className="p-6">
+              <h3 className="text-2xl font-bold mb-6 text-purple-300">Contact Info</h3>
+              
+              <div className="space-y-4">
+                <div className="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center">
+                    <FiMail className="text-xl text-purple-300" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-400">Email</p>
+                    <p className="text-white font-medium">{getSettingValue('contact_email') || 'your@email.com'}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center">
+                    <FiMessageSquare className="text-xl text-purple-300" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-400">Phone</p>
+                    <p className="text-white font-medium">{getSettingValue('phone_number') || '+62 812-3456-7890'}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center">
+                    <FiStar className="text-xl text-purple-300" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-400">Location</p>
+                    <p className="text-white font-medium">{getSettingValue('location') || 'Palembang, Indonesia'}</p>
+                  </div>
+                </div>
+              </div>
+            </GlassCard>
+
+            {/* CV Download */}
+            <GlassCard className="p-6 text-center">
+              <h4 className="text-lg font-semibold text-white mb-3">Download My CV</h4>
+              <motion.a
+                href={getSettingValue('cv_url')}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-purple-400 text-purple-300 rounded-xl font-semibold hover:bg-purple-500/10 transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <FiDownload className="text-xl" />
+                Download CV
+              </motion.a>
+            </GlassCard>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default function Portfolio() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [showContact, setShowContact] = useState(false);
+  
+  // State untuk data dari API
+  const [sections, setSections] = useState<Section[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [skills, setSkills] = useState<Skill[]>([]);
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [education, setEducation] = useState<Education[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
+  const [settings, setSettings] = useState<Setting[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+
+  // Fungsi untuk mengambil semua data dari API
+  const fetchAllData = async () => {
+    try {
+      setLoading(true);
+      setFetchError(null);
+
+      const res = await fetch('/api/portofolio');
+      if (!res.ok) throw new Error(`Failed to load data: ${res.status}`);
+
+      const payload = await res.json();
       
-      {/* Tombol di section profil */}
+      console.log('Full API response:', payload);
+      console.log('Projects from API:', payload.projects);
+      console.log('Source:', payload.source);
+
+      setSections(payload.sections || []);
+      setProjects(Array.isArray(payload.projects) ? payload.projects : []);
+      setExperiences(payload.experiences || []);
+      setSkills(payload.skills || []);
+      setCertificates(payload.certificates || []);
+      setEducation(payload.education || []);
+      setTestimonials(payload.testimonials || []);
+      setBlogPosts(payload.blogPosts || []);
+      setSocialLinks(payload.socialLinks || []);
+      setSettings(payload.settings || []);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setFetchError((error as Error)?.message || 'Unknown error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <AnimatedBackground />
+        <FloatingParticles />
+        <div className="text-center text-white z-10">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            className="w-16 h-16 border-4 border-purple-400 border-t-transparent rounded-full mx-auto mb-4"
+          />
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            Loading Portfolio...
+          </motion.p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative min-h-screen text-white overflow-x-hidden">
+      {/* Background Elements */}
+      <AnimatedBackground />
+      <FloatingParticles />
+      
+      {/* Enhanced Navigation */}
+      <EnhancedNavigation 
+        sections={sections} 
+        menuOpen={menuOpen} 
+        setMenuOpen={setMenuOpen} 
+      />
+
+      {/* Main Content */}
+      <main className="relative z-10">
+        {/* Profile Section */}
+        <EnhancedProfileSection settings={settings} setShowContact={setShowContact} />
+
+        {/* About Section */}
+        <EnhancedAboutSection projects={projects} />
+
+        {/* Experiences Section */}
+        <EnhancedExperiencesSection experiences={experiences} />
+
+        {/* Projects Section */}
+        <EnhancedProjectsSection projects={projects} />
+
+        {/* Skills Section */}
+        <EnhancedSkillsSection skills={skills} certificates={certificates} />
+
+        {/* Education Section */}
+        <EnhancedEducationSection education={education} />
+
+        {/* Testimonials Section */}
+        <EnhancedTestimonialsSection testimonials={testimonials} />
+
+        {/* Blog Section */}
+        <EnhancedBlogSection blogPosts={blogPosts} />
+
+        {/* Contact Section */}
+        <EnhancedContactSection settings={settings} />
+      </main>
+
+      {/* Enhanced Contact Bubble */}
+      <ContactBubble isOpen={showContact} onClose={() => setShowContact(false)} socialLinks={socialLinks} />
+
+      {/* Floating Contact Button */}
       <motion.button
-        className="px-6 py-3 bg-transparent border border-indigo-400 hover:bg-indigo-900/30 text-indigo-100 rounded-lg font-medium shadow-lg transition-all duration-300 flex items-center gap-2"
-        whileHover={{ scale: 1.05, boxShadow: "0 5px 15px rgba(99, 102, 241, 0.2)" }}
-        whileTap={{ scale: 0.98 }}
         onClick={() => setShowContact(true)}
+        className="fixed bottom-8 right-8 z-40 p-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl shadow-2xl flex items-center gap-3 group"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        animate={{ y: [0, -10, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
       >
-        <FiMail className="text-lg" />
-        Contact Me
+        <FiMessageSquare className="text-xl" />
+        <span className="font-semibold">Contact</span>
       </motion.button>
 
-      {/* Jika ada tombol mengambang di pojok kanan bawah */}
-      <button
-        onClick={() => setShowContact(true)}
-        className="fixed bottom-4 right-4 z-50 p-3 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg flex items-center gap-2"
-      >
-        <FiMessageSquare className="text-2xl" />
-        <span className="hidden md:inline-block font-medium">Contact Me</span>
-      </button>
-
-      {/* Bubble */}
-      <ContactBubble isOpen={showContact} onClose={() => setShowContact(false)} />
-        
+      {/* Error Banner */}
+      {fetchError && (
+        <motion.div
+          className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-yellow-500/90 text-black px-6 py-3 rounded-2xl shadow-2xl max-w-md text-sm font-medium"
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          ⚠️ Using fallback data: {fetchError}
+        </motion.div>
+      )}
     </div>
   );
 }
