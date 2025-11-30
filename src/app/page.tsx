@@ -97,46 +97,30 @@ const FloatingParticles = () => {
 const AnimatedBackground = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0.5, y: 0.5 });
   const [isClient, setIsClient] = useState(false);
-  const [particles, setParticles] = useState<Array<{left: string, top: string, width: string, height: string, delay: string, duration: string}>>([]);
 
   useEffect(() => {
     setIsClient(true);
-    
-    // Generate particles hanya di client
-    const generatedParticles = Array.from({ length: 15 }, () => ({
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      width: `${Math.random() * 3 + 1}px`,
-      height: `${Math.random() * 3 + 1}px`,
-      delay: `${Math.random() * 5}s`,
-      duration: `${Math.random() * 10 + 10}s`
-    }));
-    setParticles(generatedParticles);
 
+    // Optimized mouse tracking dengan throttling menggunakan requestAnimationFrame
+    let rafId: number;
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: e.clientX / window.innerWidth,
-        y: e.clientY / window.innerHeight,
+      if (rafId) cancelAnimationFrame(rafId);
+      
+      rafId = requestAnimationFrame(() => {
+        setMousePosition({
+          x: e.clientX / window.innerWidth,
+          y: e.clientY / window.innerHeight,
+        });
       });
     };
 
-    // Throttle mouse events untuk performa
-    let ticking = false;
-    const throttledMouseMove = (e: MouseEvent) => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          handleMouseMove(e);
-          ticking = false;
-        });
-        ticking = true;
-      }
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (rafId) cancelAnimationFrame(rafId);
     };
-
-    window.addEventListener('mousemove', throttledMouseMove);
-    return () => window.removeEventListener('mousemove', throttledMouseMove);
   }, []);
 
-  // Untuk menghindari hydration mismatch, render minimal di server
   if (!isClient) {
     return (
       <div className="fixed inset-0 z-0 overflow-hidden">
@@ -147,110 +131,168 @@ const AnimatedBackground = () => {
 
   return (
     <div className="fixed inset-0 z-0 overflow-hidden">
-      {/* Base gradient static - lebih ringan */}
+      {/* Base gradient dengan GPU acceleration */}
       <div 
         className="absolute inset-0"
         style={{
-          background: 'radial-gradient(circle at 50% 50%, #1e1b4b 0%, #581c87 50%, #831843 100%)',
+          background: `
+            radial-gradient(circle at 50% 50%, #1e1b4b 0%, #581c87 50%, #831843 100%)
+          `,
+          transform: 'translate3d(0, 0, 0)'
         }}
       />
 
-      {/* Interactive gradient yang mengikuti mouse - simplified */}
-      <motion.div
-        className="absolute inset-0 opacity-30"
-        animate={{
-          background: `radial-gradient(circle 600px at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, rgba(139, 92, 246, 0.25), transparent 50%)`,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 100,
-          damping: 30,
-          mass: 0.5
-        }}
-      />
-
-      {/* Reduced animated orbs - hanya 2 dengan animasi lebih sederhana */}
-      <motion.div
-        className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/15 rounded-full blur-2xl"
-        animate={{
-          x: [0, 40, 0],
-          y: [0, -30, 0],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-      
-      <motion.div
-        className="absolute bottom-1/3 right-1/4 w-56 h-56 bg-pink-500/15 rounded-full blur-2xl"
-        animate={{
-          x: [0, -30, 0],
-          y: [0, 40, 0],
-          scale: [1, 1.05, 1],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1,
+      {/* Optimized interactive gradient dengan transform untuk performa */}
+      <div 
+        className="absolute inset-0 opacity-40 transition-transform duration-100 ease-out"
+        style={{
+          background: `radial-gradient(circle 400px at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, 
+            rgba(139, 92, 246, 0.3) 0%, 
+            rgba(192, 132, 252, 0.2) 30%, 
+            transparent 70%)`,
+          willChange: 'transform',
+          transform: 'translate3d(0, 0, 0)'
         }}
       />
 
-      {/* Simplified particles - hanya di-render di client */}
+      {/* GPU Accelerated orbs dengan CSS transforms */}
       <div className="absolute inset-0">
-        {particles.map((particle, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full bg-white/20 animate-float"
-            style={{
-              left: particle.left,
-              top: particle.top,
-              width: particle.width,
-              height: particle.height,
-              animationDelay: particle.delay,
-              animationDuration: particle.duration,
-            }}
-          />
-        ))}
+        <div 
+          className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/20 rounded-full blur-xl moving-orb orb-1"
+          style={{ transform: 'translate3d(0, 0, 0)' }}
+        />
+        <div 
+          className="absolute bottom-1/3 right-1/4 w-56 h-56 bg-pink-500/20 rounded-full blur-xl moving-orb orb-2"
+          style={{ transform: 'translate3d(0, 0, 0)' }}
+        />
       </div>
 
-      {/* Static mesh grid - tanpa animasi */}
-      <div
-        className="absolute inset-0 opacity-5"
+      {/* Optimized particles dengan CSS animation */}
+      <div className="absolute inset-0 particles-container" />
+
+      {/* Enhanced mesh grid dengan opacity animation subtle */}
+      <div 
+        className="absolute inset-0 opacity-10 mesh-grid"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)
+            linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px)
           `,
-          backgroundSize: '80px 80px',
+          backgroundSize: '60px 60px',
+          transform: 'translate3d(0, 0, 0)'
         }}
       />
 
-      {/* Static vignette effect */}
-      <div
-        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/5 to-black/40"
-      />
-
-      {/* Reduced shimmer effect - hanya 1 dengan durasi lebih lama */}
-      <motion.div
-        className="absolute inset-0 opacity-20"
+      {/* Dynamic vignette yang mengikuti mouse */}
+      <div 
+        className="absolute inset-0 opacity-60 transition-opacity duration-200"
         style={{
-          background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent)',
-          transform: 'skewX(-20deg)',
-        }}
-        animate={{
-          x: ['-100%', '200%'],
-        }}
-        transition={{
-          duration: 12,
-          repeat: Infinity,
-          ease: "easeInOut",
-          repeatDelay: 3,
+          background: `radial-gradient(ellipse at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, 
+            transparent 30%, 
+            rgba(0, 0, 0, 0.3) 70%)`,
         }}
       />
+
+      {/* Optimized shimmer effect */}
+      <div 
+        className="absolute inset-0 opacity-15 shimmer"
+        style={{
+          background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent)',
+          transform: 'skewX(-15deg) translate3d(0, 0, 0)'
+        }}
+      />
+
+      {/* CSS Styles untuk performa optimal */}
+      <style jsx>{`
+        .moving-orb {
+          animation-timing-function: ease-in-out;
+          animation-iteration-count: infinite;
+          will-change: transform;
+        }
+        
+        .orb-1 {
+          animation: orbFloat1 15s infinite;
+        }
+        
+        .orb-2 {
+          animation: orbFloat2 18s infinite;
+          animation-delay: 2s;
+        }
+        
+        .particles-container::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background-image: 
+            radial-gradient(circle at 20% 80%, rgba(255,255,255,0.3) 1px, transparent 1px),
+            radial-gradient(circle at 80% 20%, rgba(255,255,255,0.2) 1px, transparent 1px),
+            radial-gradient(circle at 40% 40%, rgba(255,255,255,0.25) 1px, transparent 1px),
+            radial-gradient(circle at 60% 60%, rgba(255,255,255,0.15) 1px, transparent 1px);
+          background-size: 30% 30%, 40% 40%, 50% 50%, 60% 60%;
+          animation: particleMove 25s linear infinite;
+          will-change: transform;
+        }
+        
+        .mesh-grid {
+          animation: gridPulse 20s ease-in-out infinite;
+        }
+        
+        .shimmer {
+          animation: shimmerSlide 18s ease-in-out infinite;
+          will-change: transform;
+        }
+        
+        @keyframes orbFloat1 {
+          0%, 100% { 
+            transform: translate3d(0, 0, 0) scale(1) rotate(0deg); 
+          }
+          33% { 
+            transform: translate3d(30px, -20px, 0) scale(1.05) rotate(120deg); 
+          }
+          66% { 
+            transform: translate3d(-15px, 25px, 0) scale(1.02) rotate(240deg); 
+          }
+        }
+        
+        @keyframes orbFloat2 {
+          0%, 100% { 
+            transform: translate3d(0, 0, 0) scale(1) rotate(0deg); 
+          }
+          33% { 
+            transform: translate3d(-25px, 15px, 0) scale(1.03) rotate(-120deg); 
+          }
+          66% { 
+            transform: translate3d(20px, -25px, 0) scale(1.07) rotate(-240deg); 
+          }
+        }
+        
+        @keyframes particleMove {
+          0% { transform: translate3d(0, 0, 0); }
+          25% { transform: translate3d(2%, 1%, 0); }
+          50% { transform: translate3d(-1%, 2%, 0); }
+          75% { transform: translate3d(1%, -1%, 0); }
+          100% { transform: translate3d(0, 0, 0); }
+        }
+        
+        @keyframes gridPulse {
+          0%, 100% { opacity: 0.08; }
+          50% { opacity: 0.12; }
+        }
+        
+        @keyframes shimmerSlide {
+          0% { transform: skewX(-15deg) translate3d(-100%, 0, 0); }
+          100% { transform: skewX(-15deg) translate3d(200%, 0, 0); }
+        }
+
+        /* Force GPU acceleration */
+        .moving-orb,
+        .particles-container::before,
+        .mesh-grid,
+        .shimmer {
+          backface-visibility: hidden;
+          perspective: 1000px;
+        }
+      `}</style>
     </div>
   );
 };
