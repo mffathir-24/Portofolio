@@ -42,7 +42,7 @@ export default function BlogPage() {
     const fetchBlogPosts = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://portobackend-production-5461.up.railway.app/api/v1/blog');
+        const response = await fetch('https://salty-juditha-mffathir24-b1918382.koyeb.app/api/v1/blog');
         
         if (!response.ok) {
           throw new Error('Failed to fetch blog posts');
