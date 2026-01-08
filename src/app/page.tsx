@@ -1152,7 +1152,7 @@ const EnhancedAboutSection = ({ projects }: { projects: Project[] }) => {
             <GlassCard className="p-6">
               <h3 className="text-2xl font-bold mb-4 text-purple-300">My Journey</h3>
               <p className="text-gray-300 leading-relaxed">
-                Dengan pengalaman lebih dari {experienceYears} dalam pengembangan web, saya mengkhususkan diri dalam membuat aplikasi modern dan responsif, serta sekarang mulai dalam pengembangan mobile dengan menggunakan React Native dan Golang, saya dapat membuat aplikasi yang memiliki performa dan UI yang modern,responsive serta interaktif. Saya telah menyelesaikan <span className="text-purple-300 font-semibold">{projects.length} projects </span> 
+                Dengan pengalaman lebih dari {experienceYears} dalam pengembangan web dengan menggunakan laravel, saya mengkhususkan diri dalam membuat aplikasi modern dan responsif, serta sekarang mulai dalam pengembangan mobile dengan menggunakan React Native dan Golang, saya dapat membuat aplikasi yang memiliki performa dan UI yang modern,responsive serta interaktif. Saya telah menyelesaikan <span className="text-purple-300 font-semibold">{projects.length} projects </span> 
                  menggunakan teknologi terkini.
               </p>
             </GlassCard>
