@@ -291,8 +291,8 @@ const dummyData = {
       title: 'Aplikasi Task and Projek Manajemen System berbasis Mobile',
       description: 'Aplikasi ini menggunakan backend golang dan frontend react native dengan memiliki 3 role admin,manager,staff',
       image_url: '/project/taskprojekmobile.jpg',
-      demo_url: '#',
-      code_url: 'https://github.com/mffathir-24/Company-Profile-AI_PT-Coal-Lestari.git',
+      demo_url: 'https://expo.dev/accounts/mffathir/projects/taskmanagementapp/builds/17787899-83af-41cf-afd7-2c8df7c40eb5',
+      code_url: 'https://github.com/mffathir-24/MobileTaskandProjekManajemenSystem',
       display_order: 6,
       is_featured: true,
       status: 'published',
@@ -307,11 +307,36 @@ const dummyData = {
         { id: '6', name: 'API', color: '#0F172A', created_at: '2024-06-18T10:00:00Z' },
       ]
     },
+    {
+      id: '10',
+      title: 'Aplikasi Mobile Beserta Back Officenya Pempek Kito',
+      description: 'Aplikasi dibuat sebagai media belajar dengan menggunakan flutter yang terintegrasi dengan midtrans sebagai payment gateway, biteship sebagai shippment dan menggunakan firebase untuk login menggunakan google. serta melakukan setup ke ubuntu server yang dibuat dari laptop lama sebagai server home lab..',
+      image_url: '/project/pempekkito.jpeg',
+      demo_url: 'https://drive.google.com/file/d/1IOpgNS9GRMpbvRIfVx86pgEy03xdROh9/view?usp=drive_link',
+      code_url: 'https://github.com/mffathir-24/PempekKitoFE',
+      display_order: 7,
+      is_featured: true,
+      status: 'published',
+      created_at: '2025-07-10T10:00:00Z',
+      updated_at: '2024-08-18T10:00:00Z',
+      tags: [
+        { id: '1', name: 'Golang', color: '#00ADD8' },     // official Go blue
+        { id: '2', name: 'Flutter', color: '#02569B' },    // Flutter blue
+        { id: '3', name: 'React', color: '#61DAFB' },      // React cyan
+        { id: '4', name: 'Postman', color: '#FF6C37' },    // Postman orange
+        { id: '5', name: 'Tailwind', color: '#38BDF8' },   // Tailwind sky blue
+        { id: '7', name: 'Rest API', color: '#64748B' },   // neutral slate
+        { id: '8', name: 'Firebase', color: '#FFCA28' },   // Firebase yellow
+        { id: '9', name: 'Swagger', color: '#85EA2D' },    // Swagger green
+        { id: '10', name: 'BiteShip', color: '#4F46E5' },  // modern indigo (biar kontras)
+        { id: '11', name: 'Mysql', color: '#4479A1' },     // MySQL blue
+      ]
+    },
   ],
   
   experiences: [
     {
-      id: '1',
+      id: '5',
       title: 'Saya membuat aplikasi pengelolaan dokumen akreditasi untuk Prodi Manajemen Informatika',
       company: 'University Sriwijaya',
       location: 'Bukit Lama, Palembang, South Sumatra, Indonesia',
@@ -353,7 +378,7 @@ const dummyData = {
       ]
     },
     {
-      id: '2',
+      id: '4',
       title: 'Saya bekerja paruh waktu sebagai installer Wi-Fi dan SD-WAN di PT. Enseval Megatrading Putera Tbk.Palembang',
       company: 'Freelance Team Installation Wi-fi Sdwan',
       location: 'Onsite PT.Enseval Megatrading Putera Tbk.Palembang',
@@ -434,7 +459,7 @@ const dummyData = {
       ]
     },
     {
-      id: '4',
+      id: '2',
       title: 'Saya bekerja freelance sebagai teknisi replace Fortiswitch dan FortiGate dari perangkat lama ke perangkat baru di Jamkrindo kantor cabang dan kantor wilayah Palembang',
       company: 'MSInfokom',
       location: 'Onsite',
@@ -476,11 +501,11 @@ const dummyData = {
       ]
     },
     {
-      id: '5',
-      title: 'Saya bekerja freelance sebagai Web Developer di PT.Meta Digital Informasi di Batam',
+      id: '1',
+      title: 'Saya bekerja sebagai Fullstack Web Developer di PT.Meta Digital Informasi di Batam',
       company: 'PT.Meta Digital Informasi',
       location: 'Onsite',
-      start_year: '2026',
+      start_year: '2025',
       end_year: '2026',
       current_job: true,
       display_order: 5,
@@ -537,7 +562,7 @@ skills: [
       icon_url: '/icons/php.png', 
       category: 'Backend',
       display_order: 2,
-      is_featured: true,
+      is_featured: false,
       created_at: '2024-01-01T00:00:00Z',
       updated_at: '2024-01-01T00:00:00Z'
     },
@@ -622,7 +647,7 @@ skills: [
     { 
       id: '10', 
       name: 'NextJS', 
-      value: 90, 
+      value: 82, 
       icon_url: '/icons/nextjs.png', 
       category: 'Frontend',
       display_order: 10,
@@ -715,6 +740,17 @@ skills: [
       category: 'Design',
       display_order: 18,
       is_featured: false,
+      created_at: '2024-01-01T00:00:00Z',
+      updated_at: '2024-01-01T00:00:00Z'
+    },
+    { 
+      id: '19', 
+      name: 'Flutter', 
+      value: 85, 
+      icon_url: '/icons/flutter.png', 
+      category: 'Design',
+      display_order: 19,
+      is_featured: true,
       created_at: '2024-01-01T00:00:00Z',
       updated_at: '2024-01-01T00:00:00Z'
     }
