@@ -193,7 +193,7 @@ const dummyData = {
       code_url: 'https://github.com/mffathir-24/Absen-Face_Recognition.git',
       display_order: 4,
       is_featured: true,
-      status: 'in_progress',
+      status: 'completed',
       created_at: '2024-04-05T10:00:00Z',
       updated_at: '2024-04-05T10:00:00Z',
       tags: [
@@ -232,7 +232,7 @@ const dummyData = {
       code_url: 'https://github.com/mffathir-24/Pempek-Online',
       display_order: 6,
       is_featured: true,
-      status: 'published',
+      status: 'completed',
       created_at: '2024-06-18T10:00:00Z',
       updated_at: '2024-06-18T10:00:00Z',
       tags: [
@@ -252,7 +252,7 @@ const dummyData = {
       code_url: 'https://github.com/mffathir-24/System-Audit_Unsri.git',
       display_order: 6,
       is_featured: true,
-      status: 'published',
+      status: 'completed',
       created_at: '2025-07-10T10:00:00Z',
       updated_at: '2024-08-18T10:00:00Z',
       tags: [
@@ -273,7 +273,7 @@ const dummyData = {
       code_url: 'https://github.com/mffathir-24/Company-Profile-AI_PT-Coal-Lestari.git',
       display_order: 6,
       is_featured: true,
-      status: 'published',
+      status: 'completed',
       created_at: '2025-07-10T10:00:00Z',
       updated_at: '2024-08-18T10:00:00Z',
       tags: [
