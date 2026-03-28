@@ -291,7 +291,7 @@ const dummyData = {
       title: 'Aplikasi Task and Projek Manajemen System berbasis Mobile',
       description: 'Aplikasi ini menggunakan backend golang dan frontend react native dengan memiliki 3 role admin,manager,staff',
       image_url: '/project/taskprojekmobile.jpg',
-      demo_url: 'https://expo.dev/accounts/mffathir/projects/taskmanagementapp/builds/0c6c7fc6-219e-4f9e-bf6f-3ff1bfd49fe4',
+      demo_url: 'https://expo.dev/accounts/mffathir/projects/taskmanagementapp/builds/f4cb1de9-889b-4f3d-85ee-b64ecd69eed0',
       code_url: 'https://github.com/mffathir-24/MobileTaskandProjekManajemenSystem',
       display_order: 6,
       is_featured: true,
