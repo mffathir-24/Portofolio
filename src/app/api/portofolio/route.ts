@@ -763,48 +763,58 @@ skills: [
       image_url: '/sertifikat-laravel.jpg',
       issue_date: '2024-01-15',
       issuer: 'Sanbercode',
-      credential_url: '#',
+      credential_url: 'https://sanbercode.com/certificate/in/54e24c35-d64e-4116-9a8d-2edc86de7873',
       display_order: 1,
-      created_at: '2024-01-15T00:00:00Z'
+      created_at: '2023-06-15T00:00:00Z'
     },
     { 
       id: '2', 
-      name: 'Sertifikat English Conversation, Speaking and Academy Writing', 
-      image_url: '/englishsr.jpg',
+      name: 'Sertifikat Selesai Magang di PT.PLN (Persero) Wilayah Sumatera Selatan, Jambi, dan Bengkulu', 
+      image_url: '/kp.png',
       issue_date: '2023-11-20',
-      issuer: 'English Course Center',
-      credential_url: '#',
+      issuer: 'PT.PLN (Persero) Wilayah Sumatera Selatan, Jambi, dan Bengkulu',
+      credential_url: 'https://drive.google.com/file/d/1arMhn6Q9Q2WYNXpUJL3k0q28U9BPoF2H/view?usp=drive_link',
       display_order: 2,
       created_at: '2023-11-20T00:00:00Z'
     },
     { 
       id: '3', 
+      name: 'Sertifikat English Conversation, Speaking and Academy Writing', 
+      image_url: '/englishsr.jpg',
+      issue_date: '2023-11-20',
+      issuer: 'English Course Center',
+      credential_url: 'https://drive.google.com/file/d/1wNXVqrZFTIL4EkDpvg4z1jDmul-A76GN/view?usp=drive_link',
+      display_order: 3,
+      created_at: '2023-11-20T00:00:00Z'
+    },
+    { 
+      id: '4', 
       name: 'Sertifikat Seminar by Google Developer Student Clubs', 
       image_url: '/seminarG.jpg',
       issue_date: '2023-09-10',
       issuer: 'Google Developer Student Clubs',
-      credential_url: '#',
-      display_order: 3,
+      credential_url: 'https://drive.google.com/file/d/14lcBj_3kq-_Erq-JfW5liq_XoHf4lKsW/view?usp=drive_link',
+      display_order: 4,
       created_at: '2023-09-10T00:00:00Z'
     },
     { 
-      id: '4', 
+      id: '5', 
       name: 'Sertifikat Apresiasi Panitia Perlengkapan', 
       image_url: '/apresiasisr.jpg',
       issue_date: '2023-08-05',
       issuer: 'University Sriwijaya',
-      credential_url: '#',
-      display_order: 4,
+      credential_url: 'https://drive.google.com/file/d/1NowLnOMAvPdgpSggAEGYdle7JkurQP8Z/view?usp=drive_link',
+      display_order: 5,
       created_at: '2023-08-05T00:00:00Z'
     },
     { 
-      id: '5', 
+      id: '6', 
       name: 'Sertifikat Golang Achivement Mastered Bootcamp by Sanbercode', 
       image_url: '/sertifikat-golang.jpg',
       issue_date: '2023-08-05',
       issuer: 'University Sriwijaya',
-      credential_url: '#',
-      display_order: 4,
+      credential_url: 'https://sanbercode.com/certificate/in/887a6275-290a-4fd4-877e-6e83d344bb07',
+      display_order: 6,
       created_at: '2023-08-05T00:00:00Z'
     }
   ],

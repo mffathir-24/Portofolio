@@ -556,7 +556,7 @@ const TypingAnimation = ({ lines, speed, className }: { lines: string[]; speed: 
 };
 
 const TypingTitle = React.memo(() => {
-  const typedName = useTyping('Web Developer | Mobile Developer | FullStack', 120, 3000);
+  const typedName = useTyping('Fullstack Developer | Building Real-World Applications', 120, 3000);
   return <>{typedName}</>;
 });
 
@@ -816,9 +816,14 @@ const EnhancedProfileSection = ({ settings, setShowContact }: {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
           >
-            Pengembang yang penuh semangat menciptakan pengalaman digital dengan teknologi modern. 
-            Mengkhususkan diri dalam membuat aplikasi web yang responsif dan berkinerja tinggi yang memberikan pengalaman pengguna yang luar biasa, 
-            serta aplikasi mobile yang performa tinggi dan ramah pengguna. Saya selalu berusaha untuk belajar, explore, dan berinovasi dalam setiap proyek yang saya kerjakan.
+            Fullstack Developer with hands-on experience in building real-world applications, 
+            including e-commerce systems with payment gateway, shipping integration, 
+            and OAuth authentication.
+
+            Skilled in Golang, React.js, Flutter, and MySQL. Experienced in building, 
+            deploying, and managing applications independently, including using personal server environments.
+
+            Focused on performance, scalability, and user experience.
           </motion.p>
 
           <motion.div
@@ -1126,7 +1131,7 @@ const EnhancedAboutSection = ({ projects }: { projects: Project[] }) => {
                     "const developer = {",
                     `  name: 'Muhammad Fathiir Farhansyah',`,
                     `  projects: ${projects.length},`, // Tampilkan jumlah real
-                    "  skills: ['React', 'Golang', 'Laravel'],",
+                    "  skills: ['React', 'Golang', 'Laravel', 'Flutter'],",
                     "  focus: 'User experience & performance',",
                     "  philosophy: 'Clean, maintainable code',",
                     "};",
@@ -1152,8 +1157,7 @@ const EnhancedAboutSection = ({ projects }: { projects: Project[] }) => {
             <GlassCard className="p-6">
               <h3 className="text-2xl font-bold mb-4 text-purple-300">My Journey</h3>
               <p className="text-gray-300 leading-relaxed">
-                Dengan pengalaman lebih dari {experienceYears} dalam pengembangan web dengan menggunakan laravel, saya mengkhususkan diri dalam membuat aplikasi modern dan responsif, serta sekarang mulai dalam pengembangan mobile dengan menggunakan React Native dan Golang, saya dapat membuat aplikasi yang memiliki performa dan UI yang modern,responsive serta interaktif. Saya telah menyelesaikan <span className="text-purple-300 font-semibold">{projects.length} projects </span> 
-                 menggunakan teknologi terkini.
+                I am a Fullstack Developer with 1 year of professional experience and an additional 1+ year of experience through personal projects, totaling around {experienceYears}+ years of experience. I have built several applications, around {projectsCount}+ projects, including an e-commerce system called “Pempek Kito” with an integrated payment gateway (Midtrans), delivery service (Biteship), and OAuth authentication (Google & Facebook). Through this project, I gained experience in backend development, API integration, and system deployment. I am comfortable working with Golang (Gin), React.js, Flutter, and MySQL. I also have experience using Git and deploying applications via hosting services and personal server setups. I enjoy solving real problems, improving system performance, and continuously learning new technologies to build better and more scalable applications.
               </p>
             </GlassCard>
 
@@ -1168,7 +1172,7 @@ const EnhancedAboutSection = ({ projects }: { projects: Project[] }) => {
                 >
                   {experienceYears}+
                 </motion.div>
-                <div className="text-gray-400 text-sm">Years Experience</div>
+                <div className="text-gray-400 text-sm">Years of personal and professional experience </div>
               </GlassCard>
               
               <GlassCard className="p-4 text-center">
