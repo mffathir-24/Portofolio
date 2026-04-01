@@ -250,7 +250,7 @@ const dummyData = {
       image_url: '/project/auditi.png',
       demo_url: '#',
       code_url: 'https://github.com/mffathir-24/System-Audit_Unsri.git',
-      display_order: 6,
+      display_order: 7,
       is_featured: true,
       status: 'completed',
       created_at: '2025-07-10T10:00:00Z',
@@ -271,7 +271,7 @@ const dummyData = {
       image_url: '/project/ptlematangcoallestari.png',
       demo_url: '#',
       code_url: 'https://github.com/mffathir-24/Company-Profile-AI_PT-Coal-Lestari.git',
-      display_order: 6,
+      display_order: 8,
       is_featured: true,
       status: 'completed',
       created_at: '2025-07-10T10:00:00Z',
@@ -293,7 +293,7 @@ const dummyData = {
       image_url: '/project/taskprojekmobile.jpg',
       demo_url: 'https://expo.dev/accounts/mffathir/projects/taskmanagementapp/builds/f4cb1de9-889b-4f3d-85ee-b64ecd69eed0',
       code_url: 'https://github.com/mffathir-24/MobileTaskandProjekManajemenSystem',
-      display_order: 6,
+      display_order: 9,
       is_featured: true,
       status: 'published',
       created_at: '2025-07-10T10:00:00Z',
@@ -314,7 +314,32 @@ const dummyData = {
       image_url: '/project/pempekkito.jpeg',
       demo_url: 'https://drive.google.com/file/d/1IOpgNS9GRMpbvRIfVx86pgEy03xdROh9/view?usp=drive_link',
       code_url: 'https://github.com/mffathir-24/PempekKitoFE',
-      display_order: 7,
+      display_order: 10,
+      is_featured: true,
+      status: 'published',
+      created_at: '2025-07-10T10:00:00Z',
+      updated_at: '2024-08-18T10:00:00Z',
+      tags: [
+        { id: '1', name: 'Golang', color: '#00ADD8' },     // official Go blue
+        { id: '2', name: 'Flutter', color: '#02569B' },    // Flutter blue
+        { id: '3', name: 'React', color: '#61DAFB' },      // React cyan
+        { id: '4', name: 'Postman', color: '#FF6C37' },    // Postman orange
+        { id: '5', name: 'Tailwind', color: '#38BDF8' },   // Tailwind sky blue
+        { id: '7', name: 'Rest API', color: '#64748B' },   // neutral slate
+        { id: '8', name: 'Firebase', color: '#FFCA28' },   // Firebase yellow
+        { id: '9', name: 'Swagger', color: '#85EA2D' },    // Swagger green
+        { id: '10', name: 'BiteShip', color: '#4F46E5' },  // modern indigo (biar kontras)
+        { id: '11', name: 'Mysql', color: '#4479A1' },     // MySQL blue
+      ]
+    },
+    {
+      id: '11',
+      title: 'Back Office Pempek Kito',
+      description: 'Aplikasi dibuat sebagai media belajar dengan menggunakan flutter yang terintegrasi dengan midtrans sebagai payment gateway, biteship sebagai shippment dan menggunakan firebase untuk login menggunakan google. serta melakukan setup ke ubuntu server yang dibuat dari laptop lama sebagai server home lab..',
+      image_url: '/project/backofficepk.png',
+      demo_url: 'https://pempekkitobo.techtive.online/',
+      code_url: 'https://github.com/mffathir-24/PempekKitoFEBackoffice',
+      display_order: 11,
       is_featured: true,
       status: 'published',
       created_at: '2025-07-10T10:00:00Z',
@@ -343,7 +368,7 @@ const dummyData = {
       start_year: '2024',
       end_year: '2025',
       current_job: false,
-      display_order: 1,
+      display_order: 5,
       responsibilities: [
         { 
           id: '1', 
@@ -385,7 +410,7 @@ const dummyData = {
       start_year: '2024',
       end_year: '2024',
       current_job: false,
-      display_order: 2,
+      display_order: 4,
       responsibilities: [
         { 
           id: '4', 
@@ -466,7 +491,7 @@ const dummyData = {
       start_year: '2025',
       end_year: '2025',
       current_job: false,
-      display_order: 4,
+      display_order: 2,
       responsibilities: [
         { 
           id: '10', 
@@ -508,7 +533,7 @@ const dummyData = {
       start_year: '2025',
       end_year: '2026',
       current_job: true,
-      display_order: 5,
+      display_order: 1,
       responsibilities: [
         { 
           id: '16', 
