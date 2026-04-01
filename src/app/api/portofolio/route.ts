@@ -269,7 +269,7 @@ const dummyData = {
       title: 'Aplikasi Profile Perusahaan Berbasis Web dengan Penerapan AI di PT. Lematang Coal Lestari',
       description: 'Aplikasi ini adalah website profile perusahaan yang memanfaatkan teknologi AI untuk meningkatkan interaksi pengguna dan memberikan informasi yang lebih personalisasi tentang PT. Lematang Coal Lestari. Dengan kesediaan AI lokasi perusahaan dapat dengan mudah ditemukan dari mencari hotel terdekat, restoran terdekat, dan lain-lain.',
       image_url: '/project/ptlematangcoallestari.png',
-      demo_url: '#',
+      demo_url: 'https://coallestaricp.techtive.online',
       code_url: 'https://github.com/mffathir-24/Company-Profile-AI_PT-Coal-Lestari.git',
       display_order: 8,
       is_featured: true,
