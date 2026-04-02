@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/jsx-no-comment-textnodes */
 'use client';
-import { useState, useEffect, JSX, useRef } from 'react';
+import { useState, useEffect, JSX, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import {
   FiBarChart2, FiAward, FiCode, FiDownload, FiMail, FiX,
@@ -353,6 +353,8 @@ const CursorGlow = () => {
     const move = (e: MouseEvent) => { x.set(e.clientX); y.set(e.clientY); };
     window.addEventListener('mousemove', move);
     return () => window.removeEventListener('mousemove', move);
+    // Add eslint-disable comment above the effect
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -486,7 +488,9 @@ const HeroSection = ({ settings, setShowContact }: { settings: Setting[]; setSho
   const [typed, setTyped] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const roles = ['Fullstack Developer', 'Web Engineer', 'Mobile Developer', 'API Architect', 'UI/UX Builder'];
+  const roles = useMemo(() => [
+    'Fullstack Developer', 'Web Engineer', 'Mobile Developer', 'API Architect', 'UI/UX Builder'
+  ], []);
 
   useEffect(() => {
     const current = roles[roleIdx];
@@ -1481,7 +1485,7 @@ const ContactModal = ({ isOpen, onClose, socialLinks }: { isOpen: boolean; onClo
 // ============================================================
 export default function Portfolio() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [_menuOpen, setMenuOpen] = useState(false);
   const [showContact, setShowContact] = useState(false);
   const [sections, setSections] = useState<Section[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -1545,7 +1549,7 @@ export default function Portfolio() {
       <CursorGlow />
 
       <div style={{ position: 'relative', zIndex: 1 }}>
-        <Navigation sections={sections} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+        <Navigation sections={sections} menuOpen={_menuOpen} setMenuOpen={setMenuOpen} />
         <main>
           <HeroSection settings={settings} setShowContact={setShowContact} />
           <AboutSection projects={projects} />
