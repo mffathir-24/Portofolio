@@ -1,19 +1,20 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable react/jsx-no-comment-textnodes */
 'use client';
-import { useState, useEffect, JSX, useRef, useCallback } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+import { useState, useEffect, JSX, useRef } from 'react';
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import {
   FiBarChart2, FiAward, FiCode, FiDownload, FiMail, FiX,
   FiMessageSquare, FiLinkedin, FiInstagram, FiGithub, FiStar,
-  FiExternalLink, FiCalendar, FiEye, FiClock, FiUser,
-  FiMonitor, FiSmartphone, FiServer, FiDatabase, FiGlobe,
+  FiExternalLink, FiCalendar, FiEye, FiClock, 
+  FiMonitor, FiSmartphone, FiServer, FiDatabase, 
   FiArrowRight, FiZap, FiLayers, FiTerminal, FiCpu,
   FiChevronDown, FiMapPin, FiPhone, FiCheckCircle
 } from 'react-icons/fi';
 import { FaWhatsapp, FaTelegram, FaLine, FaReact, FaGolang, FaLaravel, FaFlutter } from 'react-icons/fa6';
-import { SiGo, SiLaravel, SiFlutter, SiReact, SiMysql, SiDocker } from 'react-icons/si';
+import { SiMysql, SiDocker } from 'react-icons/si';
 import React from 'react';
 import Link from 'next/link';
-
 // ============================================================
 // TYPES
 // ============================================================
@@ -1243,6 +1244,7 @@ const BlogSection = ({ blogPosts }: { blogPosts: BlogPost[] }) => {
         ) : (
           <div className="glass" style={{ padding: 60, textAlign: 'center', borderRadius: 16 }}>
             <FiMessageSquare style={{ fontSize: 32, color: 'var(--text-muted)', marginBottom: 12 }} />
+            // eslint-disable-next-line react/jsx-no-comment-textnodes
             <p className="mono" style={{ color: 'var(--text-muted)', fontSize: 13 }}>// Articles loading soon...</p>
           </div>
         )}

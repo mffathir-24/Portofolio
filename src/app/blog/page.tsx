@@ -1,9 +1,10 @@
+/* eslint-disable react/jsx-no-comment-textnodes */
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
-  FiMessageSquare, FiExternalLink, FiEye, FiClock,
+  FiMessageSquare, FiEye, FiClock,
   FiArrowLeft, FiTag, FiSearch, FiTerminal, FiX,
   FiArrowRight, FiCalendar, FiZap
 } from 'react-icons/fi';
