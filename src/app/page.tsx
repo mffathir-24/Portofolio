@@ -1,651 +1,1469 @@
 'use client';
-import { useState, useEffect, JSX } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiBarChart2, FiAward, FiCode, FiDownload, FiMail, FiX, FiMessageSquare, FiLinkedin, FiInstagram, FiGithub, FiStar, FiExternalLink, FiCalendar, FiEye, FiClock, FiUser } from 'react-icons/fi';
-import { FaWhatsapp, FaTelegram, FaLine } from 'react-icons/fa';
+import { useState, useEffect, JSX, useRef, useCallback } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+import {
+  FiBarChart2, FiAward, FiCode, FiDownload, FiMail, FiX,
+  FiMessageSquare, FiLinkedin, FiInstagram, FiGithub, FiStar,
+  FiExternalLink, FiCalendar, FiEye, FiClock, FiUser,
+  FiMonitor, FiSmartphone, FiServer, FiDatabase, FiGlobe,
+  FiArrowRight, FiZap, FiLayers, FiTerminal, FiCpu,
+  FiChevronDown, FiMapPin, FiPhone, FiCheckCircle
+} from 'react-icons/fi';
+import { FaWhatsapp, FaTelegram, FaLine, FaReact, FaGolang, FaLaravel, FaFlutter } from 'react-icons/fa6';
+import { SiGo, SiLaravel, SiFlutter, SiReact, SiMysql, SiDocker } from 'react-icons/si';
 import React from 'react';
 import Link from 'next/link';
 
-// Typing animation hook
-function useTyping(text: string, delay = 100, pause = 3000) {
-  const [display, setDisplay] = useState('');
-  const [phase, setPhase] = useState<'typing' | 'waiting' | 'deleting'>('typing');
-  const [idx, setIdx] = useState(0);
+// ============================================================
+// TYPES
+// ============================================================
+interface Project { id:string; title:string; description:string; image_url:string; demo_url:string; code_url:string; display_order:number; is_featured:boolean; status:string; created_at:string; updated_at:string; tags:ProjectTag[]; }
+interface ProjectTag { id:string; name:string; color:string; created_at:string; }
+interface Experience { id:string; title:string; company:string; location:string; start_year:string; end_year:string; current_job:boolean; display_order:number; responsibilities:Responsibility[]; skills:ExperienceSkill[]; }
+interface Responsibility { id:string; experience_id:string; description:string; display_order:number; created_at:string; }
+interface ExperienceSkill { experience_id:string; skill_name:string; }
+interface Skill { id:string; name:string; value:number; icon_url:string; category:string; display_order:number; is_featured:boolean|string|null; created_at:string; updated_at:string; }
+interface Certificate { id:string; name:string; image_url:string; issue_date:string; issuer:string; credential_url:string; display_order:number; created_at:string; }
+interface Education { id:string; school:string; major:string; start_year:string; end_year:string; description:string; degree:string; display_order:number; achievements:Achievement[]; }
+interface Achievement { id:string; education_id:string; achievement:string; display_order:number; created_at:string; }
+interface Testimonial { id:string; name:string; title:string; message:string; avatar_url:string; rating:number; is_featured:boolean; display_order:number; status:string; created_at:string; }
+interface BlogPost { id:string; title:string; content:string; excerpt:string; slug:string; featured_image:string; publish_date:string; status:string; view_count:number; tags:BlogTag[]; }
+interface BlogTag { id:string; name:string; created_at:string; }
+interface Section { id:string; section_id:string; label:string; display_order:number; is_active:boolean; created_at:string; updated_at:string; }
+interface SocialLink { id:string; platform:string; url:string; icon_name:string; display_order:number; is_active:boolean; created_at:string; updated_at:string; }
+interface Setting { id:string; key:string; value:string; data_type:string; description:string; created_at:string; updated_at:string; }
 
-  useEffect(() => {
-    let timeout: NodeJS.Timeout;
-    if (phase === 'typing') {
-      if (idx < text.length) {
-        timeout = setTimeout(() => {
-          setDisplay((d) => d + text[idx]);
-          setIdx((i) => i + 1);
-        }, delay);
-      } else {
-        timeout = setTimeout(() => setPhase('deleting'), pause);
-      }
-    } else if (phase === 'deleting') {
-      if (idx > 0) {
-        timeout = setTimeout(() => {
-          setDisplay((d) => d.slice(0, -1));
-          setIdx((i) => i - 1);
-        }, delay / 2);
-      } else {
-        timeout = setTimeout(() => setPhase('typing'), 500);
-      }
-    } else if (phase === 'waiting') {
-      timeout = setTimeout(() => setPhase('deleting'), pause);
+// ============================================================
+// GLOBAL STYLES
+// ============================================================
+const GlobalStyles = () => (
+  <style jsx global>{`
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Fira+Code:wght@300;400;500;600&display=swap');
+
+    :root {
+      --font-display: 'Syne', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+
+      --bg:        #03050d;
+      --bg-card:   #070b18;
+      --bg-card2:  #09101f;
+      --bg-glass:  rgba(9,16,31,0.7);
+
+      --border:        rgba(255,255,255,0.05);
+      --border-glow:   rgba(0,245,212,0.25);
+
+      --cyan:    #00F5D4;
+      --blue:    #3B82F6;
+      --violet:  #8B5CF6;
+      --green:   #10B981;
+      --amber:   #F59E0B;
+      --pink:    #EC4899;
+
+      --text-primary:   #F0F6FF;
+      --text-secondary: #8892A4;
+      --text-muted:     #3D4A5C;
     }
-    return () => clearTimeout(timeout);
-  }, [text, idx, phase, delay, pause]);
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-display);
+      background: var(--bg);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 2px; opacity: 0.5; }
+
+    /* Utilities */
+    .mono { font-family: var(--font-mono); }
+    .section { padding: 120px 0; }
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+    /* Glass card */
+    .glass {
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .glass:hover {
+      border-color: rgba(0,245,212,0.15);
+      box-shadow: 0 0 40px rgba(0,245,212,0.04), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+
+    /* Section label */
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--cyan);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .section-label::before { content: '//'; opacity: 0.4; }
+    .section-label::after { content: ''; flex: 0 0 32px; height: 1px; background: var(--cyan); opacity: 0.4; }
+
+    /* Gradient text */
+    .grad { background: linear-gradient(135deg, var(--cyan) 0%, var(--blue) 50%, var(--violet) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .grad-warm { background: linear-gradient(135deg, var(--amber) 0%, var(--pink) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* Tag */
+    .tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 9px; border-radius: 4px;
+      font-size: 10px; font-weight: 500; letter-spacing: 0.06em;
+      font-family: var(--font-mono);
+    }
+
+    /* Buttons */
+    .btn-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 26px;
+      background: var(--cyan);
+      color: #03050d;
+      font-family: var(--font-display);
+      font-size: 14px; font-weight: 700;
+      border: none; border-radius: 10px;
+      cursor: pointer; text-decoration: none;
+      transition: box-shadow 0.25s, transform 0.15s;
+      letter-spacing: 0.02em;
+    }
+    .btn-cta:hover { box-shadow: 0 0 24px rgba(0,245,212,0.4); transform: translateY(-2px); }
+
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px;
+      background: transparent;
+      color: var(--text-primary);
+      font-family: var(--font-display);
+      font-size: 14px; font-weight: 600;
+      border: 1px solid var(--border-glow);
+      border-radius: 10px;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.25s, box-shadow 0.25s, transform 0.15s;
+    }
+    .btn-outline:hover { background: rgba(0,245,212,0.06); box-shadow: 0 0 16px rgba(0,245,212,0.12); transform: translateY(-2px); }
+
+    /* Badge */
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px; border-radius: 30px;
+      font-family: var(--font-mono); font-size: 11px;
+      background: rgba(0,245,212,0.08);
+      border: 1px solid rgba(0,245,212,0.2);
+      color: var(--cyan);
+    }
+
+    /* Status dot animated */
+    .dot-live {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: live-pulse 2s ease-in-out infinite;
+    }
+    @keyframes live-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
+
+    /* Skill bar */
+    .bar-track { background: rgba(255,255,255,0.04); border-radius: 3px; height: 4px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--cyan), var(--blue)); }
+
+    /* Timeline */
+    .tl-line { width: 1px; background: linear-gradient(to bottom, var(--cyan), transparent); position: absolute; top: 0; left: 18px; height: 100%; opacity: 0.2; }
+    .tl-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--cyan); border: 2px solid var(--bg); position: absolute; left: 14px; top: 28px; box-shadow: 0 0 10px var(--cyan); }
+
+    /* Platform chips */
+    .chip-web    { background: rgba(59,130,246,0.12); color: #60A5FA; border: 1px solid rgba(59,130,246,0.25); }
+    .chip-mobile { background: rgba(0,245,212,0.10); color: var(--cyan); border: 1px solid rgba(0,245,212,0.2); }
+    .chip-back   { background: rgba(16,185,129,0.10); color: #34D399; border: 1px solid rgba(16,185,129,0.2); }
+    .chip-full   { background: rgba(139,92,246,0.10); color: #A78BFA; border: 1px solid rgba(139,92,246,0.2); }
+
+    /* Code block */
+    .code-block {
+      background: #050912;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.75;
+      position: relative;
+      overflow: hidden;
+    }
+    .code-block::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      opacity: 0.4;
+    }
+
+    /* Hover lift */
+    .lift { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+    .lift:hover { transform: translateY(-5px); box-shadow: 0 16px 48px rgba(0,0,0,0.4); }
+
+    /* Glow divider */
+    .glow-hr { border: none; height: 1px; background: linear-gradient(90deg, transparent, rgba(0,245,212,0.2), transparent); margin: 32px 0; }
+
+    /* Nav link */
+    .nav-link {
+      color: var(--text-secondary); text-decoration: none;
+      font-size: 13px; font-weight: 500; letter-spacing: 0.03em;
+      padding: 6px 13px; border-radius: 8px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-link:hover { color: var(--text-primary); background: rgba(255,255,255,0.04); }
+
+    /* Grid background helper */
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(0,245,212,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,212,0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    /* Responsive helpers */
+    @media(max-width: 768px) {
+      .hide-sm { display: none !important; }
+      .two-col { grid-template-columns: 1fr !important; }
+      .section { padding: 72px 0; }
+    }
+    @media(max-width: 480px) {
+      .container { padding: 0 16px; }
+    }
+
+    /* Cursor blink */
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .cursor::after { content: '▋'; animation: blink 0.9s step-end infinite; color: var(--cyan); }
+
+    /* Scanline effect */
+    @keyframes scan { 0%{transform:translateY(-100%)} 100%{transform:translateY(100vh)} }
+
+    /* Float animation */
+    @keyframes float-a { 0%,100%{transform:translateY(0px) rotate(0deg)} 50%{transform:translateY(-20px) rotate(3deg)} }
+    @keyframes float-b { 0%,100%{transform:translateY(0px) rotate(0deg)} 50%{transform:translateY(16px) rotate(-2deg)} }
+    @keyframes float-c { 0%,100%{transform:translateY(0px)} 33%{transform:translateY(-12px)} 66%{transform:translateY(8px)} }
+
+    /* Shimmer */
+    @keyframes shimmer { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
+  `}</style>
+);
+
+// ============================================================
+// ANIMATED BACKGROUND — Circuit / Code Rain
+// ============================================================
+const Background = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rafRef = useRef<number>(0);
 
   useEffect(() => {
-    if (phase === 'typing') setIdx(0);
-    if (phase === 'deleting') setIdx(text.length);
-  }, [phase, text]);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d')!;
 
-  return display;
-}
+    const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+    resize();
+    window.addEventListener('resize', resize);
 
-// Particle Background Component - Fixed for hydration
-const FloatingParticles = () => {
-  const [isClient, setIsClient] = useState(false);
+    // Matrix-like code rain columns
+    const cols = Math.floor(window.innerWidth / 22);
+    const drops: number[] = Array(cols).fill(1);
+    const chars = '01アイウエオカキクケコGOLANGREACTFLUTTERLARAVELMYSQL{}[]()<>/=+*&^%$#@!;:?~'.split('');
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+    // Floating orbs
+    const orbs = [
+      { x: 0.15, y: 0.2, r: 260, color: 'rgba(0,245,212,', speed: 0.00008 },
+      { x: 0.85, y: 0.5, r: 200, color: 'rgba(59,130,246,', speed: 0.00012 },
+      { x: 0.5,  y: 0.8, r: 180, color: 'rgba(139,92,246,', speed: 0.0001 },
+    ];
 
-  // Jangan render particles di server
-  if (!isClient) {
-    return (
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" />
-    );
-  }
+    let t = 0;
+    const draw = () => {
+      t++;
+      ctx.fillStyle = 'rgba(3,5,13,0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {[...Array(15)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full bg-gradient-to-r from-purple-400/20 to-pink-400/20"
-          initial={{
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-            scale: Math.random() * 0.5 + 0.5,
-          }}
-          animate={{
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-            scale: Math.random() * 0.8 + 0.2,
-          }}
-          transition={{
-            duration: Math.random() * 20 + 20,
-            repeat: Infinity,
-            ease: "linear",
-            delay: Math.random() * 5,
-          }}
-          style={{
-            width: Math.random() * 15 + 5,
-            height: Math.random() * 15 + 5,
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-
-// Animated Background Gradient
-const AnimatedBackground = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0.5, y: 0.5 });
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-
-    // Optimized mouse tracking dengan throttling menggunakan requestAnimationFrame
-    let rafId: number;
-    const handleMouseMove = (e: MouseEvent) => {
-      if (rafId) cancelAnimationFrame(rafId);
-      
-      rafId = requestAnimationFrame(() => {
-        setMousePosition({
-          x: e.clientX / window.innerWidth,
-          y: e.clientY / window.innerHeight,
-        });
+      // Animated orbs
+      orbs.forEach((o, i) => {
+        const px = (o.x + Math.sin(t * o.speed * (i + 1)) * 0.08) * canvas.width;
+        const py = (o.y + Math.cos(t * o.speed * (i + 1)) * 0.06) * canvas.height;
+        const grad = ctx.createRadialGradient(px, py, 0, px, py, o.r);
+        grad.addColorStop(0, o.color + '0.07)');
+        grad.addColorStop(1, o.color + '0)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
       });
+
+      // Code rain
+      ctx.font = '12px "Fira Code", monospace';
+      drops.forEach((y, i) => {
+        const char = chars[Math.floor(Math.random() * chars.length)];
+        const x = i * 22;
+        // Head glow
+        ctx.fillStyle = 'rgba(0,245,212,0.9)';
+        ctx.fillText(char, x, y * 16);
+        // Trail
+        ctx.fillStyle = `rgba(0,245,212,${Math.random() * 0.12})`;
+        ctx.fillText(chars[Math.floor(Math.random() * chars.length)], x, (y - 1) * 16);
+
+        if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      });
+
+      rafRef.current = requestAnimationFrame(draw);
     };
 
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      if (rafId) cancelAnimationFrame(rafId);
-    };
+    // Clear first
+    ctx.fillStyle = '#03050d';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    draw();
+
+    return () => { cancelAnimationFrame(rafRef.current); window.removeEventListener('resize', resize); };
   }, []);
 
-  if (!isClient) {
-    return (
-      <div className="fixed inset-0 z-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900" />
-      </div>
-    );
-  }
-
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden">
-      {/* Base gradient dengan GPU acceleration */}
-      <div 
-        className="absolute inset-0"
-        style={{
-          background: `
-            radial-gradient(circle at 50% 50%, #1e1b4b 0%, #581c87 50%, #831843 100%)
-          `,
-          transform: 'translate3d(0, 0, 0)'
-        }}
-      />
-
-      {/* Optimized interactive gradient dengan transform untuk performa */}
-      <div 
-        className="absolute inset-0 opacity-40 transition-transform duration-100 ease-out"
-        style={{
-          background: `radial-gradient(circle 400px at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, 
-            rgba(139, 92, 246, 0.3) 0%, 
-            rgba(192, 132, 252, 0.2) 30%, 
-            transparent 70%)`,
-          willChange: 'transform',
-          transform: 'translate3d(0, 0, 0)'
-        }}
-      />
-
-      {/* GPU Accelerated orbs dengan CSS transforms */}
-      <div className="absolute inset-0">
-        <div 
-          className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/20 rounded-full blur-xl moving-orb orb-1"
-          style={{ transform: 'translate3d(0, 0, 0)' }}
-        />
-        <div 
-          className="absolute bottom-1/3 right-1/4 w-56 h-56 bg-pink-500/20 rounded-full blur-xl moving-orb orb-2"
-          style={{ transform: 'translate3d(0, 0, 0)' }}
-        />
-      </div>
-
-      {/* Optimized particles dengan CSS animation */}
-      <div className="absolute inset-0 particles-container" />
-
-      {/* Enhanced mesh grid dengan opacity animation subtle */}
-      <div 
-        className="absolute inset-0 opacity-10 mesh-grid"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px)
-          `,
-          backgroundSize: '60px 60px',
-          transform: 'translate3d(0, 0, 0)'
-        }}
-      />
-
-      {/* Dynamic vignette yang mengikuti mouse */}
-      <div 
-        className="absolute inset-0 opacity-60 transition-opacity duration-200"
-        style={{
-          background: `radial-gradient(ellipse at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, 
-            transparent 30%, 
-            rgba(0, 0, 0, 0.3) 70%)`,
-        }}
-      />
-
-      {/* Optimized shimmer effect */}
-      <div 
-        className="absolute inset-0 opacity-15 shimmer"
-        style={{
-          background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent)',
-          transform: 'skewX(-15deg) translate3d(0, 0, 0)'
-        }}
-      />
-
-      {/* CSS Styles untuk performa optimal */}
-      <style jsx>{`
-        .moving-orb {
-          animation-timing-function: ease-in-out;
-          animation-iteration-count: infinite;
-          will-change: transform;
-        }
-        
-        .orb-1 {
-          animation: orbFloat1 15s infinite;
-        }
-        
-        .orb-2 {
-          animation: orbFloat2 18s infinite;
-          animation-delay: 2s;
-        }
-        
-        .particles-container::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background-image: 
-            radial-gradient(circle at 20% 80%, rgba(255,255,255,0.3) 1px, transparent 1px),
-            radial-gradient(circle at 80% 20%, rgba(255,255,255,0.2) 1px, transparent 1px),
-            radial-gradient(circle at 40% 40%, rgba(255,255,255,0.25) 1px, transparent 1px),
-            radial-gradient(circle at 60% 60%, rgba(255,255,255,0.15) 1px, transparent 1px);
-          background-size: 30% 30%, 40% 40%, 50% 50%, 60% 60%;
-          animation: particleMove 25s linear infinite;
-          will-change: transform;
-        }
-        
-        .mesh-grid {
-          animation: gridPulse 20s ease-in-out infinite;
-        }
-        
-        .shimmer {
-          animation: shimmerSlide 18s ease-in-out infinite;
-          will-change: transform;
-        }
-        
-        @keyframes orbFloat1 {
-          0%, 100% { 
-            transform: translate3d(0, 0, 0) scale(1) rotate(0deg); 
-          }
-          33% { 
-            transform: translate3d(30px, -20px, 0) scale(1.05) rotate(120deg); 
-          }
-          66% { 
-            transform: translate3d(-15px, 25px, 0) scale(1.02) rotate(240deg); 
-          }
-        }
-        
-        @keyframes orbFloat2 {
-          0%, 100% { 
-            transform: translate3d(0, 0, 0) scale(1) rotate(0deg); 
-          }
-          33% { 
-            transform: translate3d(-25px, 15px, 0) scale(1.03) rotate(-120deg); 
-          }
-          66% { 
-            transform: translate3d(20px, -25px, 0) scale(1.07) rotate(-240deg); 
-          }
-        }
-        
-        @keyframes particleMove {
-          0% { transform: translate3d(0, 0, 0); }
-          25% { transform: translate3d(2%, 1%, 0); }
-          50% { transform: translate3d(-1%, 2%, 0); }
-          75% { transform: translate3d(1%, -1%, 0); }
-          100% { transform: translate3d(0, 0, 0); }
-        }
-        
-        @keyframes gridPulse {
-          0%, 100% { opacity: 0.08; }
-          50% { opacity: 0.12; }
-        }
-        
-        @keyframes shimmerSlide {
-          0% { transform: skewX(-15deg) translate3d(-100%, 0, 0); }
-          100% { transform: skewX(-15deg) translate3d(200%, 0, 0); }
-        }
-
-        /* Force GPU acceleration */
-        .moving-orb,
-        .particles-container::before,
-        .mesh-grid,
-        .shimmer {
-          backface-visibility: hidden;
-          perspective: 1000px;
-        }
-      `}</style>
-    </div>
+    <>
+      <canvas ref={canvasRef} style={{ position: 'fixed', inset: 0, zIndex: 0, opacity: 0.55 }} />
+      {/* Grid overlay */}
+      <div className="grid-bg" style={{ position: 'fixed', inset: 0, zIndex: 0, opacity: 0.4 }} />
+      {/* Vignette */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, background: 'radial-gradient(ellipse at center, transparent 40%, rgba(3,5,13,0.85) 100%)', pointerEvents: 'none' }} />
+    </>
   );
 };
 
-// Glass Morphism Card Component
-const GlassCard = ({ children, className = "", onClick }: { children: React.ReactNode; className?: string; onClick?: () => void }) => {
+// ============================================================
+// CURSOR GLOW (desktop only)
+// ============================================================
+const CursorGlow = () => {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const sx = useSpring(x, { stiffness: 80, damping: 20 });
+  const sy = useSpring(y, { stiffness: 80, damping: 20 });
+
+  useEffect(() => {
+    const move = (e: MouseEvent) => { x.set(e.clientX); y.set(e.clientY); };
+    window.addEventListener('mousemove', move);
+    return () => window.removeEventListener('mousemove', move);
+  }, []);
+
   return (
     <motion.div
-      className={`backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-2xl ${className}`}
-      whileHover={{
-        scale: 1.02,
-        backgroundColor: "rgba(255, 255, 255, 0.15)",
-        transition: { duration: 0.2 }
+      style={{
+        position: 'fixed', zIndex: 0, pointerEvents: 'none',
+        width: 400, height: 400,
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(0,245,212,0.05) 0%, transparent 70%)',
+        transform: 'translate(-50%,-50%)',
+        left: sx, top: sy,
       }}
-      onClick={onClick}
-    >
-      {children}
-    </motion.div>
+    />
   );
 };
 
-// Interface definitions
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  image_url: string;
-  demo_url: string;
-  code_url: string;
-  display_order: number;
-  is_featured: boolean;
-  status: string;
-  created_at: string;
-  updated_at: string;
-  tags: ProjectTag[];
-}
-
-interface ProjectTag {
-  id: string;
-  name: string;
-  color: string;
-  created_at: string;
-}
-
-interface Experience {
-  id: string;
-  title: string;
-  company: string;
-  location: string;
-  start_year: string;
-  end_year: string;
-  current_job: boolean;
-  display_order: number;
-  responsibilities: Responsibility[];
-  skills: ExperienceSkill[];
-}
-
-interface Responsibility {
-  id: string;
-  experience_id: string;
-  description: string;
-  display_order: number;
-  created_at: string;
-}
-
-interface ExperienceSkill {
-  experience_id: string;
-  skill_name: string;
-}
-
-interface Skill {
-  id: string;
-  name: string;
-  value: number;
-  icon_url: string;
-  category: string;
-  display_order: number;
-  is_featured: boolean | string | null;
-  created_at: string;
-  updated_at: string;
-}
-
-interface Certificate {
-  id: string;
-  name: string;
-  image_url: string;
-  issue_date: string;
-  issuer: string;
-  credential_url: string;
-  display_order: number;
-  created_at: string;
-}
-
-interface Education {
-  id: string;
-  school: string;
-  major: string;
-  start_year: string;
-  end_year: string;
-  description: string;
-  degree: string;
-  display_order: number;
-  achievements: Achievement[];
-}
-
-interface Achievement {
-  id: string;
-  education_id: string;
-  achievement: string;
-  display_order: number;
-  created_at: string;
-}
-
-interface Testimonial {
-  id: string;
-  name: string;
-  title: string;
-  message: string;
-  avatar_url: string;
-  rating: number;
-  is_featured: boolean;
-  display_order: number;
-  status: string;
-  created_at: string;
-}
-
-interface BlogPost {
-  id: string;
-  title: string;
-  content: string;
-  excerpt: string;
-  slug: string;
-  featured_image: string;
-  publish_date: string;
-  status: string;
-  view_count: number;
-  tags: BlogTag[];
-}
-
-interface BlogTag {
-  id: string;
-  name: string;
-  created_at: string;
-}
-
-interface Section {
-  id: string;
-  section_id: string;
-  label: string;
-  display_order: number;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-interface SocialLink {
-  id: string;
-  platform: string;
-  url: string;
-  icon_name: string;
-  display_order: number;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-interface Setting {
-  id: string;
-  key: string;
-  value: string;
-  data_type: string;
-  description: string;
-  created_at: string;
-  updated_at:string;
-}
-
-// Enhanced Typing Animation Component
-const TypingAnimation = ({ lines, speed, className }: { lines: string[]; speed: number; className?: string }) => {
-  const [displayedLines, setDisplayedLines] = useState<string[]>([]);
-  const [currentLineIndex, setCurrentLineIndex] = useState(0);
-  const [currentCharIndex, setCurrentCharIndex] = useState(0);
-
+// ============================================================
+// NAVIGATION
+// ============================================================
+const Navigation = ({ sections, menuOpen, setMenuOpen }: { sections:Section[]; menuOpen:boolean; setMenuOpen:(v:boolean)=>void }) => {
+  const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
-    if (currentLineIndex >= lines.length) return;
+    const fn = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', fn, { passive: true });
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
 
-    const timeout = setTimeout(() => {
-      if (currentCharIndex < lines[currentLineIndex].length) {
-        setDisplayedLines(prev => {
-          const newLines = [...prev];
-          if (!newLines[currentLineIndex]) {
-            newLines[currentLineIndex] = '';
-          }
-          newLines[currentLineIndex] = lines[currentLineIndex].substring(0, currentCharIndex + 1);
-          return newLines;
-        });
-        setCurrentCharIndex(prev => prev + 1);
-      } else {
-        setCurrentLineIndex(prev => prev + 1);
-        setCurrentCharIndex(0);
-      }
-    }, speed);
-
-    return () => clearTimeout(timeout);
-  }, [currentLineIndex, currentCharIndex, lines, speed]);
+  const scrollTo = (id: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    setMenuOpen(false);
+  };
 
   return (
-    <div className={className}>
-      {displayedLines.map((line, index) => (
-        <motion.div
-          key={index}
-          className="flex"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: index * 0.1 }}
-        >
-          <span className="text-purple-400 mr-2 select-none font-mono">{index + 1}</span>
-          <span className="font-mono">
-            {typeof line === 'string'
-              ? line.split('').map((char, i) => {
-                let color = 'text-gray-300';
-                if (char === "'" || char === '"') color = 'text-yellow-300';
-                if (char === '{' || char === '}' || char === '(' || char === ')' || char === '[' || char === ']') color = 'text-white';
-                if (
-                  line.trim().startsWith('const') ||
-                  line.trim().startsWith('function') ||
-                  line.trim().startsWith('return') ||
-                  line.trim().startsWith('export')
-                ) {
-                  color = 'text-purple-300';
-                }
-                if (line.includes('//')) {
-                  const commentIndex = line.indexOf('//');
-                  if (i >= commentIndex) color = 'text-green-400';
-                }
-                return (
-                  <motion.span
-                    key={i}
-                    className={color}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: (index * 0.1) + (i * 0.02) }}
-                  >
-                    {char}
-                  </motion.span>
-                );
-              })
-              : null}
+    <motion.header
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      style={{
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+        transition: 'all 0.4s ease',
+        borderBottom: scrolled ? '1px solid rgba(0,245,212,0.08)' : '1px solid transparent',
+        background: scrolled ? 'rgba(3,5,13,0.88)' : 'transparent',
+        backdropFilter: scrolled ? 'blur(24px)' : 'none',
+      }}
+    >
+      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 68 }}>
+        {/* Logo */}
+        <a href="#profil" onClick={scrollTo('profil')} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            width: 34, height: 34,
+            background: 'linear-gradient(135deg, var(--cyan), var(--blue))',
+            borderRadius: 9,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 0 14px rgba(0,245,212,0.3)'
+          }}>
+            <FiTerminal style={{ color: '#03050d', fontSize: 15, fontWeight: 700 }} />
+          </div>
+          <span className="mono" style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '0.02em' }}>
+            MFF<span style={{ color: 'var(--cyan)' }}>.dev</span>
           </span>
+        </a>
+
+        {/* Desktop nav */}
+        <nav className="hide-sm" style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          {sections.map(sec => (
+            <a key={sec.id} href={`#${sec.section_id}`} onClick={scrollTo(sec.section_id)} className="nav-link mono" style={{ fontSize: 12 }}>
+              {sec.label}
+            </a>
+          ))}
+        </nav>
+
+        <a href="#kontak" onClick={scrollTo('kontak')} className="btn-cta" style={{ padding: '9px 20px', fontSize: 12 }}>
+          <FiZap size={13} /> Hire Me
+        </a>
+      </div>
+    </motion.header>
+  );
+};
+
+// ============================================================
+// FLOATING TECH ICONS DECORATION
+// ============================================================
+const TechOrbit = () => {
+  const icons = [
+    { Icon: FaReact, color: '#61DAFB', label: 'React', style: { top: '12%', right: '5%', animation: 'float-a 7s ease-in-out infinite' } },
+    { Icon: FaGolang, color: '#00ADD8', label: 'Go', style: { top: '45%', right: '2%', animation: 'float-b 6s ease-in-out infinite 0.5s' } },
+    { Icon: FaFlutter, color: '#02569B', label: 'Flutter', style: { top: '70%', right: '8%', animation: 'float-a 8s ease-in-out infinite 1s' } },
+    { Icon: FaLaravel, color: '#FF2D20', label: 'Laravel', style: { top: '28%', right: '12%', animation: 'float-c 5s ease-in-out infinite 0.8s' } },
+    { Icon: SiMysql, color: '#4479A1', label: 'MySQL', style: { top: '58%', right: '18%', animation: 'float-b 9s ease-in-out infinite 1.5s' } },
+    { Icon: SiDocker, color: '#2496ED', label: 'Docker', style: { top: '82%', right: '4%', animation: 'float-a 6.5s ease-in-out infinite 2s' } },
+  ];
+
+  return (
+    <div className="hide-sm" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+      {icons.map(({ Icon, color, label, style }, i) => (
+        <motion.div
+          key={label}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1 + i * 0.15, type: 'spring' }}
+          style={{
+            position: 'absolute', ...style,
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+          }}
+        >
+          <div style={{
+            width: 46, height: 46,
+            background: 'rgba(7,11,24,0.8)',
+            border: `1px solid ${color}22`,
+            borderRadius: 12,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            backdropFilter: 'blur(8px)',
+            boxShadow: `0 0 20px ${color}15`,
+          }}>
+            <Icon style={{ fontSize: 22, color }} />
+          </div>
+          <span className="mono" style={{ fontSize: 9, color: 'var(--text-muted)', letterSpacing: '0.1em' }}>{label}</span>
         </motion.div>
       ))}
-      <motion.div
-        className="flex"
-        animate={{ opacity: [1, 0, 1] }}
-        transition={{ duration: 1, repeat: Infinity }}
-      >
-        <span className="text-purple-400 mr-2 select-none font-mono">{displayedLines.length + 1}</span>
-        <span className="w-3 h-5 bg-purple-400 inline-block ml-1"></span>
-      </motion.div>
     </div>
   );
 };
 
-const TypingTitle = React.memo(() => {
-  const typedName = useTyping('Fullstack Developer | Building Real-World Applications', 120, 3000);
-  return <>{typedName}</>;
-});
+// ============================================================
+// HERO SECTION
+// ============================================================
+const HeroSection = ({ settings, setShowContact }: { settings: Setting[]; setShowContact: (v: boolean) => void }) => {
+  const getSetting = (k: string) => settings.find(s => s.key === k)?.value || '';
+  const [roleIdx, setRoleIdx] = useState(0);
+  const [typed, setTyped] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
 
-TypingTitle.displayName = "TypingTitle";
+  const roles = ['Fullstack Developer', 'Web Engineer', 'Mobile Developer', 'API Architect', 'UI/UX Builder'];
 
-// Enhanced Contact Bubble Component
-const ContactBubble = ({ isOpen, onClose, socialLinks }: { isOpen: boolean; onClose: () => void; socialLinks: SocialLink[] }) => {
-  const iconMap: { [key: string]: JSX.Element } = {
-    'FaWhatsapp': <FaWhatsapp className="text-2xl text-green-400" />,
-    'FiInstagram': <FiInstagram className="text-2xl text-pink-400" />,
-    'FiLinkedin': <FiLinkedin className="text-2xl text-blue-400" />,
-    'FaTelegram': <FaTelegram className="text-2xl text-blue-300" />,
-    'FaLine': <FaLine className="text-2xl text-green-300" />,
-    'FiMail': <FiMail className="text-2xl text-indigo-300" />,
-    'FiGithub': <FiGithub className="text-2xl text-gray-300" />
+  useEffect(() => {
+    const current = roles[roleIdx];
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (!isDeleting && typed.length < current.length) {
+      timeout = setTimeout(() => setTyped(current.slice(0, typed.length + 1)), 80);
+    } else if (!isDeleting && typed.length === current.length) {
+      timeout = setTimeout(() => setIsDeleting(true), 2200);
+    } else if (isDeleting && typed.length > 0) {
+      timeout = setTimeout(() => setTyped(current.slice(0, typed.length - 1)), 40);
+    } else if (isDeleting && typed.length === 0) {
+      setIsDeleting(false);
+      setRoleIdx(p => (p + 1) % roles.length);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [typed, isDeleting, roleIdx]);
+
+  return (
+    <section id="profil" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
+      <TechOrbit />
+
+      <div className="container" style={{ paddingTop: 100, paddingBottom: 80, position: 'relative', zIndex: 2 }}>
+        <div style={{ maxWidth: 720 }}>
+
+          {/* Status */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <div className="badge" style={{ marginBottom: 32 }}>
+              <div className="dot-live" />
+              Open to opportunities
+            </div>
+          </motion.div>
+
+          {/* Name */}
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.15 }}>
+            <div className="section-label">Fullstack Developer · Indonesia</div>
+            <h1 style={{
+              fontSize: 'clamp(48px, 7vw, 86px)',
+              fontWeight: 800,
+              lineHeight: 1.0,
+              letterSpacing: '-0.03em',
+              marginBottom: 18,
+            }}>
+              Muhammad<br />
+              <span className="grad">Fathiir</span><br />
+              <span style={{ opacity: 0.7, fontWeight: 600, fontSize: '0.75em' }}>Farhansyah</span>
+            </h1>
+          </motion.div>
+
+          {/* Typewriter */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.45 }} style={{ marginBottom: 28 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span className="mono" style={{ color: 'var(--cyan)', fontSize: 13, opacity: 0.5 }}>const role =</span>
+              <span className="mono" style={{ color: '#F59E0B', fontSize: 15 }}>&quot;</span>
+              <span className="mono" style={{ fontSize: 16, color: 'var(--text-primary)', fontWeight: 500 }}>
+                {typed}
+              </span>
+              <span style={{ display: 'inline-block', width: 2, height: 20, background: 'var(--cyan)', animation: 'blink 0.9s step-end infinite', borderRadius: 1 }} />
+              <span className="mono" style={{ color: '#F59E0B', fontSize: 15 }}>&quot;</span>
+            </div>
+          </motion.div>
+
+          {/* Description */}
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
+            style={{ color: 'var(--text-secondary)', fontSize: 16, lineHeight: 1.8, maxWidth: 580, marginBottom: 36 }}>
+            Building production-grade web & mobile applications end-to-end — from e-commerce platforms with payment gateways
+            to cross-platform mobile apps. Specialized in{' '}
+            <span style={{ color: '#00ADD8', fontWeight: 600 }}>Golang</span>,{' '}
+            <span style={{ color: '#61DAFB', fontWeight: 600 }}>React.js</span>,{' '}
+            <span style={{ color: '#FF2D20', fontWeight: 600 }}>Laravel</span>, and{' '}
+            <span style={{ color: '#02569B', fontWeight: 600 }}>Flutter</span>.
+          </motion.p>
+
+          {/* Platform chips */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}
+            style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 40 }}>
+            {[
+              { label: 'Web Dev', cls: 'chip-web', icon: <FiMonitor size={12} /> },
+              { label: 'Mobile Apps', cls: 'chip-mobile', icon: <FiSmartphone size={12} /> },
+              { label: 'REST APIs', cls: 'chip-back', icon: <FiServer size={12} /> },
+              { label: 'Fullstack', cls: 'chip-full', icon: <FiLayers size={12} /> },
+            ].map(p => (
+              <span key={p.label} className={`tag ${p.cls}`}>
+                {p.icon} {p.label}
+              </span>
+            ))}
+          </motion.div>
+
+          {/* CTA */}
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}
+            style={{ display: 'flex', flexWrap: 'wrap', gap: 14 }}>
+            <a href={getSetting('cv_url') || '#'} target="_blank" rel="noopener noreferrer" className="btn-cta">
+              <FiDownload size={15} /> Download CV
+            </a>
+            <button onClick={() => setShowContact(true)} className="btn-outline">
+              <FiMessageSquare size={15} /> Let&apos;s Talk
+            </button>
+          </motion.div>
+
+          {/* Stats */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.0 }}
+            style={{ display: 'flex', gap: 0, marginTop: 56, paddingTop: 36, borderTop: '1px solid var(--border)' }}>
+            {[
+              { num: '2.5+', label: 'Yrs Exp', color: 'var(--cyan)' },
+              { num: '10+', label: 'Projects', color: 'var(--blue)' },
+              { num: '4', label: 'Stacks', color: 'var(--violet)' },
+              { num: '∞', label: 'Coffee ☕', color: 'var(--amber)' },
+            ].map((s, i) => (
+              <div key={s.label} style={{ flex: 1, paddingRight: 24, borderRight: i < 3 ? '1px solid var(--border)' : 'none', paddingLeft: i > 0 ? 24 : 0 }}>
+                <div className="mono" style={{ fontSize: 28, fontWeight: 700, color: s.color, lineHeight: 1 }}>{s.num}</div>
+                <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 6, letterSpacing: '0.08em', fontFamily: 'var(--font-mono)' }}>{s.label}</div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }}
+          style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}
+        >
+          <span className="mono" style={{ fontSize: 9, color: 'var(--text-muted)', letterSpacing: '0.15em' }}>SCROLL</span>
+          <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.6, repeat: Infinity }}>
+            <FiChevronDown style={{ color: 'var(--cyan)', fontSize: 16, opacity: 0.5 }} />
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+// ============================================================
+// ABOUT SECTION
+// ============================================================
+const AboutSection = ({ projects }: { projects: Project[] }) => {
+  const codeLines = [
+    { ln: '01', tokens: [{ t: 'const', c: '#8B5CF6' }, { t: ' developer', c: '#E2E8F0' }, { t: ' = {', c: '#8892A4' }] },
+    { ln: '02', tokens: [{ t: '  name:', c: '#00F5D4' }, { t: ' "Muhammad Fathiir",', c: '#F59E0B' }] },
+    { ln: '03', tokens: [{ t: '  location:', c: '#00F5D4' }, { t: ' "Palembang, ID",', c: '#F59E0B' }] },
+    { ln: '04', tokens: [{ t: '  web:', c: '#00F5D4' }, { t: ' [', c: '#8892A4' }, { t: '"React"', c: '#61DAFB' }, { t: ', ', c: '#8892A4' }, { t: '"Next.js"', c: '#61DAFB' }, { t: '],', c: '#8892A4' }] },
+    { ln: '05', tokens: [{ t: '  mobile:', c: '#00F5D4' }, { t: ' [', c: '#8892A4' }, { t: '"Flutter"', c: '#02569B' }, { t: '],', c: '#8892A4' }] },
+    { ln: '06', tokens: [{ t: '  backend:', c: '#00F5D4' }, { t: ' [', c: '#8892A4' }, { t: '"Golang"', c: '#00ADD8' }, { t: ', ', c: '#8892A4' }, { t: '"Laravel"', c: '#FF2D20' }, { t: '],', c: '#8892A4' }] },
+    { ln: '07', tokens: [{ t: '  deploy:', c: '#00F5D4' }, { t: ' [', c: '#8892A4' }, { t: '"VPS"', c: '#10B981' },{ t: '],', c: '#8892A4' }] },
+    { ln: '08', tokens: [{ t: '  experience:', c: '#00F5D4' }, { t: ' 2.5', c: '#F59E0B' }, { t: ',', c: '#8892A4' }] },
+    { ln: '09', tokens: [{ t: '  projects:', c: '#00F5D4' }, { t: ` ${projects.length}`, c: '#F59E0B' }, { t: ',', c: '#8892A4' }] },
+    { ln: '10', tokens: [{ t: '  passion:', c: '#00F5D4' }, { t: ' "Build great products"', c: '#F59E0B' }] },
+    { ln: '11', tokens: [{ t: '};', c: '#8892A4' }] },
+  ];
+
+  return (
+    <section id="about" className="section" style={{ position: 'relative' }}>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg, transparent, rgba(0,245,212,0.15), transparent)' }} />
+      <div className="container">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'center' }} className="two-col">
+
+          {/* Code block */}
+          <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.65 }}>
+            <div className="code-block">
+              {/* Tab bar */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 18, paddingBottom: 14, borderBottom: '1px solid var(--border)' }}>
+                <div style={{ display: 'flex', gap: 6 }}>
+                  {['#FF5F57','#FEBC2E','#28C840'].map(c => <div key={c} style={{ width: 10, height: 10, borderRadius: '50%', background: c }} />)}
+                </div>
+                <span className="mono" style={{ fontSize: 11, color: 'var(--text-muted)', marginLeft: 8 }}>developer.ts</span>
+                <span style={{ marginLeft: 'auto', fontSize: 10, color: 'var(--cyan)', fontFamily: 'var(--font-mono)' }}>● TypeScript</span>
+              </div>
+              {codeLines.map((line, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -8 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.06 }}
+                  style={{ display: 'flex', gap: 14, lineHeight: '26px' }}
+                >
+                  <span style={{ color: 'var(--text-muted)', minWidth: 22, textAlign: 'right', fontSize: 11, userSelect: 'none', opacity: 0.4 }}>{line.ln}</span>
+                  <span>
+                    {line.tokens.map((tok, j) => (
+                      <span key={j} style={{ color: tok.c, fontSize: 13 }}>{tok.t}</span>
+                    ))}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Mini stats */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginTop: 14 }}>
+              {[
+                { val: '2.5+', label: 'Years', c: 'var(--cyan)' },
+                { val: `${projects.length}+`, label: 'Projects', c: 'var(--blue)' },
+                { val: '4', label: 'Stacks', c: 'var(--violet)' },
+              ].map(s => (
+                <div key={s.label} className="glass" style={{ padding: '16px', textAlign: 'center' }}>
+                  <div className="mono" style={{ fontSize: 22, fontWeight: 700, color: s.c }}>{s.val}</div>
+                  <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 4, letterSpacing: '0.1em' }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Text */}
+          <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.65 }}>
+            <div className="section-label">about me</div>
+            <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, letterSpacing: '-0.025em', marginBottom: 22, lineHeight: 1.15 }}>
+              Building for<br /><span className="grad">Web & Mobile</span>
+            </h2>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.85, marginBottom: 18, fontSize: 15 }}>
+              Fullstack Developer with ~2.5 years of combined professional and project experience.
+              I build end-to-end applications — polished UIs to performant backends, deployed on real infrastructure.
+            </p>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.85, marginBottom: 32, fontSize: 15 }}>
+              My flagship project,{' '}
+              <span style={{ color: 'var(--cyan)', fontWeight: 600 }}>Pempek Kito</span>{' '}
+              — a full e-commerce platform with Midtrans, Biteship, OAuth, and a Flutter mobile app — built and deployed solo.
+            </p>
+
+            {/* Skill rows */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {[
+                { label: 'Web Development', desc: 'React.js · Next.js · Laravel · TailwindCSS', icon: <FiMonitor size={15} />, cls: 'chip-web' },
+                { label: 'Mobile Development', desc: 'Flutter · Dart · REST API integration', icon: <FiSmartphone size={15} />, cls: 'chip-mobile' },
+                { label: 'Backend & APIs', desc: 'Golang (Gin) · PHP (Laravel) · MySQL · REST', icon: <FiServer size={15} />, cls: 'chip-back' },
+                { label: 'DevOps & Deployment', desc: 'VPS · Nginx · Git · Docker basics', icon: <FiCpu size={15} />, cls: 'chip-full' },
+              ].map(item => (
+                <div key={item.label} className="glass lift" style={{ padding: '13px 16px', display: 'flex', alignItems: 'center', gap: 14, borderRadius: 12 }}>
+                  <span className={`tag ${item.cls}`} style={{ padding: '8px', borderRadius: 9, flexShrink: 0 }}>{item.icon}</span>
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: 14 }}>{item.label}</div>
+                    <div className="mono" style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 3 }}>{item.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ============================================================
+// EXPERIENCE SECTION
+// ============================================================
+const ExperienceSection = ({ experiences }: { experiences: Experience[] }) => (
+  <section id="pengalaman" className="section" style={{ position: 'relative' }}>
+    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg, transparent, rgba(59,130,246,0.15), transparent)' }} />
+    <div className="container">
+      <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+        <div className="section-label">career path</div>
+        <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, letterSpacing: '-0.025em', marginBottom: 60 }}>Work Experience</h2>
+      </motion.div>
+
+      <div style={{ position: 'relative', paddingLeft: 52 }}>
+        <div className="tl-line" />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 36 }}>
+          {experiences.map((exp, i) => (
+            <motion.div key={exp.id} initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} style={{ position: 'relative' }}>
+              <div className="tl-dot" />
+              <div className="glass lift" style={{ padding: '28px 28px' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 14 }}>
+                  <div>
+                    <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 5 }}>{exp.title}</h3>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ color: 'var(--cyan)', fontWeight: 600, fontSize: 14 }}>{exp.company}</span>
+                      <span style={{ color: 'var(--border-glow)' }}>·</span>
+                      <span className="mono" style={{ fontSize: 11, color: 'var(--text-muted)' }}><FiMapPin size={10} style={{ marginRight: 3 }} />{exp.location}</span>
+                    </div>
+                  </div>
+                  <div className="badge" style={{ fontSize: 11 }}>
+                    <FiCalendar size={11} />
+                    {exp.start_year} — {exp.current_job ? 'Present' : exp.end_year}
+                  </div>
+                </div>
+
+                <div className="glow-hr" style={{ margin: '14px 0' }} />
+
+                <ul style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 18 }}>
+                  {exp.responsibilities.map(r => (
+                    <li key={r.id} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, color: 'var(--text-secondary)', fontSize: 14, lineHeight: 1.65 }}>
+                      <FiCheckCircle size={13} style={{ color: 'var(--cyan)', marginTop: 3, flexShrink: 0, opacity: 0.7 }} />
+                      {r.description}
+                    </li>
+                  ))}
+                </ul>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {exp.skills.map((s, idx) => (
+                    <span key={idx} className="tag" style={{ background: 'rgba(0,245,212,0.06)', color: 'var(--text-secondary)', border: '1px solid rgba(0,245,212,0.1)', fontSize: 10 }}>
+                      {s.skill_name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+// ============================================================
+// PROJECTS SECTION
+// ============================================================
+const ProjectsSection = ({ projects }: { projects: Project[] }) => {
+  const [filter, setFilter] = useState<'all'|'web'|'mobile'|'backend'>('all');
+
+  const getType = (tags: ProjectTag[]) => {
+    const n = tags.map(t => t.name.toLowerCase());
+    if (n.some(x => x.includes('web') || x.includes('web'))) return 'web';
+    if (n.some(x => x.includes('flutter') || x.includes('mobile'))) return 'mobile';
+    if (n.some(x => x.includes('golang') || x.includes('api') || x.includes('backend'))) return 'backend';
+    return 'web';
+  };
+
+  const filtered = projects.filter(p => filter === 'all' || getType(p.tags || []) === filter);
+
+  const chipMap: Record<string, { cls: string; label: string; icon: JSX.Element }> = {
+    web:     { cls: 'chip-web',    label: 'Web',     icon: <FiMonitor size={10} /> },
+    mobile:  { cls: 'chip-mobile', label: 'Mobile',  icon: <FiSmartphone size={10} /> },
+    backend: { cls: 'chip-back',   label: 'Backend', icon: <FiServer size={10} /> },
+  };
+
+  return (
+    <section id="projek" className="section" style={{ position: 'relative' }}>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg, transparent, rgba(139,92,246,0.15), transparent)' }} />
+      <div className="container">
+        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <div className="section-label">portfolio</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 40, gap: 20 }}>
+            <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.15 }}>
+              Selected<br /><span className="grad">Projects</span>
+            </h2>
+            {/* Filter */}
+            <div style={{ display: 'flex', gap: 8, background: 'var(--bg-card2)', padding: '6px', borderRadius: 12, border: '1px solid var(--border)' }}>
+              {(['all','web','mobile','backend'] as const).map(f => (
+                <button key={f} onClick={() => setFilter(f)} className="mono" style={{
+                  padding: '7px 16px', fontSize: 11, borderRadius: 8, border: 'none', cursor: 'pointer',
+                  fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase',
+                  background: filter === f ? 'var(--cyan)' : 'transparent',
+                  color: filter === f ? '#03050d' : 'var(--text-muted)',
+                  transition: 'all 0.2s',
+                }}>
+                  {f}
+                </button>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
+        <AnimatePresence mode="popLayout">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 18 }}>
+            {filtered.map((project, i) => {
+              const type = getType(project.tags || []);
+              const chip = chipMap[type];
+              return (
+                <motion.div
+                  key={project.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.96 }}
+                  transition={{ delay: i * 0.06 }}
+                  className="glass lift"
+                  style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', borderRadius: 16 }}
+                >
+                  {/* Image */}
+                  <div style={{ position: 'relative', height: 188, overflow: 'hidden', background: 'var(--bg-card2)' }}>
+                    {project.image_url
+                      ? <img src={project.image_url} alt={project.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
+                          onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.05)')}
+                          onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+                        />
+                      : <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #070b18, #09101f)' }}>
+                          <FiCode style={{ fontSize: 36, color: 'var(--text-muted)' }} />
+                        </div>
+                    }
+                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(7,11,24,0.7) 0%, transparent 60%)' }} />
+                    <div style={{ position: 'absolute', top: 12, left: 12, display: 'flex', gap: 6 }}>
+                      <span className={`tag ${chip.cls}`}>{chip.icon} {chip.label}</span>
+                      {project.is_featured && <span className="tag" style={{ background: 'rgba(245,158,11,0.15)', color: 'var(--amber)', border: '1px solid rgba(245,158,11,0.25)' }}>★ Featured</span>}
+                    </div>
+                    <div style={{ position: 'absolute', top: 12, right: 12 }}>
+                      <span className="tag" style={{
+                        background: project.status === 'published' ? 'rgba(16,185,129,0.15)' : 'rgba(0,245,212,0.1)',
+                        color: project.status === 'published' ? 'var(--green)' : 'var(--cyan)',
+                        border: `1px solid ${project.status === 'published' ? 'rgba(16,185,129,0.2)' : 'rgba(0,245,212,0.2)'}`,
+                      }}>
+                        {project.status === 'published' ? '⬤ Live' : project.status === 'completed' ? '✓ Done' : '◎ WIP'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div style={{ padding: '20px 22px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8, letterSpacing: '-0.01em' }}>{project.title}</h3>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: 13, lineHeight: 1.7, marginBottom: 14, flex: 1 }}>
+                      {project.description}
+                    </p>
+
+                    {project.tags?.length > 0 && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginBottom: 16 }}>
+                        {project.tags.map(tag => (
+                          <span key={tag.id} className="tag" style={{ fontSize: 10, background: `${tag.color}10`, color: tag.color, border: `1px solid ${tag.color}22` }}>
+                            {tag.name}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    <div style={{ display: 'flex', gap: 8, paddingTop: 14, borderTop: '1px solid var(--border)' }}>
+                      {project.demo_url && project.demo_url !== '#' && (
+                        <a href={project.demo_url} target="_blank" rel="noopener noreferrer" className="btn-cta" style={{ flex: 1, justifyContent: 'center', padding: '9px 12px', fontSize: 12 }}>
+                          <FiExternalLink size={12} /> Live Demo
+                        </a>
+                      )}
+                      {project.code_url && project.code_url !== '#' && (
+                        <a href={project.code_url} target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ flex: project.demo_url && project.demo_url !== '#' ? 'none' : 1, justifyContent: 'center', padding: '8px 14px', fontSize: 12 }}>
+                          <FiGithub size={12} /> Code
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </AnimatePresence>
+
+        {filtered.length === 0 && (
+          <div className="glass" style={{ padding: 60, textAlign: 'center', borderRadius: 16 }}>
+            <FiCode style={{ fontSize: 40, color: 'var(--text-muted)', marginBottom: 16 }} />
+            <p style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: 13 }}>// No projects in this category yet</p>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
+
+// ============================================================
+// SKILLS SECTION
+// ============================================================
+const SkillsSection = ({ skills, certificates }: { skills: Skill[]; certificates: Certificate[] }) => {
+  const safeSkills = skills || [];
+  const featured = safeSkills.filter(s => s.is_featured === true || s.is_featured === 'true');
+  const others = safeSkills.filter(s => s.is_featured !== true && s.is_featured !== 'true');
+
+  const techGroups = [
+    { label: 'Frontend', icon: <FiMonitor size={14} />, cls: 'chip-web',    items: ['React.js', 'Next.js', 'TailwindCSS', 'TypeScript', 'HTML/CSS'] },
+    { label: 'Mobile',   icon: <FiSmartphone size={14} />, cls: 'chip-mobile', items: ['Flutter', 'Dart', 'REST Integration', 'State Mgmt'] },
+    { label: 'Backend',  icon: <FiServer size={14} />, cls: 'chip-back',   items: ['Golang (Gin)', 'Laravel', 'PHP', 'REST API', 'Auth/JWT'] },
+    { label: 'Infra',    icon: <FiDatabase size={14} />, cls: 'chip-full',  items: ['MySQL', 'VPS/Nginx', 'Git', 'Docker', 'CI/CD'] },
+  ];
+
+  return (
+    <section id="skill" className="section" style={{ position: 'relative' }}>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg, transparent, rgba(0,245,212,0.15), transparent)' }} />
+      <div className="container">
+        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <div className="section-label">expertise</div>
+          <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, letterSpacing: '-0.025em', marginBottom: 48 }}>
+            Skills & <span className="grad">Tech Stack</span>
+          </h2>
+        </motion.div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28, marginBottom: 36 }} className="two-col">
+
+          {/* Proficiency bars */}
+          <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+            <div className="glass" style={{ padding: '28px 28px', borderRadius: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 26 }}>
+                <FiBarChart2 style={{ color: 'var(--cyan)', fontSize: 16 }} />
+                <span style={{ fontWeight: 700, fontSize: 15 }}>Core Proficiency</span>
+              </div>
+              {featured.length > 0
+                ? featured.map((s, i) => (
+                  <motion.div key={s.id} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }} style={{ marginBottom: 22 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 9 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+                        {s.icon_url
+                          ? <img src={s.icon_url} alt={s.name} style={{ width: 18, height: 18, objectFit: 'contain' }} />
+                          : <FiCode style={{ color: 'var(--text-muted)', fontSize: 14 }} />}
+                        <span style={{ fontSize: 14, fontWeight: 600 }}>{s.name}</span>
+                      </div>
+                      <span className="mono" style={{ fontSize: 12, color: 'var(--cyan)' }}>{s.value}%</span>
+                    </div>
+                    <div className="bar-track">
+                      <motion.div className="bar-fill" initial={{ width: 0 }} whileInView={{ width: `${s.value}%` }} viewport={{ once: true }} transition={{ duration: 1.2, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }} />
+                    </div>
+                  </motion.div>
+                ))
+                : (
+                  // Default proficiency bars if none in DB
+                  [
+                    { name: 'Golang', val: 82, icon: null },
+                    { name: 'React.js', val: 88, icon: null },
+                    { name: 'Flutter', val: 80, icon: null },
+                    { name: 'Laravel', val: 85, icon: null },
+                    { name: 'MySQL', val: 78, icon: null },
+                  ].map((s, i) => (
+                    <div key={s.name} style={{ marginBottom: 20 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                        <span style={{ fontSize: 14, fontWeight: 600 }}>{s.name}</span>
+                        <span className="mono" style={{ fontSize: 12, color: 'var(--cyan)' }}>{s.val}%</span>
+                      </div>
+                      <div className="bar-track">
+                        <motion.div className="bar-fill" initial={{ width: 0 }} whileInView={{ width: `${s.val}%` }} viewport={{ once: true }} transition={{ duration: 1.2, delay: i * 0.1 }} />
+                      </div>
+                    </div>
+                  ))
+                )
+              }
+            </div>
+          </motion.div>
+
+          {/* Tech groups */}
+          <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {techGroups.map(group => (
+              <div key={group.label} className="glass" style={{ padding: '16px 20px', borderRadius: 14 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 11 }}>
+                  <span className={`tag ${group.cls}`} style={{ padding: '5px 9px' }}>{group.icon}</span>
+                  <span style={{ fontWeight: 700, fontSize: 14 }}>{group.label}</span>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {group.items.map(item => (
+                    <span key={item} className="tag mono" style={{ fontSize: 10, background: 'rgba(255,255,255,0.03)', color: 'var(--text-secondary)', border: '1px solid var(--border)' }}>
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Certificates */}
+        {certificates.length > 0 && (
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+              <FiAward style={{ color: 'var(--amber)', fontSize: 17 }} />
+              <span style={{ fontWeight: 700, fontSize: 15 }}>Certifications</span>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12 }}>
+              {certificates.map((cert, i) => (
+                <motion.a key={cert.id} href={cert.credential_url} target="_blank" rel="noopener noreferrer"
+                  initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.07 }}
+                  className="glass lift" style={{ padding: 18, textDecoration: 'none', display: 'block', borderRadius: 14 }}
+                >
+                  {cert.image_url && (
+                    <img src={cert.image_url} alt={cert.name} style={{ width: '100%', height: 90, objectFit: 'contain', marginBottom: 12, borderRadius: 8, background: 'var(--bg-card2)', padding: 8 }} />
+                  )}
+                  <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 5, lineHeight: 1.4 }}>{cert.name}</div>
+                  <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{cert.issuer}</div>
+                  <div className="mono" style={{ fontSize: 11, color: 'var(--cyan)', marginTop: 8 }}>
+                    {new Date(cert.issue_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
+                  </div>
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Other tech pills */}
+        {others.length > 0 && (
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ marginTop: 28 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+              <FiCode style={{ color: 'var(--cyan)', fontSize: 16 }} />
+              <span style={{ fontWeight: 700, fontSize: 15 }}>More Technologies</span>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {others.map(s => (
+                <span key={s.id} className="glass" style={{ padding: '8px 15px', display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 13, borderRadius: 10 }}>
+                  {s.icon_url ? <img src={s.icon_url} alt={s.name} style={{ width: 16, height: 16, objectFit: 'contain' }} /> : <FiCode style={{ color: 'var(--text-muted)', fontSize: 13 }} />}
+                  {s.name}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </div>
+    </section>
+  );
+};
+
+// ============================================================
+// EDUCATION SECTION
+// ============================================================
+const EducationSection = ({ education }: { education: Education[] }) => (
+  <section id="studi" className="section" style={{ position: 'relative' }}>
+    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg, transparent, rgba(16,185,129,0.15), transparent)' }} />
+    <div className="container">
+      <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+        <div className="section-label">background</div>
+        <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, letterSpacing: '-0.025em', marginBottom: 48 }}>Education</h2>
+      </motion.div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 18 }}>
+        {education.map((edu, i) => (
+          <motion.div key={edu.id} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+            className="glass lift" style={{ padding: 28, borderRadius: 16 }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
+              <div style={{ width: 48, height: 48, background: 'rgba(0,245,212,0.08)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(0,245,212,0.12)' }}>
+                <FiAward style={{ color: 'var(--cyan)', fontSize: 22 }} />
+              </div>
+              <div className="badge" style={{ fontSize: 10 }}>
+                <FiCalendar size={10} /> {edu.start_year} – {edu.end_year}
+              </div>
+            </div>
+            <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 5 }}>{edu.degree}</div>
+            <div style={{ color: 'var(--cyan)', fontSize: 14, fontWeight: 600, marginBottom: 4 }}>{edu.major}</div>
+            <div style={{ color: 'var(--text-secondary)', fontSize: 13, marginBottom: 12 }}>{edu.school}</div>
+            <p style={{ color: 'var(--text-muted)', fontSize: 13, lineHeight: 1.65, marginBottom: 14 }}>{edu.description}</p>
+            {edu.achievements?.length > 0 && (
+              <div style={{ paddingTop: 12, borderTop: '1px solid var(--border)' }}>
+                <div className="mono" style={{ fontSize: 10, color: 'var(--text-muted)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Achievements</div>
+                {edu.achievements.map(a => (
+                  <div key={a.id} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 7, fontSize: 13, color: 'var(--text-secondary)' }}>
+                    <FiArrowRight size={11} style={{ color: 'var(--cyan)', marginTop: 4, flexShrink: 0 }} />
+                    {a.achievement}
+                  </div>
+                ))}
+              </div>
+            )}
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+// ============================================================
+// TESTIMONIALS SECTION
+// ============================================================
+const TestimonialsSection = ({ testimonials }: { testimonials: Testimonial[] }) => (
+  <section id="testimoni" className="section" style={{ position: 'relative' }}>
+    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg, transparent, rgba(245,158,11,0.12), transparent)' }} />
+    <div className="container">
+      <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+        <div className="section-label">social proof</div>
+        <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, letterSpacing: '-0.025em', marginBottom: 48 }}>Testimonials</h2>
+      </motion.div>
+      {testimonials.length > 0 ? (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 18 }}>
+          {testimonials.map((t, i) => (
+            <motion.div key={t.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
+              className="glass" style={{ padding: '28px', borderRadius: 16 }}
+            >
+              <div style={{ fontSize: 36, color: 'var(--cyan)', lineHeight: 1, marginBottom: 16, opacity: 0.25, fontFamily: 'Georgia, serif' }}>"</div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: 14, lineHeight: 1.8, marginBottom: 20, fontStyle: 'italic' }}>{t.message}</p>
+              <div style={{ display: 'flex', gap: 3, marginBottom: 18 }}>
+                {[...Array(5)].map((_, j) => (
+                  <FiStar key={j} size={12} style={{ color: j < t.rating ? 'var(--amber)' : 'var(--text-muted)', fill: j < t.rating ? 'var(--amber)' : 'none' }} />
+                ))}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, paddingTop: 16, borderTop: '1px solid var(--border)' }}>
+                <div style={{ width: 38, height: 38, borderRadius: '50%', background: 'linear-gradient(135deg, var(--cyan), var(--blue))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 15, color: '#03050d' }}>
+                  {t.name.charAt(0)}
+                </div>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: 13 }}>{t.name}</div>
+                  <div className="mono" style={{ fontSize: 11, color: 'var(--text-muted)' }}>{t.title}</div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      ) : (
+        <div className="glass" style={{ padding: 60, textAlign: 'center', borderRadius: 16 }}>
+          <FiMessageSquare style={{ fontSize: 32, color: 'var(--text-muted)', marginBottom: 12 }} />
+          <p className="mono" style={{ color: 'var(--text-muted)', fontSize: 13 }}>// No testimonials yet — come back soon</p>
+        </div>
+      )}
+    </div>
+  </section>
+);
+
+// ============================================================
+// BLOG SECTION
+// ============================================================
+const BlogSection = ({ blogPosts }: { blogPosts: BlogPost[] }) => {
+  const latest = [...blogPosts]
+    .sort((a, b) => new Date(b.publish_date).getTime() - new Date(a.publish_date).getTime())
+    .slice(0, 3);
+
+  return (
+    <section id="blog" className="section" style={{ position: 'relative' }}>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg, transparent, rgba(59,130,246,0.12), transparent)' }} />
+      <div className="container">
+        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <div className="section-label">writing</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 48, flexWrap: 'wrap', gap: 16 }}>
+            <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, letterSpacing: '-0.025em' }}>
+              Latest <span className="grad">Articles</span>
+            </h2>
+            {blogPosts.length > 3 && (
+              <Link href="/blog" style={{ color: 'var(--cyan)', textDecoration: 'none', fontSize: 13, display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600 }}>
+                View all {blogPosts.length} <FiArrowRight size={13} />
+              </Link>
+            )}
+          </div>
+        </motion.div>
+
+        {latest.length > 0 ? (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 18 }}>
+            {latest.map((post, i) => {
+              const isNew = (new Date().getTime() - new Date(post.publish_date).getTime()) < 3 * 24 * 3600 * 1000;
+              return (
+                <Link key={post.id} href={`/blog/${post.id}`} style={{ textDecoration: 'none' }}>
+                  <motion.article initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
+                    className="glass lift" style={{ borderRadius: 16, overflow: 'hidden', height: '100%' }}
+                  >
+                    <div style={{ height: 110, background: 'linear-gradient(135deg, #070b18, #0a1020)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
+                      <div className="grid-bg" style={{ position: 'absolute', inset: 0, opacity: 0.5 }} />
+                      <div style={{ width: 44, height: 44, background: 'rgba(0,245,212,0.08)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(0,245,212,0.12)', position: 'relative', zIndex: 1 }}>
+                        <FiMessageSquare style={{ fontSize: 20, color: 'rgba(0,245,212,0.5)' }} />
+                      </div>
+                      <div style={{ position: 'absolute', top: 10, left: 12 }}>
+                        <span className="mono" style={{ fontSize: 10, color: 'var(--text-muted)' }}>
+                          {new Date(post.publish_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </span>
+                      </div>
+                      {isNew && (
+                        <div style={{ position: 'absolute', top: 10, right: 12 }}>
+                          <span className="tag chip-back" style={{ fontSize: 9 }}>✦ NEW</span>
+                        </div>
+                      )}
+                    </div>
+                    <div style={{ padding: '18px 20px' }}>
+                      {post.tags?.slice(0, 2).map(tag => (
+                        <span key={tag.id} className="tag" style={{ fontSize: 10, background: 'rgba(0,245,212,0.06)', color: 'var(--text-secondary)', border: '1px solid var(--border)', marginRight: 5, marginBottom: 10, display: 'inline-block' }}>
+                          #{tag.name}
+                        </span>
+                      ))}
+                      <h3 style={{ fontWeight: 700, fontSize: 15, lineHeight: 1.45, marginBottom: 8 }}>{post.title}</h3>
+                      <p style={{ color: 'var(--text-secondary)', fontSize: 13, lineHeight: 1.65, marginBottom: 14 }}>
+                        {post.excerpt || 'Read the full article...'}
+                      </p>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 11, color: 'var(--text-muted)' }}>
+                        <div style={{ display: 'flex', gap: 14 }}>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><FiEye size={11} /> {post.view_count || 0}</span>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><FiClock size={11} /> {Math.max(1, Math.ceil((post.content?.length || 0) / 1200))}m read</span>
+                        </div>
+                        <span style={{ color: 'var(--cyan)', display: 'flex', alignItems: 'center', gap: 4, fontWeight: 600 }}>
+                          Read <FiArrowRight size={11} />
+                        </span>
+                      </div>
+                    </div>
+                  </motion.article>
+                </Link>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="glass" style={{ padding: 60, textAlign: 'center', borderRadius: 16 }}>
+            <FiMessageSquare style={{ fontSize: 32, color: 'var(--text-muted)', marginBottom: 12 }} />
+            <p className="mono" style={{ color: 'var(--text-muted)', fontSize: 13 }}>// Articles loading soon...</p>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
+
+// ============================================================
+// CONTACT SECTION
+// ============================================================
+const ContactSection = ({ settings }: { settings: Setting[] }) => {
+  const getSetting = (k: string) => settings.find(s => s.key === k)?.value || '';
+  const [sent, setSent] = useState(false);
+
+  return (
+    <section id="kontak" className="section" style={{ position: 'relative' }}>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg, transparent, rgba(0,245,212,0.15), transparent)' }} />
+      {/* Big glow bg */}
+      <div style={{ position: 'absolute', bottom: '-10%', left: '50%', transform: 'translateX(-50%)', width: '80vw', height: '60vh', background: 'radial-gradient(ellipse, rgba(0,245,212,0.04) 0%, transparent 65%)', pointerEvents: 'none' }} />
+
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 64 }}>
+          <div className="section-label" style={{ justifyContent: 'center' }}>contact</div>
+          <h2 style={{ fontSize: 'clamp(36px, 5vw, 58px)', fontWeight: 800, letterSpacing: '-0.03em', marginBottom: 18, lineHeight: 1.1 }}>
+            Let&apos;s Build<br /><span className="grad">Something Great</span>
+          </h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 16, lineHeight: 1.8, maxWidth: 520, margin: '0 auto' }}>
+            Open to freelance projects, full-time roles, and collaboration. Whether it&apos;s a web app, mobile app, or full-scale platform — let&apos;s talk.
+          </p>
+        </motion.div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28 }} className="two-col">
+
+          {/* Left */}
+          <motion.div initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            {[
+              { icon: <FiMail size={17} />, label: 'Email', value: getSetting('contact_email') || 'your@email.com', color: 'var(--cyan)' },
+              { icon: <FiPhone size={17} />, label: 'Phone / WA', value: getSetting('phone_number') || '+62 812-3456-7890', color: 'var(--blue)' },
+              { icon: <FiMapPin size={17} />, label: 'Location', value: getSetting('location') || 'Palembang, Indonesia', color: 'var(--violet)' },
+            ].map(item => (
+              <div key={item.label} className="glass" style={{ padding: '18px 22px', display: 'flex', alignItems: 'center', gap: 16, borderRadius: 14 }}>
+                <div style={{ width: 44, height: 44, background: `rgba(0,0,0,0.3)`, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: item.color, flexShrink: 0, border: `1px solid ${item.color}20` }}>
+                  {item.icon}
+                </div>
+                <div>
+                  <div className="mono" style={{ fontSize: 10, color: 'var(--text-muted)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
+                  <div style={{ fontSize: 14, fontWeight: 600 }}>{item.value}</div>
+                </div>
+              </div>
+            ))}
+
+            <a href={getSetting('cv_url') || '#'} target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ marginTop: 8, justifyContent: 'center' }}>
+              <FiDownload size={15} /> Download Full CV
+            </a>
+          </motion.div>
+
+          {/* Right — Form */}
+          <motion.div initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+            <div className="glass" style={{ padding: '32px 30px', borderRadius: 16 }}>
+              {!sent ? (
+                <>
+                  <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 24, display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <FiMessageSquare style={{ color: 'var(--cyan)' }} />
+                    Send a Message
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                    {['name', 'email'].map(field => (
+                      <div key={field}>
+                        <label className="mono" style={{ display: 'block', fontSize: 10, color: 'var(--text-muted)', marginBottom: 7, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{field}</label>
+                        <input
+                          type={field === 'email' ? 'email' : 'text'}
+                          placeholder={field === 'email' ? 'you@example.com' : 'Your name'}
+                          style={{ width: '100%', padding: '12px 15px', background: 'rgba(3,5,13,0.6)', border: '1px solid var(--border)', borderRadius: 10, color: 'var(--text-primary)', fontSize: 14, outline: 'none', fontFamily: 'var(--font-display)', transition: 'border-color 0.2s' }}
+                          onFocus={e => e.target.style.borderColor = 'rgba(0,245,212,0.35)'}
+                          onBlur={e => e.target.style.borderColor = 'var(--border)'}
+                        />
+                      </div>
+                    ))}
+                    <div>
+                      <label className="mono" style={{ display: 'block', fontSize: 10, color: 'var(--text-muted)', marginBottom: 7, textTransform: 'uppercase', letterSpacing: '0.1em' }}>message</label>
+                      <textarea rows={4} placeholder="Tell me about your project..."
+                        style={{ width: '100%', padding: '12px 15px', background: 'rgba(3,5,13,0.6)', border: '1px solid var(--border)', borderRadius: 10, color: 'var(--text-primary)', fontSize: 14, outline: 'none', resize: 'none', fontFamily: 'var(--font-display)', transition: 'border-color 0.2s' }}
+                        onFocus={e => e.target.style.borderColor = 'rgba(0,245,212,0.35)'}
+                        onBlur={e => e.target.style.borderColor = 'var(--border)'}
+                      />
+                    </div>
+                    <button type="button" onClick={() => setSent(true)} className="btn-cta" style={{ width: '100%', justifyContent: 'center', padding: 14 }}>
+                      <FiArrowRight size={15} /> Send Message
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} style={{ textAlign: 'center', padding: '40px 0' }}>
+                  <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'rgba(16,185,129,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', border: '1px solid rgba(16,185,129,0.2)' }}>
+                    <FiCheckCircle style={{ fontSize: 28, color: 'var(--green)' }} />
+                  </div>
+                  <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 8 }}>Message Sent!</div>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>I&apos;ll get back to you soon. 🚀</p>
+                  <button onClick={() => setSent(false)} style={{ marginTop: 20, background: 'none', border: '1px solid var(--border)', borderRadius: 8, padding: '8px 18px', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: 13, fontFamily: 'var(--font-display)' }}>
+                    Send Another
+                  </button>
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ============================================================
+// FOOTER
+// ============================================================
+const Footer = ({ socialLinks }: { socialLinks: SocialLink[] }) => {
+  const iconMap: Record<string, JSX.Element> = {
+    FaWhatsapp: <FaWhatsapp size={16} />, FiInstagram: <FiInstagram size={16} />,
+    FiLinkedin: <FiLinkedin size={16} />, FaTelegram: <FaTelegram size={16} />,
+    FaLine: <FaLine size={16} />, FiMail: <FiMail size={16} />, FiGithub: <FiGithub size={16} />
+  };
+  const colors: Record<string, string> = {
+    FaWhatsapp: '#25D366', FiInstagram: '#E1306C', FiLinkedin: '#0A66C2',
+    FaTelegram: '#229ED9', FiMail: 'var(--cyan)', FiGithub: '#A0AEC0', FaLine: '#00C300'
+  };
+
+  return (
+    <footer style={{ borderTop: '1px solid var(--border)', padding: '36px 0', position: 'relative' }}>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg, transparent, rgba(0,245,212,0.1), transparent)' }} />
+      <div className="container" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 28, height: 28, background: 'linear-gradient(135deg, var(--cyan), var(--blue))', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <FiTerminal style={{ color: '#03050d', fontSize: 13 }} />
+          </div>
+          <span className="mono" style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
+            MFF<span style={{ color: 'var(--cyan)' }}>.dev</span> · Muhammad Fathiir Farhansyah
+          </span>
+        </div>
+
+        <div style={{ display: 'flex', gap: 8 }}>
+          {socialLinks.map(s => (
+            <a key={s.id} href={s.url} target="_blank" rel="noopener noreferrer"
+              style={{ width: 36, height: 36, borderRadius: 9, border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', textDecoration: 'none', transition: 'all 0.2s' }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.color = colors[s.icon_name] || 'var(--cyan)'; el.style.borderColor = (colors[s.icon_name] || 'var(--cyan)') + '44'; el.style.background = 'rgba(255,255,255,0.03)'; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.color = 'var(--text-muted)'; el.style.borderColor = 'var(--border)'; el.style.background = 'transparent'; }}
+            >
+              {iconMap[s.icon_name] || <FiMail size={16} />}
+            </a>
+          ))}
+        </div>
+
+        <span className="mono" style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+          © {new Date().getFullYear()} · Palembang, Indonesia
+        </span>
+      </div>
+    </footer>
+  );
+};
+
+// ============================================================
+// CONTACT MODAL
+// ============================================================
+const ContactModal = ({ isOpen, onClose, socialLinks }: { isOpen: boolean; onClose: () => void; socialLinks: SocialLink[] }) => {
+  const iconMap: Record<string, JSX.Element> = {
+    FaWhatsapp: <FaWhatsapp size={22} />, FiInstagram: <FiInstagram size={22} />,
+    FiLinkedin: <FiLinkedin size={22} />, FaTelegram: <FaTelegram size={22} />,
+    FaLine: <FaLine size={22} />, FiMail: <FiMail size={22} />, FiGithub: <FiGithub size={22} />
+  };
+  const colors: Record<string, string> = {
+    FaWhatsapp: '#25D366', FiInstagram: '#E1306C', FiLinkedin: '#0A66C2',
+    FaTelegram: '#229ED9', FiMail: '#00F5D4', FiGithub: '#A0AEC0', FaLine: '#00C300'
   };
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          style={{ position: 'fixed', inset: 0, zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(3,5,13,0.8)', backdropFilter: 'blur(12px)', padding: 20 }}
+          onClick={onClose}
         >
-          {/* Backdrop */}
-          <motion.div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-          />
-          
-          {/* Modal */}
-          <motion.div
-            className="relative bg-gray-900/90 backdrop-blur-xl border border-purple-500/30 rounded-3xl p-8 max-w-md w-full mx-auto shadow-2xl"
-            initial={{ scale: 0.8, opacity: 0, y: 50 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.8, opacity: 0, y: 50 }}
-            transition={{ type: 'spring', damping: 25 }}
+          <motion.div initial={{ scale: 0.88, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.88, opacity: 0, y: 20 }} transition={{ type: 'spring', damping: 18, stiffness: 200 }}
+            onClick={e => e.stopPropagation()}
+            style={{ background: 'var(--bg-card)', border: '1px solid rgba(0,245,212,0.12)', borderRadius: 20, padding: 36, width: '100%', maxWidth: 420, position: 'relative', boxShadow: '0 0 80px rgba(0,245,212,0.08)' }}
           >
-            <button 
-              onClick={onClose}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-white/10"
+            {/* Top glow line */}
+            <div style={{ position: 'absolute', top: 0, left: 24, right: 24, height: 1, background: 'linear-gradient(90deg, transparent, var(--cyan), transparent)', opacity: 0.4 }} />
+
+            <button onClick={onClose} style={{ position: 'absolute', top: 18, right: 18, background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border)', borderRadius: 9, padding: '6px', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', transition: 'all 0.2s' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'var(--text-primary)'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)'; }}
             >
-              <FiX className="text-xl" />
+              <FiX size={16} />
             </button>
-            
-            <motion.h3 
-              className="text-2xl font-bold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300 flex items-center justify-center gap-3"
-              initial={{ y: -20 }}
-              animate={{ y: 0 }}
-            >
-              <FiMessageSquare className="text-purple-300" />
-              Let&apos;s Connect
-            </motion.h3>
-            
-            <div className="grid grid-cols-2 gap-4">
-              {socialLinks.map((social, index) => (
-                <motion.a
-                  key={social.id}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="glass-card p-4 flex flex-col items-center gap-3 group relative overflow-hidden"
-                  whileHover={{ y: -5, scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + index * 0.05 }}
+
+            <div className="section-label" style={{ marginBottom: 6 }}>connect with me</div>
+            <h3 style={{ fontSize: 24, fontWeight: 800, marginBottom: 6 }}>Get In Touch</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: 13, marginBottom: 28 }}>Choose your preferred platform</p>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              {socialLinks.map((s, i) => (
+                <motion.a key={s.id} href={s.url} target="_blank" rel="noopener noreferrer"
+                  initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
+                  style={{ padding: '16px', border: '1px solid var(--border)', borderRadius: 12, display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none', color: 'var(--text-primary)', transition: 'all 0.25s', background: 'rgba(255,255,255,0.01)' }}
+                  onMouseEnter={e => {
+                    const el = e.currentTarget as HTMLElement;
+                    const c = colors[s.icon_name] || 'var(--cyan)';
+                    el.style.borderColor = c + '44';
+                    el.style.background = c + '08';
+                    el.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseLeave={e => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.borderColor = 'var(--border)';
+                    el.style.background = 'rgba(255,255,255,0.01)';
+                    el.style.transform = 'translateY(0)';
+                  }}
                 >
-                  <motion.div
-                    className="p-3 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 group-hover:from-purple-500/30 group-hover:to-pink-500/30 transition-all duration-300"
-                    whileHover={{ rotate: 360 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    {iconMap[social.icon_name] || <FiMail className="text-2xl text-indigo-300" />}
-                  </motion.div>
-                  <span className="text-sm font-medium text-gray-200 group-hover:text-white transition-colors">
-                    {social.platform}
+                  <span style={{ color: colors[s.icon_name] || 'var(--cyan)', flexShrink: 0 }}>
+                    {iconMap[s.icon_name] || <FiMail size={22} />}
                   </span>
-                  
-                  {/* Hover effect */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"
-                    initial={false}
-                  />
+                  <span style={{ fontSize: 14, fontWeight: 600 }}>{s.platform}</span>
                 </motion.a>
               ))}
             </div>
@@ -656,1680 +1474,12 @@ const ContactBubble = ({ isOpen, onClose, socialLinks }: { isOpen: boolean; onCl
   );
 };
 
-// Enhanced Navigation Component
-const EnhancedNavigation = ({ sections, menuOpen, setMenuOpen }: { 
-  sections: Section[]; 
-  menuOpen: boolean; 
-  setMenuOpen: (open: boolean) => void;
-}) => {
-  const handleNavClick = (id: string) => (e: React.MouseEvent) => {
-    e.preventDefault();
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-      setMenuOpen(false);
-    }
-  };
-
-  return (
-    <motion.nav
-      className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50"
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6 }}
-    >
-      {/* Desktop Navigation */}
-      <div className="hidden md:flex items-center gap-2 backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl px-6 py-3 shadow-2xl">
-        {sections.map((sec, index) => (
-          <motion.a
-            key={sec.id}
-            href={`#${sec.section_id}`}
-            onClick={handleNavClick(sec.section_id)}
-            className="px-4 py-2 rounded-xl text-sm font-medium text-gray-200 hover:text-white hover:bg-white/10 transition-all duration-300 relative group"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-          >
-            {sec.label}
-            <motion.span
-              className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 group-hover:w-full transition-all duration-300"
-              initial={false}
-            />
-          </motion.a>
-        ))}
-      </div>
-
-      {/* Mobile Navigation */}
-      <div className="md:hidden">
-        <motion.button
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-3 shadow-2xl"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <div className="w-6 h-6 flex flex-col justify-between">
-            <motion.span
-              className="w-full h-0.5 bg-white rounded"
-              animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 8 : 0 }}
-            />
-            <motion.span
-              className="w-full h-0.5 bg-white rounded"
-              animate={{ opacity: menuOpen ? 0 : 1 }}
-            />
-            <motion.span
-              className="w-full h-0.5 bg-white rounded"
-              animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -8 : 0 }}
-            />
-          </div>
-        </motion.button>
-
-        <AnimatePresence>
-          {menuOpen && (
-            <motion.div
-              className="absolute top-16 left-0 backdrop-blur-xl bg-gray-900/95 border border-white/20 rounded-2xl p-4 shadow-2xl min-w-48"
-              initial={{ opacity: 0, scale: 0.8, y: -20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.8, y: -20 }}
-            >
-              {sections.map((sec, index) => (
-                <motion.a
-                  key={sec.id}
-                  href={`#${sec.section_id}`}
-                  onClick={handleNavClick(sec.section_id)}
-                  className="block px-4 py-3 rounded-lg text-gray-200 hover:text-white hover:bg-white/10 transition-all duration-300"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ x: 5 }}
-                >
-                  {sec.label}
-                </motion.a>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </motion.nav>
-  );
-};
-
-// Enhanced Profile Section with 3D Effect
-const EnhancedProfileSection = ({ settings, setShowContact }: { 
-  settings: Setting[]; 
-  setShowContact: (show: boolean) => void;
-}) => {
-  const getSettingValue = (key: string): string => {
-    const setting = settings.find(s => s.key === key);
-    return setting?.value || '';
-  };
-
-  return (
-    <section id="profil" className="min-h-screen flex items-center justify-center relative overflow-hidden px-4 py-20">
-      <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        {/* Text Content */}
-        <motion.div
-          className="text-center lg:text-left space-y-6"
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <motion.div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 backdrop-blur-sm"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <FiStar className="text-yellow-400" />
-            <span className="text-sm font-medium text-purple-200">Hello, I&apos;m</span>
-          </motion.div>
-
-          <motion.h1
-            className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-300 to-white block">
-              Muhammad
-            </span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-white block">
-              Fathiir Farhansyah
-            </span>
-          </motion.h1>
-
-          <motion.div
-            className="text-xl md:text-2xl text-gray-300 mb-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            <span className="font-mono bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">
-              <TypingTitle />
-            </span>
-          </motion.div>
-
-          <motion.p
-            className="text-lg text-gray-400 leading-relaxed max-w-2xl"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-          >
-            Fullstack Developer with hands-on experience in building real-world applications, 
-            including e-commerce systems with payment gateway, shipping integration, 
-            and OAuth authentication.
-
-            Skilled in Golang, React.js, Flutter, and MySQL. Experienced in building, 
-            deploying, and managing applications independently, including using personal server environments.
-
-            Focused on performance, scalability, and user experience.
-          </motion.p>
-
-          <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
-          >
-            <motion.button
-              className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl font-semibold text-white shadow-2xl flex items-center gap-3 group"
-              whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(192, 132, 252, 0.3)" }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <FiDownload className="text-xl" />
-              <a href={getSettingValue('cv_url')} target="_blank" rel="noopener noreferrer" className="inline-block">
-                Download CV
-              </a>
-            </motion.button>
-            
-            <motion.button
-              onClick={() => setShowContact(true)}
-              className="px-8 py-4 border-2 border-purple-400 text-purple-300 rounded-2xl font-semibold backdrop-blur-sm hover:bg-purple-500/10 transition-all duration-300 flex items-center gap-3 group"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <FiMail className="text-xl" />
-              Get In Touch
-            </motion.button>
-          </motion.div>
-        </motion.div>
-
-        {/* 3D ID Card */}
-        <motion.div
-          className="flex justify-center lg:justify-end"
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <InteractiveIDCard />
-        </motion.div>
-      </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
-      >
-        <div className="w-6 h-10 border-2 border-purple-400 rounded-full flex justify-center">
-          <motion.div
-            className="w-1 h-3 bg-purple-400 rounded-full mt-2"
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-        </div>
-      </motion.div>
-    </section>
-  );
-};
-
-// Interactive 3D ID Card Component
-const InteractiveIDCard = () => {
-  const [rotation, setRotation] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    
-    const rotateY = ((x - centerX) / centerX) * 10;
-    const rotateX = ((centerY - y) / centerY) * 10;
-    
-    setRotation({ x: rotateX, y: rotateY });
-  };
-
-  const handleMouseLeave = () => {
-    setRotation({ x: 0, y: 0 });
-    setIsHovered(false);
-  };
-
-  return (
-    <motion.div
-      className="relative w-80 h-96 lg:w-96 lg:h-[480px] cursor-grab active:cursor-grabbing"
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      animate={{
-        rotateX: rotation.x,
-        rotateY: rotation.y,
-        scale: isHovered ? 1.05 : 1,
-      }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      style={{
-        transformStyle: "preserve-3d",
-        perspective: "1000px",
-      }}
-    >
-      {/* Main Card */}
-      <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl">
-        {/* Animated Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900" />
-        
-        {/* Holographic Effect */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="w-full h-full bg-gradient-to-r from-transparent via-white to-transparent transform rotate-45 scale-150" />
-        </div>
-
-        {/* Glow Effect */}
-        <motion.div
-          className="absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20"
-          animate={{ opacity: [0.3, 0.6, 0.3] }}
-          transition={{ duration: 3, repeat: Infinity }}
-        />
-
-        {/* Card Content */}
-        <div className="relative z-10 w-full h-full p-8 flex flex-col justify-between">
-          {/* Header */}
-          <div className="flex justify-between items-start">
-            <div>
-              <motion.div
-                className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-2xl mb-4"
-                whileHover={{ rotate: 360 }}
-                transition={{ duration: 0.5 }}
-              >
-                <FiCode className="text-white text-xl" />
-              </motion.div>
-              <h3 className="text-white text-sm font-semibold opacity-80">JUNIOR DEVELOPER</h3>
-            </div>
-            
-            {/* Company Logo/Badge */}
-            <motion.div
-              className="bg-white/10 backdrop-blur-lg rounded-2xl p-3 border border-white/20"
-              whileHover={{ scale: 1.1 }}
-            >
-              <div className="w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center">
-                <FiAward className="text-white text-sm" />
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Profile Section */}
-          <div className="flex-1 flex flex-col justify-center items-center space-y-6">
-            {/* Profile Image with Frame */}
-            <motion.div
-              className="relative"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              {/* Outer Ring */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 animate-spin-slow -m-2" />
-              {/* Image Container */}
-              <div className="relative rounded-full overflow-hidden w-32 h-32 border-4 border-gray-900 bg-gray-800">
-                <img
-                  src="/fatirr.jpg"
-                  alt="Muhammad Fathiir Farhansyah"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </motion.div>
-
-            {/* Name and Title */}
-            <div className="text-center">
-              <motion.h2
-                className="text-2xl font-bold text-white mb-2"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                Muhammad Fathiir Farhansyah
-              </motion.h2>
-              <motion.p
-                className="text-purple-300 font-mono text-sm"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-              >
-                Web/Mobile Developer
-              </motion.p>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="space-y-4">
-            {/* Status Bar */}
-            <div className="flex items-center justify-between text-xs text-gray-400">
-              <span>STATUS</span>
-              <motion.div
-                className="flex items-center gap-2"
-                animate={{ opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <div className="w-2 h-2 bg-green-400 rounded-full" />
-                <span className="text-green-400 font-semibold">AVAILABLE</span>
-              </motion.div>
-            </div>
-
-            {/* Tech Stack */}
-            <div className="flex justify-center gap-3">
-              {['Golang', 'Laravel', 'React', 'Python'].map((tech, index) => (
-                <motion.span
-                  key={tech}
-                  className="px-3 py-1 bg-white/5 rounded-full text-xs text-gray-300 border border-white/10 backdrop-blur-sm"
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.7 + index * 0.1 }}
-                  whileHover={{ scale: 1.1, backgroundColor: "rgba(147, 51, 234, 0.2)" }}
-                >
-                  {tech}
-                </motion.span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Floating Elements */}
-        <motion.div
-          className="absolute top-6 right-6 w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full shadow-2xl"
-          animate={{ y: [0, -10, 0], rotate: [0, 180, 360] }}
-          transition={{ duration: 4, repeat: Infinity }}
-        />
-        
-        <motion.div
-          className="absolute bottom-6 left-6 w-4 h-4 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full shadow-2xl"
-          animate={{ y: [0, 10, 0], scale: [1, 1.2, 1] }}
-          transition={{ duration: 3, repeat: Infinity, delay: 1 }}
-        />
-
-        {/* Scan Lines Effect */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent opacity-20 pointer-events-none" />
-      </div>
-
-      {/* Reflection Shadow */}
-      <motion.div
-        className="absolute -bottom-4 left-4 right-4 h-8 bg-purple-500/20 blur-xl rounded-full"
-        animate={{ opacity: [0.3, 0.6, 0.3] }}
-        transition={{ duration: 2, repeat: Infinity }}
-      />
-    </motion.div>
-  );
-};
-
-// Enhanced About Section
-const EnhancedAboutSection = ({ projects }: { projects: Project[] }) => {
-  const [projectsCount, setProjectsCount] = useState(0);
-  const [experienceYears, setExperienceYears] = useState(0);
-
-  useEffect(() => {
-    // Gunakan projects.length dari API (bukan hardcoded)
-    const targetProjects = projects.length; // Ini yang penting!
-    const targetYears = 2.5;
-    
-    const duration = 2000;
-    const startTime = Date.now();
-    
-    const animateCount = () => {
-      const currentTime = Date.now();
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      
-      const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
-      
-      const currentProjects = Math.floor(easeOut(progress) * targetProjects);
-      const currentYears = (easeOut(progress) * targetYears).toFixed(1);
-      
-      setProjectsCount(currentProjects);
-      setExperienceYears(parseFloat(currentYears));
-      
-      if (progress < 1) {
-        requestAnimationFrame(animateCount);
-      }
-    };
-    
-    animateCount();
-  }, [projects]); // projects sebagai dependency
-
-  return (
-    <section id="about" className="min-h-screen flex items-center justify-center px-4 py-20">
-      <div className="w-full max-w-6xl mx-auto">
-        <motion.h2 
-          className="text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          About Me
-        </motion.h2>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Laptop Animation */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="relative"
-          >
-            <GlassCard className="p-8">
-              <div className="bg-gray-800 rounded-xl p-6">
-                <TypingAnimation
-                  lines={[
-                    "const developer = {",
-                    `  name: 'Muhammad Fathiir Farhansyah',`,
-                    `  projects: ${projects.length},`, // Tampilkan jumlah real
-                    "  skills: ['React', 'Golang', 'Laravel', 'Flutter'],",
-                    "  focus: 'User experience & performance',",
-                    "  philosophy: 'Clean, maintainable code',",
-                    "};",
-                    "",
-                    "function buildFuture() {",
-                    "  return innovate().then(grow);",
-                    "}"
-                  ]}
-                  speed={40}
-                  className="text-sm"
-                />
-              </div>
-            </GlassCard>
-          </motion.div>
-
-          {/* Personal Info */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6"
-          >
-            <GlassCard className="p-6">
-              <h3 className="text-2xl font-bold mb-4 text-purple-300">My Journey</h3>
-              <p className="text-gray-300 leading-relaxed">
-                I am a Fullstack Developer with 1 year of professional experience and an additional 1+ year of experience through personal projects, totaling around {experienceYears}+ years of experience. I have built several applications, around {projectsCount}+ projects, including an e-commerce system called “Pempek Kito” with an integrated payment gateway (Midtrans), delivery service (Biteship), and OAuth authentication (Google & Facebook). Through this project, I gained experience in backend development, API integration, and system deployment. I am comfortable working with Golang (Gin), React.js, Flutter, and MySQL. I also have experience using Git and deploying applications via hosting services and personal server setups. I enjoy solving real problems, improving system performance, and continuously learning new technologies to build better and more scalable applications.
-              </p>
-            </GlassCard>
-
-            <div className="grid grid-cols-2 gap-4">
-              <GlassCard className="p-4 text-center">
-                <FiAward className="text-3xl text-yellow-400 mx-auto mb-2" />
-                <motion.div 
-                  className="text-2xl font-bold text-white"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 1 }}
-                >
-                  {experienceYears}+
-                </motion.div>
-                <div className="text-gray-400 text-sm">Years of personal and professional experience </div>
-              </GlassCard>
-              
-              <GlassCard className="p-4 text-center">
-                <FiCode className="text-3xl text-purple-400 mx-auto mb-2" />
-                <motion.div 
-                  className="text-2xl font-bold text-white"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 1.5 }}
-                >
-                  {projectsCount}+
-                </motion.div>
-                <div className="text-gray-400 text-sm">Projects Completed</div>
-              </GlassCard>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// Enhanced Projects Section
-const EnhancedProjectsSection = ({ projects }: { projects: Project[] }) => {
-  console.log('Projects data in EnhancedProjectsSection:', projects);
-  
-  return (
-    <section id="projek" className="min-h-screen flex items-center justify-center px-4 py-20">
-      <div className="w-full max-w-7xl mx-auto">
-        <motion.h2 
-          className="text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          My Projects
-        </motion.h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ y: -10, scale: 1.02 }}
-              className="group cursor-pointer"
-            >
-              <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl overflow-hidden h-full flex flex-col hover:bg-white/10 transition-all duration-300 shadow-xl hover:shadow-2xl">
-                {/* Project Image */}
-                <div className="relative h-48 overflow-hidden">
-                  <motion.img
-                    src={project.image_url || '/default-project.jpg'}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    whileHover={{ scale: 1.1 }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  
-                  {/* Project Status Badge */}
-                  <div className="absolute top-4 left-4">
-                    <span className={`px-3 py-1 text-xs font-medium rounded-full backdrop-blur-sm border ${
-                      project.status === 'completed' 
-                        ? 'bg-green-500/20 text-green-300 border-green-400/30'
-                        : project.status === 'in_progress'
-                        ? 'bg-yellow-500/20 text-yellow-300 border-yellow-400/30'
-                        : project.status === 'published'
-                        ? 'bg-blue-500/20 text-blue-300 border-blue-400/30'
-                        : 'bg-purple-500/20 text-purple-300 border-purple-400/30'
-                    }`}>
-                      {project.status === 'published' ? '🚀 Published' : 
-                       project.status === 'completed' ? '✅ Completed' :
-                       project.status === 'in_progress' ? '🔄 In Progress' : '💡 Planned'}
-                    </span>
-                  </div>
-
-                  {/* Featured Badge */}
-                  {project.is_featured && (
-                    <div className="absolute top-4 right-4">
-                      <span className="px-2 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold rounded-full backdrop-blur-sm border border-white/20">
-                        ⭐ Featured
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Project Content */}
-                <div className="p-6 flex-1 flex flex-col">
-                  {/* Project Title */}
-                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors line-clamp-2">
-                    {project.title}
-                  </h3>
-                  
-                  {/* Project Description */}
-                  <p className="text-gray-300 text-sm mb-4 flex-1 line-clamp-3 leading-relaxed">
-                    {project.description}
-                  </p>
-
-                  {/* Project Tags */}
-                  {project.tags && project.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.tags.map(tag => (
-                        <motion.span
-                          key={tag.id}
-                          className="px-3 py-1.5 text-xs font-medium rounded-full border backdrop-blur-sm flex items-center gap-1"
-                          style={{
-                            backgroundColor: `${tag.color}15`,
-                            color: tag.color,
-                            borderColor: `${tag.color}30`
-                          }}
-                          whileHover={{ 
-                            scale: 1.05,
-                            backgroundColor: `${tag.color}25`,
-                            boxShadow: `0 0 10px ${tag.color}40`
-                          }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <div 
-                            className="w-2 h-2 rounded-full"
-                            style={{ backgroundColor: tag.color }}
-                          />
-                          {tag.name}
-                        </motion.span>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Project Meta */}
-                  <div className="flex items-center justify-between mb-4 text-xs text-gray-400">
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1">
-                        <FiCalendar className="text-xs" />
-                        <span>
-                          {new Date(project.created_at).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric'
-                          })}
-                        </span>
-                      </div>
-                      {project.display_order > 0 && (
-                        <div className="flex items-center gap-1">
-                          <FiStar className="text-xs" />
-                          <span>#{project.display_order}</span>
-                        </div>
-                      )}
-                    </div>
-                    
-                    {/* Tech Stack Icons based on tags */}
-                    <div className="flex gap-1">
-                      {project.tags?.slice(0, 3).map(tag => (
-                        <div 
-                          key={tag.id}
-                          className="w-3 h-3 rounded-full border border-white/20"
-                          style={{ backgroundColor: tag.color }}
-                          title={tag.name}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Project Links */}
-                  <div className="flex gap-3 mt-auto pt-4 border-t border-white/10">
-                    {project.demo_url && project.demo_url !== '#' && (
-                      <motion.a
-                        href={project.demo_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 px-3 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-purple-500/25"
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <FiExternalLink className="text-xs" />
-                        Live Demo
-                      </motion.a>
-                    )}
-                    
-                    {project.code_url && project.code_url !== '#' && (
-                      <motion.a
-                        href={project.code_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`flex-1 px-3 py-2 border rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 backdrop-blur-sm ${
-                          project.demo_url && project.demo_url !== '#'
-                            ? 'border-purple-400 text-purple-300 hover:bg-purple-500/10'
-                            : 'border-purple-400 text-purple-300 hover:bg-purple-500/10'
-                        }`}
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <FiCode className="text-xs" />
-                        Source Code
-                      </motion.a>
-                    )}
-                  </div>
-                </div>
-
-                {/* Hover Effect Border */}
-                <motion.div
-                  className="absolute inset-0 border-2 border-transparent bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                  whileHover={{ opacity: 1 }}
-                />
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Empty State */}
-        {projects.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            className="text-center py-20"
-          >
-            <motion.div
-              className="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-3xl flex items-center justify-center border border-white/10 shadow-2xl"
-              animate={{ rotate: [0, 5, -5, 0] }}
-              transition={{ duration: 4, repeat: Infinity }}
-            >
-              <FiCode className="text-4xl text-purple-300" />
-            </motion.div>
-            <h3 className="text-2xl font-semibold text-white mb-4">No Projects Yet</h3>
-            <p className="text-gray-300 text-lg max-w-md mx-auto mb-8">
-              Amazing projects are coming soon! Stay tuned for some exciting developments.
-            </p>
-            
-            {/* Animated Dots */}
-            <div className="flex justify-center gap-3 mt-6">
-              {[0, 1, 2].map((dot) => (
-                <motion.div
-                  key={dot}
-                  className="w-3 h-3 bg-purple-400 rounded-full"
-                  animate={{ y: [0, -12, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity, delay: dot * 0.2 }}
-                />
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </div>
-    </section>
-  );
-};
-
-// Enhanced Experiences Section
-const EnhancedExperiencesSection = ({ experiences }: { experiences: Experience[] }) => {
-  return (
-    <section id="pengalaman" className="min-h-screen flex items-center justify-center px-4 py-20">
-      <div className="w-full max-w-6xl mx-auto">
-        <motion.h2 
-          className="text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          My Experience
-        </motion.h2>
-
-        <div className="relative">
-          {/* Timeline Line */}
-          <div className="absolute left-6 md:left-1/2 h-full w-1 bg-gradient-to-b from-purple-500/30 to-pink-500/30 transform -translate-x-1/2" />
-          
-          <div className="space-y-12">
-            {experiences.map((exp, index) => (
-              <motion.div
-                key={exp.id}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`relative flex ${
-                  index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-                } items-start gap-8`}
-              >
-                {/* Timeline Dot */}
-                <div className="absolute left-6 md:left-1/2 w-4 h-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transform -translate-x-1/2 z-10" />
-                
-                {/* Content */}
-                <div className={`flex-1 ml-12 md:ml-0 ${
-                  index % 2 === 0 ? 'md:pr-8' : 'md:pl-8'
-                }`}>
-                  <GlassCard className="p-8 group hover:bg-white/15 transition-all duration-300">
-                    {/* Date Badge */}
-                    <motion.div
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full mb-4"
-                      whileHover={{ scale: 1.05 }}
-                    >
-                      <FiStar className="text-yellow-400 text-sm" />
-                      <span className="text-sm font-medium text-purple-200">
-                        {exp.start_year} - {exp.current_job ? 'Present' : exp.end_year}
-                      </span>
-                    </motion.div>
-
-                    {/* Job Title */}
-                    <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-purple-300 transition-colors">
-                      {exp.title}
-                    </h3>
-
-                    {/* Company & Location */}
-                    <div className="flex items-center gap-4 text-gray-300 mb-4">
-                      <span className="font-semibold text-purple-300">{exp.company}</span>
-                      <span className="text-sm">• {exp.location}</span>
-                    </div>
-
-                    {/* Responsibilities */}
-                    <div className="space-y-3 mb-6">
-                      <h4 className="text-lg font-semibold text-white">Responsibilities:</h4>
-                      <ul className="space-y-2">
-                        {exp.responsibilities.map((responsibility, idx) => (
-                          <motion.li
-                            key={responsibility.id}
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ delay: index * 0.1 + idx * 0.05 }}
-                            className="flex items-start gap-3 text-gray-300"
-                          >
-                            <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0" />
-                            <span>{responsibility.description}</span>
-                          </motion.li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Skills */}
-                    {exp.skills && exp.skills.length > 0 && (
-                      <div className="flex flex-wrap gap-2">
-                        {exp.skills.map((skill, idx) => (
-                          <motion.span
-                            key={idx}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: index * 0.1 + idx * 0.05 }}
-                            className="px-3 py-1 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-400/30 rounded-full text-sm text-purple-200"
-                          >
-                            {skill.skill_name}
-                          </motion.span>
-                        ))}
-                      </div>
-                    )}
-                  </GlassCard>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// Enhanced Education Section
-const EnhancedEducationSection = ({ education }: { education: Education[] }) => {
-  return (
-    <section id="studi" className="min-h-screen flex items-center justify-center px-4 py-20">
-      <div className="w-full max-w-4xl mx-auto">
-        <motion.h2 
-          className="text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          Education
-        </motion.h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {education.map((edu, index) => (
-            <motion.div
-              key={edu.id}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ y: -10 }}
-            >
-              <GlassCard className="p-8 h-full group hover:bg-white/15 transition-all duration-300">
-                {/* School Icon */}
-                <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl flex items-center justify-center group-hover:from-purple-500/30 group-hover:to-pink-500/30 transition-all duration-300">
-                  <FiAward className="text-2xl text-purple-300" />
-                </div>
-
-                {/* Degree & Major */}
-                <h3 className="text-xl font-bold text-white text-center mb-2 group-hover:text-purple-300 transition-colors">
-                  {edu.degree}
-                </h3>
-                <p className="text-lg text-purple-300 text-center font-semibold mb-4">
-                  {edu.major}
-                </p>
-
-                {/* School Name */}
-                <p className="text-gray-300 text-center mb-4 font-medium">
-                  {edu.school}
-                </p>
-
-                {/* Duration */}
-                <div className="flex justify-center mb-4">
-                  <span className="px-3 py-1 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full text-sm text-purple-200">
-                    {edu.start_year} - {edu.end_year}
-                  </span>
-                </div>
-
-                {/* Description */}
-                <p className="text-gray-400 text-center text-sm mb-6 leading-relaxed">
-                  {edu.description}
-                </p>
-
-                {/* Achievements */}
-                {edu.achievements && edu.achievements.length > 0 && (
-                  <div className="space-y-3">
-                    <h4 className="text-sm font-semibold text-white text-center">Achievements:</h4>
-                    <ul className="space-y-2">
-                      {edu.achievements.map((achievement, idx) => (
-                        <motion.li
-                          key={achievement.id}
-                          initial={{ opacity: 0, x: -10 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.1 + idx * 0.05 }}
-                          className="flex items-center gap-2 text-xs text-gray-300"
-                        >
-                          <div className="w-1.5 h-1.5 bg-purple-400 rounded-full flex-shrink-0" />
-                          <span>{achievement.achievement}</span>
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </GlassCard>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// Enhanced Testimonials Section
-const EnhancedTestimonialsSection = ({ testimonials }: { testimonials: Testimonial[] }) => {
-  return (
-    <section id="testimoni" className="min-h-screen flex items-center justify-center px-4 py-20">
-      <div className="w-full max-w-6xl mx-auto">
-        <motion.h2 
-          className="text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          Testimonials
-        </motion.h2>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={testimonial.id}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ y: -10 }}
-            >
-              <GlassCard className="p-8 h-full group hover:bg-white/15 transition-all duration-300">
-                {/* Quote Icon */}
-                <div className="text-4xl text-purple-400/50 mb-4">&quot;</div>
-                
-                {/* Testimonial Text */}
-                <p className="text-gray-300 italic mb-6 leading-relaxed">
-                  &quot;{testimonial.message}&quot;
-                </p>
-
-                {/* Rating */}
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ scale: 0 }}
-                      whileInView={{ scale: 1 }}
-                      transition={{ delay: index * 0.1 + i * 0.1 }}
-                    >
-                      <FiStar 
-                        className={`text-sm ${
-                          i < testimonial.rating 
-                            ? 'text-yellow-400 fill-yellow-400' 
-                            : 'text-gray-600'
-                        }`}
-                      />
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* Client Info */}
-                <div className="flex items-center gap-4">
-                  {/* Avatar */}
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
-                    {testimonial.name.charAt(0)}
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-semibold text-white">{testimonial.name}</h4>
-                    <p className="text-sm text-purple-300">{testimonial.title}</p>
-                  </div>
-                </div>
-              </GlassCard>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Empty State */}
-        {testimonials.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            className="text-center py-12"
-          >
-            <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-3xl flex items-center justify-center">
-              <FiMessageSquare className="text-3xl text-purple-300" />
-            </div>
-            <h3 className="text-xl font-semibold text-white mb-2">No Testimonials Yet</h3>
-            <p className="text-gray-400">Be the first to share your experience!</p>
-          </motion.div>
-        )}
-      </div>
-    </section>
-  );
-};
-
-// Enhanced Blog Section
-const EnhancedBlogSection = ({ blogPosts }: { blogPosts: BlogPost[] }) => {
-  // Sort blog posts by publish_date (newest first) and take 5 latest
-  const latestBlogPosts = blogPosts
-    .sort((a, b) => new Date(b.publish_date).getTime() - new Date(a.publish_date).getTime())
-    .slice(0, 5);
-
-  return (
-    <section id="blog" className="min-h-screen flex items-center justify-center px-4 py-20">
-      <div className="w-full max-w-6xl mx-auto">
-        <motion.h2 
-          className="text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          Latest Blog
-        </motion.h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {latestBlogPosts.map((post, index) => (
-            <Link key={post.id} href={`/blog/${post.id}`} className="block">
-              <motion.article
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ y: -10, scale: 1.02 }}
-                className="group cursor-pointer h-full"
-              >
-                {/* Glass Card Replacement */}
-                <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl overflow-hidden h-full flex flex-col hover:bg-white/10 transition-all duration-300 shadow-xl hover:shadow-2xl">
-                  {/* Gradient Header sebagai pengganti gambar */}
-                  <div className="relative h-40 overflow-hidden">
-                    <motion.div 
-                      className="absolute inset-0 bg-gradient-to-br from-purple-500/40 via-pink-500/30 to-indigo-500/40"
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ duration: 0.5 }}
-                    />
-                    
-                    {/* Pattern Overlay */}
-                    <div className="absolute inset-0 opacity-[0.15]">
-                      <div className="w-full h-full bg-gradient-to-r from-transparent via-white to-transparent transform rotate-45 scale-150" />
-                    </div>
-                    
-                    {/* Icon dan Title di Header */}
-                    <div className="absolute inset-0 flex items-center justify-center p-6">
-                      <div className="text-center w-full">
-                        <motion.div
-                          className="w-14 h-14 mx-auto mb-4 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-white/30"
-                          whileHover={{ rotate: 360, scale: 1.1 }}
-                          transition={{ duration: 0.5 }}
-                        >
-                          <FiMessageSquare className="text-2xl text-white" />
-                        </motion.div>
-                        <h3 className="text-xl font-bold text-white line-clamp-2 leading-tight px-2">
-                          {post.title}
-                        </h3>
-                      </div>
-                    </div>
-
-                    {/* Date Badge */}
-                    <div className="absolute top-4 left-4">
-                      <span className="px-3 py-2 bg-black/50 backdrop-blur-sm rounded-full text-sm text-white border border-white/20 font-medium">
-                        {new Date(post.publish_date).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric'
-                        })}
-                      </span>
-                    </div>
-
-                    {/* New Badge untuk artikel terbaru (3 hari terakhir) */}
-                    {isNewPost(post.publish_date) && (
-                      <div className="absolute top-4 right-4">
-                        <span className="px-2 py-1 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full text-xs text-white font-bold animate-pulse">
-                          NEW
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 flex-1 flex flex-col">
-                    {/* Tags */}
-                    {post.tags && post.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {post.tags.slice(0, 3).map(tag => (
-                          <motion.span
-                            key={tag.id}
-                            className="px-3 py-1.5 text-sm bg-gradient-to-r from-purple-500/40 to-pink-500/40 rounded-full text-purple-100 border border-purple-400/40 backdrop-blur-sm font-medium"
-                            whileHover={{ scale: 1.05 }}
-                          >
-                            #{tag.name}
-                          </motion.span>
-                        ))}
-                      </div>
-                    )}
-                    
-                    {/* Excerpt */}
-                    <motion.p 
-                      className="text-gray-300 text-base mb-6 flex-1 line-clamp-3 leading-relaxed"
-                      whileHover={{ color: "#E9D5FF" }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      {post.excerpt || "Discover more about this fascinating topic in our latest blog post..."}
-                    </motion.p>
-
-                    {/* Stats */}
-                    <div className="flex items-center gap-6 mb-4 text-sm text-gray-400">
-                      <div className="flex items-center gap-2">
-                        <FiEye className="text-base" />
-                        <span>{post.view_count || 0} views</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <FiClock className="text-base" />
-                        <span>{Math.ceil((post.content?.length || 0) / 200)} min read</span>
-                      </div>
-                    </div>
-
-                    {/* Footer */}
-                    <div className="flex items-center justify-between pt-4 border-t border-white/20">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center shadow-lg">
-                          <FiUser className="text-sm text-white" />
-                        </div>
-                        <span className="text-sm text-gray-300 font-medium">Admin</span>
-                      </div>
-                      
-                      <motion.div
-                        className="flex items-center gap-2 text-purple-300 hover:text-purple-200 transition-colors text-base font-semibold"
-                        whileHover={{ x: 5 }}
-                      >
-                        Read More
-                        <FiExternalLink className="text-sm" />
-                      </motion.div>
-                    </div>
-                  </div>
-
-                  {/* Hover Effect Border */}
-                  <motion.div
-                    className="absolute inset-0 border-2 border-transparent bg-gradient-to-r from-purple-500/30 to-pink-500/30 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                    whileHover={{ opacity: 1 }}
-                  />
-                </div>
-              </motion.article>
-            </Link>
-          ))}
-        </div>
-
-        {/* View All Button */}
-        {blogPosts.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="text-center mt-16"
-          >
-            <div className="mb-6 text-gray-400">
-              <p className="text-lg">Showing {latestBlogPosts.length} latest articles</p>
-              {blogPosts.length > 5 && (
-                <p className="text-sm mt-1">
-                  {blogPosts.length - 5} more articles available
-                </p>
-              )}
-            </div>
-            
-            <Link href="/blog">
-              <motion.button
-                className="px-8 py-4 bg-gradient-to-r from-purple-500/30 to-pink-500/30 border border-purple-400/50 text-purple-100 rounded-2xl font-semibold hover:from-purple-500/40 hover:to-pink-500/40 transition-all duration-300 flex items-center gap-3 mx-auto backdrop-blur-lg shadow-lg hover:shadow-xl text-lg"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                View All {blogPosts.length} Articles
-                <FiExternalLink className="text-xl" />
-              </motion.button>
-            </Link>
-          </motion.div>
-        )}
-
-        {/* Empty State */}
-        {blogPosts.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            className="text-center py-20"
-          >
-            <motion.div
-              className="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-3xl flex items-center justify-center border border-white/20 shadow-2xl"
-              animate={{ rotate: [0, 5, -5, 0] }}
-              transition={{ duration: 4, repeat: Infinity }}
-            >
-              <FiMessageSquare className="text-4xl text-purple-200" />
-            </motion.div>
-            <h3 className="text-2xl font-semibold text-white mb-4">No Articles Yet</h3>
-            <p className="text-gray-300 text-lg max-w-md mx-auto mb-8">
-              Stay tuned! Amazing blog posts are coming soon to inspire and educate.
-            </p>
-            
-            {/* Animated Dots */}
-            <div className="flex justify-center gap-3 mt-6">
-              {[0, 1, 2].map((dot) => (
-                <motion.div
-                  key={dot}
-                  className="w-3 h-3 bg-purple-400 rounded-full"
-                  animate={{ y: [0, -12, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity, delay: dot * 0.2 }}
-                />
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </div>
-    </section>
-  );
-};
-
-// Helper function to check if post is new (published within last 3 days)
-function isNewPost(publishDate: string): boolean {
-  const postDate = new Date(publishDate);
-  const threeDaysAgo = new Date();
-  threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
-  return postDate > threeDaysAgo;
-}
-
-// Enhanced Skills Section
-const EnhancedSkillsSection = ({ skills, certificates }: { skills: Skill[]; certificates: Certificate[] }) => {
-  // Handle undefined or null data
-  const safeSkills = skills || [];
-  const safeCertificates = certificates || [];
-
-  // Filter skills dengan handling untuk null/undefined
-  const featuredSkills = safeSkills.filter(skill => {
-    // Handle berbagai kemungkinan tipe data
-    if (skill.is_featured === true || skill.is_featured === 'true') return true;
-    if (skill.is_featured === false || skill.is_featured === 'false' || skill.is_featured === null) return false;
-    return false; // default untuk nilai yang tidak dikenali
-  });
-
-  const skillCollection = safeSkills.filter(skill => {
-    // Handle berbagai kemungkinan tipe data
-    if (skill.is_featured === false || skill.is_featured === 'false') return true;
-    if (skill.is_featured === true || skill.is_featured === 'true' || skill.is_featured === null) return false;
-    return true; // default anggap sebagai non-featured
-  });
-
-  // Debug: console.log untuk memastikan filter bekerja
-  console.log('All skills:', safeSkills);
-  console.log('Featured skills:', featuredSkills);
-  console.log('Skill collection:', skillCollection);
-  console.log('Certificates:', safeCertificates);
-
-  // Debug detail untuk setiap skill
-  safeSkills.forEach((skill, index) => {
-    console.log(`Skill ${index}:`, {
-      name: skill.name,
-      is_featured: skill.is_featured,
-      type: typeof skill.is_featured,
-      value: skill.is_featured
-    });
-  });
-
-  return (
-    <section id="skill" className="min-h-screen flex items-center justify-center px-4 py-20">
-      <div className="w-full max-w-7xl mx-auto">
-        <motion.h2 
-          className="text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          Skills & Certifications
-        </motion.h2>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
-          {/* Featured Skills dengan Progress Bars */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <GlassCard className="p-8">
-              <h3 className="text-2xl font-bold mb-8 text-purple-300 flex items-center gap-3">
-                <FiBarChart2 />
-                Core Competencies
-              </h3>
-              
-              {featuredSkills.length > 0 ? (
-                <div className="space-y-6">
-                  {featuredSkills.map((skill, index) => (
-                    <motion.div
-                      key={skill.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="group"
-                    >
-                      <div className="flex justify-between items-center mb-2">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center group-hover:from-purple-500/30 group-hover:to-pink-500/30 transition-all duration-300">
-                            {skill.icon_url ? (
-                              <img 
-                                src={skill.icon_url} 
-                                alt={skill.name}
-                                className="w-6 h-6 object-contain"
-                              />
-                            ) : (
-                              <FiCode className="text-purple-300 text-lg" />
-                            )}
-                          </div>
-                          <span className="font-medium text-white group-hover:text-purple-300 transition-colors">
-                            {skill.name}
-                          </span>
-                        </div>
-                        <span className="text-purple-300 font-mono text-sm bg-purple-500/10 px-2 py-1 rounded">
-                          {skill.value}%
-                        </span>
-                      </div>
-                      
-                      <div className="w-full h-2.5 bg-white/10 rounded-full overflow-hidden">
-                        <motion.div
-                          className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full relative"
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${skill.value}%` }}
-                          transition={{ duration: 1.2, delay: index * 0.1, type: "spring" }}
-                        >
-                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
-                        </motion.div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8 text-gray-400">
-                  <FiBarChart2 className="text-4xl mx-auto mb-4 opacity-50" />
-                  <p>No featured skills available</p>
-                  <p className="text-sm mt-2">
-                    {safeSkills.length === 0 ? 'No skills data found' : 'Skills with is_featured: true will appear here'}
-                  </p>
-                  <p className="text-xs mt-1">Total skills: {safeSkills.length}, Featured: {featuredSkills.length}</p>
-                </div>
-              )}
-            </GlassCard>
-          </motion.div>
-
-          {/* Certifications - tetap sama */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <GlassCard className="p-8">
-              <h3 className="text-2xl font-bold mb-8 text-purple-300 flex items-center gap-3">
-                <FiAward />
-                Certifications
-              </h3>
-              
-              {safeCertificates.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {safeCertificates.map((cert, index) => (
-                    <motion.a
-                      key={cert.id}
-                      href={cert.credential_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      whileHover={{ y: -8, scale: 1.03 }}
-                      className="block cursor-pointer group"
-                    >
-                      <GlassCard className="p-6 h-full transition-all duration-300 hover:bg-white/15 border border-white/10 hover:border-purple-400/30">
-                        {/* Certificate Image Container */}
-                        <div className="relative mb-4 rounded-xl overflow-hidden bg-gradient-to-br from-purple-500/10 to-pink-500/10">
-                          {cert.image_url ? (
-                            <div className="aspect-video relative">
-                              <img
-                                src={cert.image_url}
-                                alt={cert.name}
-                                className="w-full h-full object-contain p-2 transition-transform duration-500 group-hover:scale-105"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                            </div>
-                          ) : (
-                            <div className="aspect-video flex items-center justify-center">
-                              <FiAward className="text-4xl text-purple-300 opacity-60" />
-                            </div>
-                          )}
-                          
-                          <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-sm rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <FiExternalLink className="text-white text-xs" />
-                          </div>
-                        </div>
-
-                        <div className="text-center">
-                          <h4 className="font-bold text-white mb-2 text-sm leading-tight line-clamp-2 group-hover:text-purple-300 transition-colors">
-                            {cert.name}
-                          </h4>
-                          
-                          <p className="text-gray-400 text-xs mb-3 line-clamp-2">
-                            {cert.issuer}
-                          </p>
-                          
-                          <div className="flex items-center justify-center gap-1 text-purple-300 text-xs">
-                            <FiCalendar className="text-xs" />
-                            <span>{new Date(cert.issue_date).toLocaleDateString('en-US', { 
-                              year: 'numeric', 
-                              month: 'short',
-                              day: 'numeric'
-                            })}</span>
-                          </div>
-                        </div>
-
-                        <div className="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-purple-500/20 transition-all duration-300" />
-                      </GlassCard>
-                    </motion.a>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8 text-gray-400">
-                  <FiAward className="text-4xl mx-auto mb-4 opacity-50" />
-                  <p>No certifications available</p>
-                </div>
-              )}
-            </GlassCard>
-          </motion.div>
-        </div>
-
-        {/* Skill Collection - Non-featured skills */}
-        {skillCollection.length > 0 ? (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <GlassCard className="p-8">
-              <h3 className="text-2xl font-bold mb-8 text-purple-300 flex items-center gap-3">
-                <FiCode />
-                Technology Stack
-              </h3>
-              
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                {skillCollection.map((skill, index) => (
-                  <motion.div
-                    key={skill.id}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, delay: index * 0.05 }}
-                    whileHover={{ y: -5, scale: 1.05 }}
-                    className="group"
-                  >
-                    <GlassCard className="p-4 text-center transition-all duration-300 hover:bg-white/15 border border-white/10 hover:border-purple-400/30">
-                      <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center group-hover:from-purple-500/30 group-hover:to-pink-500/30 transition-all duration-300">
-                        {skill.icon_url ? (
-                          <img 
-                            src={skill.icon_url} 
-                            alt={skill.name}
-                            className="w-6 h-6 object-contain"
-                          />
-                        ) : (
-                          <FiCode className="text-purple-300 text-lg" />
-                        )}
-                      </div>
-                      
-                      <span className="text-sm font-medium text-white group-hover:text-purple-300 transition-colors">
-                        {skill.name}
-                      </span>
-                    </GlassCard>
-                  </motion.div>
-                ))}
-              </div>
-            </GlassCard>
-          </motion.div>
-        ) : (
-          safeSkills.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <GlassCard className="p-8">
-                <h3 className="text-2xl font-bold mb-8 text-purple-300 flex items-center gap-3">
-                  <FiCode />
-                  Technology Stack
-                </h3>
-                <div className="text-center py-8 text-gray-400">
-                  <FiCode className="text-4xl mx-auto mb-4 opacity-50" />
-                  <p>No additional skills available</p>
-                  <p className="text-sm mt-2">Skills with is_featured: false will appear here</p>
-                  <p className="text-xs mt-1">Total skills: {safeSkills.length}, Featured: {featuredSkills.length}, Non-featured: {skillCollection.length}</p>
-                </div>
-              </GlassCard>
-            </motion.div>
-          )
-        )}
-      </div>
-    </section>
-  );
-};
-
-// Enhanced Contact Section
-const EnhancedContactSection = ({ settings }: { settings: Setting[] }) => {
-  const getSettingValue = (key: string): string => {
-    const setting = settings.find(s => s.key === key);
-    return setting?.value || '';
-  };
-
-  return (
-    <section id="kontak" className="min-h-screen flex items-center justify-center px-4 py-20">
-      <div className="w-full max-w-4xl mx-auto">
-        <motion.h2 
-          className="text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          Get In Touch
-        </motion.h2>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <GlassCard className="p-8">
-              <h3 className="text-2xl font-bold mb-6 text-purple-300">Send Message</h3>
-              
-              <form className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Name</label>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400"
-                    placeholder="Your name"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
-                  <input
-                    type="email"
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400"
-                    placeholder="your.email@example.com"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Message</label>
-                  <textarea
-                    rows={5}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400 resize-none"
-                    placeholder="Your message here..."
-                  />
-                </div>
-                
-                <motion.button
-                  type="submit"
-                  className="w-full px-6 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-300"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Send Message
-                </motion.button>
-              </form>
-            </GlassCard>
-          </motion.div>
-
-          {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6"
-          >
-            <GlassCard className="p-6">
-              <h3 className="text-2xl font-bold mb-6 text-purple-300">Contact Info</h3>
-              
-              <div className="space-y-4">
-                <div className="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center">
-                    <FiMail className="text-xl text-purple-300" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-400">Email</p>
-                    <p className="text-white font-medium">{getSettingValue('contact_email') || 'your@email.com'}</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center">
-                    <FiMessageSquare className="text-xl text-purple-300" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-400">Phone</p>
-                    <p className="text-white font-medium">{getSettingValue('phone_number') || '+62 812-3456-7890'}</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center">
-                    <FiStar className="text-xl text-purple-300" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-400">Location</p>
-                    <p className="text-white font-medium">{getSettingValue('location') || 'Palembang, Indonesia'}</p>
-                  </div>
-                </div>
-              </div>
-            </GlassCard>
-
-            {/* CV Download */}
-            <GlassCard className="p-6 text-center">
-              <h4 className="text-lg font-semibold text-white mb-3">Download My CV</h4>
-              <motion.a
-                href={getSettingValue('cv_url')}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-purple-400 text-purple-300 rounded-xl font-semibold hover:bg-purple-500/10 transition-all duration-300"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <FiDownload className="text-xl" />
-                Download CV
-              </motion.a>
-            </GlassCard>
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
+// ============================================================
+// MAIN PORTFOLIO
+// ============================================================
 export default function Portfolio() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showContact, setShowContact] = useState(false);
-  
-  // State untuk data dari API
   const [sections, setSections] = useState<Section[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [experiences, setExperiences] = useState<Experience[]>([]);
@@ -2343,135 +1493,102 @@ export default function Portfolio() {
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
-  // Fungsi untuk mengambil semua data dari API
-  const fetchAllData = async () => {
-    try {
-      setLoading(true);
-      setFetchError(null);
-
-      const res = await fetch('/api/portofolio');
-      if (!res.ok) throw new Error(`Failed to load data: ${res.status}`);
-
-      const payload = await res.json();
-      
-      console.log('Full API response:', payload);
-      console.log('Projects from API:', payload.projects);
-      console.log('Source:', payload.source);
-
-      setSections(payload.sections || []);
-      setProjects(Array.isArray(payload.projects) ? payload.projects : []);
-      setExperiences(payload.experiences || []);
-      setSkills(payload.skills || []);
-      setCertificates(payload.certificates || []);
-      setEducation(payload.education || []);
-      setTestimonials(payload.testimonials || []);
-      setBlogPosts(payload.blogPosts || []);
-      setSocialLinks(payload.socialLinks || []);
-      setSettings(payload.settings || []);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setFetchError((error as Error)?.message || 'Unknown error');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchAllData();
+    (async () => {
+      try {
+        const res = await fetch('/api/portofolio');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const d = await res.json();
+        setSections(d.sections || []);
+        setProjects(Array.isArray(d.projects) ? d.projects : []);
+        setExperiences(d.experiences || []);
+        setSkills(d.skills || []);
+        setCertificates(d.certificates || []);
+        setEducation(d.education || []);
+        setTestimonials(d.testimonials || []);
+        setBlogPosts(d.blogPosts || []);
+        setSocialLinks(d.socialLinks || []);
+        setSettings(d.settings || []);
+      } catch (err) {
+        setFetchError((err as Error)?.message);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
-        <AnimatedBackground />
-        <FloatingParticles />
-        <div className="text-center text-white z-10">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="w-16 h-16 border-4 border-purple-400 border-t-transparent rounded-full mx-auto mb-4"
-          />
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            Loading Portfolio...
-          </motion.p>
+      <>
+        <GlobalStyles />
+        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
+          <div style={{ textAlign: 'center' }}>
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+              style={{ width: 44, height: 44, border: '2px solid rgba(0,245,212,0.15)', borderTopColor: 'var(--cyan)', borderRadius: '50%', margin: '0 auto 20px' }}
+            />
+            <div className="mono" style={{ fontSize: 12, color: 'var(--text-muted)', letterSpacing: '0.15em' }}>LOADING PORTFOLIO...</div>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="relative min-h-screen text-white overflow-x-hidden">
-      {/* Background Elements */}
-      <AnimatedBackground />
-      <FloatingParticles />
-      
-      {/* Enhanced Navigation */}
-      <EnhancedNavigation 
-        sections={sections} 
-        menuOpen={menuOpen} 
-        setMenuOpen={setMenuOpen} 
-      />
+    <>
+      <GlobalStyles />
+      <Background />
+      <CursorGlow />
 
-      {/* Main Content */}
-      <main className="relative z-10">
-        {/* Profile Section */}
-        <EnhancedProfileSection settings={settings} setShowContact={setShowContact} />
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        <Navigation sections={sections} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+        <main>
+          <HeroSection settings={settings} setShowContact={setShowContact} />
+          <AboutSection projects={projects} />
+          <ExperienceSection experiences={experiences} />
+          <ProjectsSection projects={projects} />
+          <SkillsSection skills={skills} certificates={certificates} />
+          <EducationSection education={education} />
+          <TestimonialsSection testimonials={testimonials} />
+          <BlogSection blogPosts={blogPosts} />
+          <ContactSection settings={settings} />
+        </main>
+        <Footer socialLinks={socialLinks} />
+      </div>
 
-        {/* About Section */}
-        <EnhancedAboutSection projects={projects} />
+      {/* Contact Modal */}
+      <ContactModal isOpen={showContact} onClose={() => setShowContact(false)} socialLinks={socialLinks} />
 
-        {/* Experiences Section */}
-        <EnhancedExperiencesSection experiences={experiences} />
-
-        {/* Projects Section */}
-        <EnhancedProjectsSection projects={projects} />
-
-        {/* Skills Section */}
-        <EnhancedSkillsSection skills={skills} certificates={certificates} />
-
-        {/* Education Section */}
-        <EnhancedEducationSection education={education} />
-
-        {/* Testimonials Section */}
-        <EnhancedTestimonialsSection testimonials={testimonials} />
-
-        {/* Blog Section */}
-        <EnhancedBlogSection blogPosts={blogPosts} />
-
-        {/* Contact Section */}
-        <EnhancedContactSection settings={settings} />
-      </main>
-
-      {/* Enhanced Contact Bubble */}
-      <ContactBubble isOpen={showContact} onClose={() => setShowContact(false)} socialLinks={socialLinks} />
-
-      {/* Floating Contact Button */}
+      {/* Floating CTA */}
       <motion.button
         onClick={() => setShowContact(true)}
-        className="fixed bottom-8 right-8 z-40 p-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl shadow-2xl flex items-center gap-3 group"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        animate={{ y: [0, -10, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
+        style={{
+          position: 'fixed', bottom: 28, right: 28, zIndex: 50,
+          padding: '12px 22px',
+          background: 'linear-gradient(135deg, var(--cyan), var(--blue))',
+          color: '#03050d',
+          border: 'none', borderRadius: 12, fontWeight: 700, fontSize: 13,
+          cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8,
+          fontFamily: 'var(--font-display)',
+          boxShadow: '0 4px 28px rgba(0,245,212,0.3)',
+          letterSpacing: '0.02em',
+        }}
+        whileHover={{ scale: 1.06, boxShadow: '0 4px 40px rgba(0,245,212,0.45)' }}
+        whileTap={{ scale: 0.96 }}
+        animate={{ y: [0, -5, 0] }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
       >
-        <FiMessageSquare className="text-xl" />
-        <span className="font-semibold">Contact</span>
+        <FiMessageSquare size={15} /> Contact Me
       </motion.button>
 
-      {/* Error Banner */}
+      {/* Error toast */}
       {fetchError && (
-        <motion.div
-          className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-yellow-500/90 text-black px-6 py-3 rounded-2xl shadow-2xl max-w-md text-sm font-medium"
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          ⚠️ Using fallback data: {fetchError}
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
+          style={{ position: 'fixed', top: 80, left: '50%', transform: 'translateX(-50%)', zIndex: 99, background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.25)', color: 'var(--amber)', padding: '10px 20px', borderRadius: 10, fontSize: 12, fontFamily: 'var(--font-mono)' }}>
+          ⚠ API fallback mode — {fetchError}
         </motion.div>
       )}
-    </div>
+    </>
   );
 }

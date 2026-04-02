@@ -346,7 +346,7 @@ const dummyData = {
       updated_at: '2024-08-18T10:00:00Z',
       tags: [
         { id: '1', name: 'Golang', color: '#00ADD8' },     // official Go blue
-        { id: '2', name: 'Flutter', color: '#02569B' },    // Flutter blue
+        { id: '2', name: 'Web', color: '#02569B' },    // Flutter blue
         { id: '3', name: 'React', color: '#61DAFB' },      // React cyan
         { id: '4', name: 'Postman', color: '#FF6C37' },    // Postman orange
         { id: '5', name: 'Tailwind', color: '#38BDF8' },   // Tailwind sky blue
@@ -969,54 +969,50 @@ skills: [
     }
   ],
   
-  blogPosts: [
-    {
-      id: '1',
-      title: '5 Tips Menjadi Web Developer Handal',
-      content: 'Menjadi web developer bukan hanya soal coding, tetapi juga soal mindset dan kebiasaan... Konten lengkap akan tersedia di halaman detail.',
-      excerpt: 'Menjadi web developer bukan hanya soal coding, tetapi juga soal mindset dan kebiasaan...',
-      slug: '5-tips-menjadi-web-developer-handal',
-      featured_image: '/blog/web-developer-tips.jpg',
-      publish_date: '2024-05-12',
-      status: 'published',
-      view_count: 150,
-      tags: [
-        { id: '1', name: 'Web Development', created_at: '2024-05-12T00:00:00Z' },
-        { id: '2', name: 'Tips', created_at: '2024-05-12T00:00:00Z' }
-      ]
-    },
-    {
-      id: '2',
-      title: 'Tips Menggunakan AI dalam Pengembangan Web',
-      content: 'AI dapat menjadi alat yang sangat berguna dalam pengembangan web, berikut beberapa tips untuk memanfaatkannya...',
-      excerpt: 'AI dapat menjadi alat yang sangat berguna dalam pengembangan web, berikut beberapa tips untuk memanfaatkannya...',
-      slug: 'tips-menggunakan-ai-dalam-pengembangan-web',
-      featured_image: '/blog/ai-web-development.jpg',
-      publish_date: '2024-05-28',
-      status: 'published',
-      view_count: 230,
-      tags: [
-        { id: '3', name: 'AI', created_at: '2024-05-28T00:00:00Z' },
-        { id: '4', name: 'Artificial Intelligence', created_at: '2024-05-28T00:00:00Z' }
-      ]
-    },
-    {
-      id: '3',
-      title: 'Laravel vs Node.js: Mana yang Lebih Baik untuk Proyek Anda?',
-      content: 'Dalam dunia pengembangan web, Laravel dan Node.js adalah dua pilihan populer. Mari kita bahas kelebihan dan kekurangan masing-masing...',
-      excerpt: 'Dalam dunia pengembangan web, Laravel dan Node.js adalah dua pilihan populer. Mari kita bahas kelebihan dan kekurangan masing-masing...',
-      slug: 'laravel-vs-nodejs-mana-yang-lebih-baik',
-      featured_image: '/blog/laravel-vs-nodejs.jpg',
-      publish_date: '2024-05-20',
-      status: 'published',
-      view_count: 180,
-      tags: [
-        { id: '1', name: 'Web Development', created_at: '2024-05-20T00:00:00Z' },
-        { id: '5', name: 'Laravel', created_at: '2024-05-20T00:00:00Z' },
-        { id: '6', name: 'Node.js', created_at: '2024-05-20T00:00:00Z' }
-      ]
-    }
-  ],
+blogPosts: [
+  {
+    id: '1',
+    title: 'Mengubah Laptop Lama Menjadi Server Home Lab di Libur Lebaran',
+    content: `
+Di sela momen libur Idul Fitri, saya bersama bro Fahri (kakak saya) mencoba memanfaatkan waktu untuk eksplorasi hal yang lebih produktif. Kami mengubah laptop lama yang sudah tidak terpakai menjadi sebuah **home server lab**.
+
+Dari setup sederhana ini, kami menggunakannya untuk:
+- Live demo aplikasi Android  
+- Testing environment end-to-end  
+- Simulasi deployment, API integration, hingga mini production  
+
+Bagi kami, ini bukan sekadar eksperimen, tapi bagian dari **continuous learning** dan **hands-on collaboration** di bidang system & network engineering.
+
+Sebagai implementasi, saya juga membangun aplikasi mobile **Pempek Kito** (Android) sebagai bahan uji coba, dengan fitur:
+- Integrasi payment gateway (Midtrans)  
+- Integrasi shipment/delivery (Biteship)  
+- Backoffice berbasis web untuk manajemen  
+
+**Tech stack yang digunakan:**
+Ubuntu Server, MySQL, Golang, Flutter, ReactJS, Tailwind, Postman, Swagger, Cloudflare, Hostinger, Nginx, GitHub, Midtrans, dan Biteship.
+
+Menarik melihat bagaimana resource sederhana bisa dioptimalkan menjadi lingkungan belajar yang cukup powerful 🚀
+
+💡 Saya sangat terbuka untuk feedback, masukan, atau diskusi terkait setup ini maupun pengembangan aplikasinya.
+
+👉 Silakan coba aplikasinya di link berikut dan share pendapat kalian  
+👉 Kalau punya pengalaman serupa (home lab / mini server), boleh banget sharing di kolom komentar  
+👉 Atau connect dengan saya untuk diskusi lebih lanjut di bidang system, network, dan backend development  
+
+Terima kasih!
+    `,
+    excerpt: 'Mengubah laptop lama menjadi server home lab untuk testing, deployment, dan eksplorasi system engineering.',
+    slug: 'server-home-lab',
+    featured_image: '/blog/web-developer-tips.jpg',
+    publish_date: '2024-05-12',
+    status: 'published',
+    view_count: 150,
+    tags: [
+      { id: '1', name: 'Web Development', created_at: '2024-05-12T00:00:00Z' },
+      { id: '2', name: 'System Engineering', created_at: '2024-05-12T00:00:00Z' }
+    ]
+  },
+],
   
   socialLinks: [
     {
