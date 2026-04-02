@@ -1480,6 +1480,7 @@ const ContactModal = ({ isOpen, onClose, socialLinks }: { isOpen: boolean; onClo
 // MAIN PORTFOLIO
 // ============================================================
 export default function Portfolio() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [menuOpen, setMenuOpen] = useState(false);
   const [showContact, setShowContact] = useState(false);
   const [sections, setSections] = useState<Section[]>([]);
