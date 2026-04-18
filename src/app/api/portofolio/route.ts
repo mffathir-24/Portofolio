@@ -312,7 +312,7 @@ const dummyData = {
       title: 'Aplikasi Mobile Beserta Back Officenya Pempek Kito',
       description: 'Aplikasi dibuat sebagai media belajar dengan menggunakan flutter yang terintegrasi dengan midtrans sebagai payment gateway, biteship sebagai shippment dan menggunakan firebase untuk login menggunakan google. serta melakukan setup ke ubuntu server yang dibuat dari laptop lama sebagai server home lab..',
       image_url: '/project/pempekkito.jpeg',
-      demo_url: 'https://drive.google.com/file/d/1IOpgNS9GRMpbvRIfVx86pgEy03xdROh9/view?usp=drive_link',
+      demo_url: 'https://drive.google.com/file/d/1s-KzvYvm1vvPsCj5V828w3Phl1JU1w5V/view?usp=sharing',
       code_url: 'https://github.com/mffathir-24/PempekKitoFE',
       display_order: 10,
       is_featured: true,
