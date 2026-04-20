@@ -357,6 +357,27 @@ const dummyData = {
         { id: '11', name: 'Mysql', color: '#4479A1' },     // MySQL blue
       ]
     },
+    {
+      id: '12',
+      title: 'Sistem Penggajian Karyawan',
+      description: 'Aplikasi ini adalah sistem penggajian karyawan yang dirancang untuk membantu perusahaan dalam mengelola proses penggajian dengan efisien, termasuk perhitungan gaji, potongan, dan laporan keuangan.',
+      image_url: '/project/penggajiankaryawan.png',
+      demo_url: 'https://penggajian-karyawan.techtive.online/',
+      code_url: 'https://github.com/mffathir-24/Penggajian-Karyawan',
+      display_order: 12,
+      is_featured: true,
+      status: 'published',
+      created_at: '2025-07-10T10:00:00Z',
+      updated_at: '2024-08-18T10:00:00Z',
+      tags: [
+        { id: '1', name: 'Laravel', color: '#FF2D20' },     // official Go blue
+        { id: '2', name: 'Web', color: '#02569B' },      // React cyan
+        { id: '4', name: 'Postman', color: '#FF6C37' },    // Postman orange
+        { id: '5', name: 'Tailwind', color: '#38BDF8' },  
+        { id: '2', name: 'Bootstrap', color: '#7952B3' },   
+        { id: '11', name: 'Mysql', color: '#4479A1' },     // MySQL blue
+      ]
+    },
   ],
   
   experiences: [
